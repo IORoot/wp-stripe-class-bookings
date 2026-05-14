@@ -1,0 +1,307 @@
+<?php
+/**
+ * Custom post types: class and booking entities.
+ *
+ * @package IORoot_Yoga_Bookings
+ */
+
+namespace IORoot_Yoga_Bookings;
+
+defined( 'ABSPATH' ) || exit;
+
+abstract class CPT {
+
+	public const CLASS_PT   = 'yoga_class';
+	public const BOOKING_PT = 'yoga_booking';
+
+	public static function init(): void {
+		add_action( 'init', [ self::class, 'register' ] );
+		add_filter( 'manage_' . self::CLASS_PT . '_posts_columns', [ self::class, 'class_columns' ] );
+		add_action( 'manage_' . self::CLASS_PT . '_posts_custom_column', [ self::class, 'class_column_value' ], 10, 2 );
+		add_action( 'admin_enqueue_scripts', [ self::class, 'enqueue_class_list_styles' ] );
+		add_action( 'post_submitbox_misc_actions', [ self::class, 'render_class_id_in_submitbox' ] );
+
+		add_filter( 'manage_' . self::BOOKING_PT . '_posts_columns', [ self::class, 'booking_columns' ] );
+		add_action( 'manage_' . self::BOOKING_PT . '_posts_custom_column', [ self::class, 'booking_column_value' ], 10, 2 );
+		add_filter( 'manage_edit-' . self::BOOKING_PT . '_sortable_columns', [ self::class, 'booking_sortable' ] );
+	}
+
+	public static function register(): void {
+		register_post_type(
+			self::CLASS_PT,
+			[
+				'labels'       => [
+					'name'               => __( 'Stripe Classes', 'ioroot-yoga-bookings' ),
+					'singular_name'      => __( 'Stripe Class', 'ioroot-yoga-bookings' ),
+					'add_new_item'       => __( 'Add Stripe Class', 'ioroot-yoga-bookings' ),
+					'edit_item'          => __( 'Edit Stripe Class', 'ioroot-yoga-bookings' ),
+					'new_item'           => __( 'New Stripe Class', 'ioroot-yoga-bookings' ),
+					'view_item'          => __( 'View Stripe Class', 'ioroot-yoga-bookings' ),
+					'search_items'       => __( 'Search Stripe Classes', 'ioroot-yoga-bookings' ),
+					'menu_name'          => __( 'Stripe Classes', 'ioroot-yoga-bookings' ),
+				],
+				'public'       => false,
+				'show_ui'      => true,
+				'show_in_menu' => true,
+				'menu_icon'    => 'dashicons-calendar-alt',
+				'menu_position' => 26,
+				'supports'     => [ 'title' ],
+				'has_archive'  => false,
+				'rewrite'      => false,
+				'show_in_rest' => false,
+			]
+		);
+
+		register_post_type(
+			self::BOOKING_PT,
+			[
+				'labels'       => [
+					'name'               => __( 'Stripe Bookings', 'ioroot-yoga-bookings' ),
+					'singular_name'      => __( 'Booking', 'ioroot-yoga-bookings' ),
+					'edit_item'          => __( 'Edit Booking', 'ioroot-yoga-bookings' ),
+					'view_item'          => __( 'View Booking', 'ioroot-yoga-bookings' ),
+					'search_items'       => __( 'Search Bookings', 'ioroot-yoga-bookings' ),
+					'menu_name'          => __( 'Stripe Bookings', 'ioroot-yoga-bookings' ),
+				],
+				'public'       => false,
+				'show_ui'      => true,
+				'show_in_menu' => true,
+				'menu_icon'    => 'dashicons-tickets-alt',
+				'menu_position' => 27,
+				'capabilities' => [
+					'create_posts' => 'do_not_allow',
+				],
+				'map_meta_cap' => true,
+				'supports'     => [ 'title' ],
+				'has_archive'  => false,
+				'rewrite'      => false,
+				'show_in_rest' => false,
+			]
+		);
+	}
+
+	public static function class_columns( array $columns ): array {
+		$new = [];
+		foreach ( $columns as $key => $label ) {
+			$new[ $key ] = $label;
+			if ( 'cb' === $key ) {
+				$new['yb_image'] = __( 'Image', 'ioroot-yoga-bookings' );
+			}
+			if ( 'title' === $key ) {
+				$new['yb_id']       = __( 'Class ID', 'ioroot-yoga-bookings' );
+				$new['yb_location'] = __( 'Location', 'ioroot-yoga-bookings' );
+				$new['yb_when']     = __( 'When', 'ioroot-yoga-bookings' );
+				$new['yb_type']     = __( 'Type', 'ioroot-yoga-bookings' );
+				$new['yb_price']    = __( 'Price', 'ioroot-yoga-bookings' );
+				$new['yb_capacity'] = __( 'Capacity', 'ioroot-yoga-bookings' );
+				$new['yb_status']   = __( 'Status', 'ioroot-yoga-bookings' );
+			}
+		}
+		return $new;
+	}
+
+	/**
+	 * Narrow image columns on the Stripe Classes and Bookings list screens.
+	 */
+	public static function enqueue_class_list_styles( string $hook_suffix ): void {
+		if ( 'edit.php' !== $hook_suffix ) {
+			return;
+		}
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		$types  = [ self::CLASS_PT, self::BOOKING_PT ];
+		$match  = $screen && in_array( $screen->post_type, $types, true );
+		if ( ! $match && isset( $_GET['post_type'] ) && in_array( sanitize_key( wp_unslash( (string) $_GET['post_type'] ) ), $types, true ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$match = true;
+		}
+		if ( ! $match ) {
+			return;
+		}
+		wp_add_inline_style(
+			'wp-admin',
+			'.column-yb_image{width:52px;text-align:center;}' .
+			'.column-yb_image img{display:block;margin:0 auto;border-radius:4px;}' .
+			'.yb-class-list__no-image{display:inline-block;width:44px;height:44px;background:#f0f0f1;border-radius:4px;vertical-align:middle;}' .
+			'.yb-class-type-pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;line-height:1.3;font-weight:600;}' .
+			'.yb-class-type-pill--class{background:#e7f3ff;color:#1d4f8f;}' .
+			'.yb-class-type-pill--event{background:#efe8ff;color:#5a37a0;}' .
+			'.yb-class-type-pill--external{background:#e8f7ef;color:#1d6d43;}'
+		);
+	}
+
+	private static function render_class_image_column( int $class_id ): void {
+		$class  = Helpers::get_class_data( $class_id );
+		$img_id = $class && ! empty( $class['image_id'] ) ? (int) $class['image_id'] : 0;
+		if ( $img_id && wp_attachment_is_image( $img_id ) ) {
+			$alt = trim( (string) get_post_meta( $img_id, '_wp_attachment_image_alt', true ) );
+			if ( '' === $alt ) {
+				$alt = get_the_title( $class_id );
+			}
+			echo wp_get_attachment_image(
+				$img_id,
+				[ 48, 48 ],
+				true,
+				[
+					'style' => 'width:44px;height:44px;object-fit:cover;',
+					'alt'   => $alt,
+				]
+			);
+		} else {
+			echo '<span class="yb-class-list__no-image" aria-hidden="true"></span>';
+		}
+	}
+
+	public static function class_column_value( string $column, int $post_id ): void {
+		if ( 'yb_image' === $column ) {
+			self::render_class_image_column( $post_id );
+			return;
+		}
+
+		$class = Helpers::get_class_data( $post_id );
+		if ( ! $class ) {
+			return;
+		}
+		switch ( $column ) {
+			case 'yb_id':
+				echo '<code>#' . esc_html( (string) $post_id ) . '</code>';
+				break;
+			case 'yb_location':
+				echo esc_html( $class['location'] );
+				break;
+			case 'yb_when':
+				$day  = ! empty( $class['is_one_off_event'] )
+					? Helpers::format_date_range( (string) ( $class['start_date'] ?? '' ), (string) ( $class['end_date'] ?? '' ) )
+					: ( $class['day_of_week'] ? ucfirst( $class['day_of_week'] ) : '' );
+				$time = $class['start_time'] ? Helpers::format_time( $class['start_time'] ) : '';
+				$dur  = $class['duration'] ? sprintf( ' (%d min)', $class['duration'] ) : '';
+				echo esc_html( trim( "$day $time$dur" ) );
+				break;
+			case 'yb_type':
+				if ( ! empty( $class['use_external_link'] ) ) {
+					echo '<span class="yb-class-type-pill yb-class-type-pill--external">' . esc_html__( 'External link', 'ioroot-yoga-bookings' ) . '</span>';
+				} elseif ( ! empty( $class['is_one_off_event'] ) ) {
+					echo '<span class="yb-class-type-pill yb-class-type-pill--event">' . esc_html__( 'One-off event', 'ioroot-yoga-bookings' ) . '</span>';
+				} else {
+					echo '<span class="yb-class-type-pill yb-class-type-pill--class">' . esc_html__( 'Class', 'ioroot-yoga-bookings' ) . '</span>';
+				}
+				break;
+			case 'yb_price':
+				echo esc_html( Helpers::format_price( $class['price'] ) );
+				break;
+			case 'yb_capacity':
+				echo esc_html( (string) $class['capacity'] );
+				break;
+			case 'yb_status':
+				if ( ! $class['class_active'] ) {
+					echo '<strong style="color:#b00;">' . esc_html__( 'Cancelled', 'ioroot-yoga-bookings' ) . '</strong>';
+				} else {
+					echo esc_html__( 'Active', 'ioroot-yoga-bookings' );
+				}
+				break;
+		}
+	}
+
+	/**
+	 * Show a copy-friendly Class ID row on the class edit screen.
+	 */
+	public static function render_class_id_in_submitbox(): void {
+		$post = get_post();
+		if ( ! $post || self::CLASS_PT !== $post->post_type ) {
+			return;
+		}
+		$shortcode = sprintf( '[stripe_booking class_id="%d"]', (int) $post->ID );
+		echo '<div class="misc-pub-section misc-pub-yb-class-id">';
+		echo '<span>' . esc_html__( 'Class ID:', 'ioroot-yoga-bookings' ) . ' <code>#' . esc_html( (string) $post->ID ) . '</code></span>';
+		echo '</div>';
+		echo '<div class="misc-pub-section misc-pub-yb-shortcode">';
+		echo '<span>' . esc_html__( 'Shortcode:', 'ioroot-yoga-bookings' ) . '</span><br>';
+		echo '<code style="display:inline-block; margin-top:6px; user-select:all;">' . esc_html( $shortcode ) . '</code>';
+		echo '<p style="margin:6px 0 0; color:#646970; font-size:12px;">' . esc_html__( 'Copy and paste this into any page, post, or Elementor shortcode widget.', 'ioroot-yoga-bookings' ) . '</p>';
+		echo '</div>';
+	}
+
+	public static function booking_columns( array $columns ): array {
+		unset( $columns['date'] );
+		$new = [
+			'cb'           => $columns['cb'] ?? '<input type="checkbox" />',
+			'yb_image'     => __( 'Image', 'ioroot-yoga-bookings' ),
+			'title'        => __( 'Booking', 'ioroot-yoga-bookings' ),
+			'yb_class'     => __( 'Class', 'ioroot-yoga-bookings' ),
+			'yb_date'      => __( 'Class date', 'ioroot-yoga-bookings' ),
+			'yb_customer'  => __( 'Customer', 'ioroot-yoga-bookings' ),
+			'yb_seats'     => __( 'Seats', 'ioroot-yoga-bookings' ),
+			'yb_amount'    => __( 'Amount', 'ioroot-yoga-bookings' ),
+			'yb_status'    => __( 'Status', 'ioroot-yoga-bookings' ),
+			'yb_stripe'    => __( 'Stripe ID', 'ioroot-yoga-bookings' ),
+			'yb_created'   => __( 'Created', 'ioroot-yoga-bookings' ),
+		];
+		return $new;
+	}
+
+	public static function booking_column_value( string $column, int $post_id ): void {
+		switch ( $column ) {
+			case 'yb_image':
+				$class_id = (int) get_post_meta( $post_id, '_yb_class_id', true );
+				if ( $class_id ) {
+					self::render_class_image_column( $class_id );
+				} else {
+					echo '<span class="yb-class-list__no-image" aria-hidden="true"></span>';
+				}
+				break;
+			case 'yb_class':
+				$class_id = (int) get_post_meta( $post_id, '_yb_class_id', true );
+				if ( $class_id ) {
+					echo '<a href="' . esc_url( get_edit_post_link( $class_id ) ) . '">' . esc_html( get_the_title( $class_id ) ) . '</a>';
+				}
+				break;
+			case 'yb_date':
+				$date = (string) get_post_meta( $post_id, '_yb_class_date', true );
+				echo esc_html( Helpers::format_date( $date ) );
+				break;
+			case 'yb_customer':
+				$name  = (string) get_post_meta( $post_id, '_yb_customer_name', true );
+				$email = (string) get_post_meta( $post_id, '_yb_customer_email', true );
+				echo esc_html( $name );
+				if ( $email ) {
+					echo '<br><a href="mailto:' . esc_attr( $email ) . '">' . esc_html( $email ) . '</a>';
+				}
+				break;
+			case 'yb_seats':
+				echo esc_html( (string) (int) get_post_meta( $post_id, '_yb_seats', true ) );
+				break;
+			case 'yb_amount':
+				$pence = (int) get_post_meta( $post_id, '_yb_amount_total', true );
+				echo esc_html( Helpers::format_price( $pence / 100 ) );
+				break;
+			case 'yb_status':
+				$status = (string) get_post_meta( $post_id, '_yb_status', true );
+				$colors = [
+					'paid'     => '#0a7e1a',
+					'pending'  => '#a86b00',
+					'expired'  => '#888',
+					'refunded' => '#b00',
+				];
+				$color = $colors[ $status ] ?? '#444';
+				echo '<strong style="color:' . esc_attr( $color ) . ';">' . esc_html( ucfirst( $status ?: 'unknown' ) ) . '</strong>';
+				break;
+			case 'yb_stripe':
+				$id = (string) get_post_meta( $post_id, '_yb_stripe_session_id', true );
+				if ( $id ) {
+					echo '<code style="font-size:11px;">' . esc_html( substr( $id, 0, 18 ) . '…' ) . '</code>';
+				}
+				break;
+			case 'yb_created':
+				$post = get_post( $post_id );
+				if ( $post ) {
+					echo esc_html( get_the_date( 'Y-m-d H:i', $post ) );
+				}
+				break;
+		}
+	}
+
+	public static function booking_sortable( array $columns ): array {
+		$columns['yb_date']    = '_yb_class_date';
+		$columns['yb_status']  = '_yb_status';
+		$columns['yb_created'] = 'date';
+		return $columns;
+	}
+}
