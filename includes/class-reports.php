@@ -117,10 +117,33 @@ abstract class Reports {
 		?>
 		<div class="wrap ioroot-yb-reports-wrap">
 			<header class="ioroot-yb-reports-hero">
-				<h1 class="ioroot-yb-reports-hero__title"><?php esc_html_e( 'Stripe Bookings Reports', 'ioroot-yoga-bookings' ); ?></h1>
-				<p class="ioroot-yb-reports-hero__lead">
-					<?php esc_html_e( 'Historic trends, upcoming occupancy, and per-class guest lists in one place.', 'ioroot-yoga-bookings' ); ?>
-				</p>
+				<div class="ioroot-yb-reports-hero__bg" aria-hidden="true">
+					<span class="ioroot-yb-reports-hero__blob ioroot-yb-reports-hero__blob--1"></span>
+					<span class="ioroot-yb-reports-hero__blob ioroot-yb-reports-hero__blob--2"></span>
+					<span class="ioroot-yb-reports-hero__blob ioroot-yb-reports-hero__blob--3"></span>
+					<span class="ioroot-yb-reports-hero__dots"></span>
+				</div>
+				<div class="ioroot-yb-reports-hero__inner">
+					<div class="ioroot-yb-reports-hero__title-row">
+						<div class="ioroot-yb-reports-hero__logo-wrap">
+							<img
+								class="ioroot-yb-reports-hero__logo"
+								src="<?php echo esc_url( IOROOT_YB_URL . 'assets/logo_plugin.svg' ); ?>"
+								width="80"
+								height="67"
+								alt=""
+								decoding="async"
+								loading="lazy"
+							/>
+						</div>
+						<div class="ioroot-yb-reports-hero__text">
+							<h1 class="ioroot-yb-reports-hero__title"><?php esc_html_e( 'Stripe Bookings Reports', 'ioroot-yoga-bookings' ); ?></h1>
+							<p class="ioroot-yb-reports-hero__lead">
+								<?php esc_html_e( 'Historic trends, upcoming occupancy, and per-class guest lists in one place.', 'ioroot-yoga-bookings' ); ?>
+							</p>
+						</div>
+					</div>
+				</div>
 			</header>
 
 			<section class="ioroot-yb-reports-panel" aria-labelledby="ioroot-yb-reports-historic-heading">

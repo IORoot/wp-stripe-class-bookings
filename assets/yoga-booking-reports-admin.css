@@ -1,6 +1,5 @@
 /**
  * Stripe Bookings — Reports admin screen (body.ioroot-yb-reports).
- * Dark panels aligned with Booking Settings welcome (#011D29 family).
  */
 
 body.ioroot-yb-reports .ioroot-yb-reports-wrap {
@@ -12,24 +11,143 @@ body.ioroot-yb-reports .ioroot-yb-reports-wrap {
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-hero {
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
 	margin: 0 0 28px;
-	padding: 28px 32px;
-	border-radius: 14px;
-	border: 1px solid rgba(56, 189, 248, 0.2);
-	background: linear-gradient(135deg, #032a3a 0%, #011D29 48%, #010f16 100%);
+	padding: 0;
+	border-radius: 16px;
+	border: 1px solid rgba(56, 189, 248, 0.18);
+	background: linear-gradient(
+		165deg,
+		#032a3a 0%,
+		#011d29 38%,
+		#010f16 100%
+	);
 	box-shadow:
 		0 0 0 1px rgba(0, 0, 0, 0.35),
-		0 12px 40px rgba(0, 0, 0, 0.35),
-		inset 0 1px 0 rgba(255, 255, 255, 0.04);
+		0 2px 4px rgba(0, 0, 0, 0.25),
+		0 24px 48px -12px rgba(0, 0, 0, 0.45),
+		0 0 100px -30px rgba(34, 211, 238, 0.1);
+	font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+
+body.ioroot-yb-reports .ioroot-yb-reports-hero__bg {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	z-index: 0;
+}
+
+body.ioroot-yb-reports .ioroot-yb-reports-hero__blob {
+	position: absolute;
+	border-radius: 50%;
+}
+
+body.ioroot-yb-reports .ioroot-yb-reports-hero__blob--1 {
+	width: 320px;
+	height: 320px;
+	top: -120px;
+	right: -60px;
+	background: radial-gradient(
+		circle at 35% 35%,
+		rgba(34, 211, 238, 0.26) 0%,
+		rgba(14, 116, 144, 0.1) 42%,
+		transparent 70%
+	);
+}
+
+body.ioroot-yb-reports .ioroot-yb-reports-hero__blob--2 {
+	width: 260px;
+	height: 260px;
+	bottom: -100px;
+	left: -70px;
+	background: radial-gradient(
+		circle at 60% 50%,
+		rgba(129, 140, 248, 0.2) 0%,
+		rgba(99, 102, 241, 0.08) 45%,
+		transparent 68%
+	);
+}
+
+body.ioroot-yb-reports .ioroot-yb-reports-hero__blob--3 {
+	width: 180px;
+	height: 180px;
+	top: 40%;
+	left: 45%;
+	transform: translate(-50%, -50%);
+	background: radial-gradient(
+		circle,
+		rgba(255, 255, 255, 0.07) 0%,
+		rgba(1, 29, 41, 0) 62%
+	);
+}
+
+body.ioroot-yb-reports .ioroot-yb-reports-hero__dots {
+	position: absolute;
+	inset: 0;
+	opacity: 0.35;
+	background-image: radial-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+	background-size: 18px 18px;
+	mask-image: linear-gradient(to bottom, black 0%, black 60%, transparent 100%);
+	-webkit-mask-image: linear-gradient(to bottom, black 0%, black 60%, transparent 100%);
+}
+
+body.ioroot-yb-reports .ioroot-yb-reports-hero__inner {
+	position: relative;
+	z-index: 1;
+	padding: 28px 32px 30px;
+}
+
+body.ioroot-yb-reports .ioroot-yb-reports-hero__title-row {
+	display: flex;
+	align-items: center;
+	gap: clamp(14px, 2.5vw, 22px);
+}
+
+body.ioroot-yb-reports .ioroot-yb-reports-hero__logo-wrap {
+	flex-shrink: 0;
+	line-height: 0;
+}
+
+body.ioroot-yb-reports .ioroot-yb-reports-hero__logo {
+	display: block;
+	width: clamp(52px, 9vw, 80px);
+	height: auto;
+	filter: drop-shadow(0 6px 24px rgba(0, 0, 0, 0.45));
+}
+
+body.ioroot-yb-reports .ioroot-yb-reports-hero__text {
+	flex: 1 1 auto;
+	min-width: 0;
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-hero__title {
 	margin: 0 0 10px;
-	font-size: 26px;
-	font-weight: 600;
+	font-size: clamp(22px, 2.6vw, 28px);
+	font-weight: 700;
+	letter-spacing: -0.03em;
+	line-height: 1.15;
 	color: #f8fafc;
-	letter-spacing: -0.02em;
-	line-height: 1.2;
+	background: linear-gradient(
+		120deg,
+		#e0f2fe 0%,
+		#7dd3fc 18%,
+		#38bdf8 45%,
+		#a5f3fc 72%,
+		#c4b5fd 100%
+	);
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+@supports not (background-clip: text) {
+	body.ioroot-yb-reports .ioroot-yb-reports-hero__title {
+		background: none;
+		-webkit-text-fill-color: #e0f2fe;
+		color: #e0f2fe;
+	}
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-hero__lead {
@@ -37,49 +155,58 @@ body.ioroot-yb-reports .ioroot-yb-reports-hero__lead {
 	max-width: 52rem;
 	font-size: 15px;
 	line-height: 1.55;
-	color: #94a3b8;
+	color: #cbd5e1;
+}
+
+@media (max-width: 640px) {
+	body.ioroot-yb-reports .ioroot-yb-reports-hero__title-row {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	body.ioroot-yb-reports .ioroot-yb-reports-hero__inner {
+		padding: 22px 20px 24px;
+	}
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-panel {
 	margin-bottom: 28px;
 	padding: 0 4px 4px;
-	background: linear-gradient(155deg, rgba(255, 255, 255, 0.05) 0%, rgba(15, 40, 52, 0.45) 100%);
-	border: 1px solid rgba(56, 189, 248, 0.16);
+	background: #fff;
+	border: 1px solid #cbd5e1;
 	border-radius: 12px;
-	box-shadow:
-		0 2px 16px rgba(0, 0, 0, 0.35),
-		inset 0 1px 0 rgba(255, 255, 255, 0.04);
+	box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
 	overflow: hidden;
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-panel__head {
 	padding: 22px 24px 18px;
-	border-bottom: 1px solid rgba(56, 189, 248, 0.12);
-	background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(1, 29, 41, 0.2) 100%);
+	border-bottom: 1px solid #e2e8f0;
+	background: linear-gradient(180deg, #fafbfc 0%, #fff 100%);
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-panel__title {
 	margin: 0 0 8px;
 	font-size: 17px;
 	font-weight: 600;
-	color: #f1f5f9;
+	color: #0f172a;
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-panel__desc {
 	margin: 0;
 	font-size: 13px;
 	line-height: 1.55;
-	color: #94a3b8;
+	color: #64748b;
 	max-width: 56rem;
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-empty {
 	margin: 20px 24px 24px;
 	padding: 20px 22px;
-	background: rgba(255, 255, 255, 0.04);
-	border: 1px dashed rgba(56, 189, 248, 0.28);
+	background: #f8fafc;
+	border: 1px dashed #cbd5e1;
 	border-radius: 10px;
-	color: #cbd5e1;
+	color: #475569;
 	font-size: 14px;
 	line-height: 1.5;
 }
@@ -108,15 +235,15 @@ body.ioroot-yb-reports .ioroot-yb-reports-year-form {
 	gap: 8px 12px;
 	margin: 0;
 	padding: 8px 14px;
-	background: rgba(1, 29, 41, 0.55);
-	border: 1px solid rgba(148, 163, 184, 0.2);
+	background: #f8fafc;
+	border: 1px solid #e2e8f0;
 	border-radius: 10px;
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-year-form__label {
 	font-size: 12px;
 	font-weight: 600;
-	color: #cbd5e1;
+	color: #475569;
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-year-form__select {
@@ -124,9 +251,7 @@ body.ioroot-yb-reports .ioroot-yb-reports-year-form__select {
 	padding: 4px 10px;
 	font-size: 14px;
 	border-radius: 8px;
-	border: 1px solid rgba(56, 189, 248, 0.25);
-	background: rgba(15, 40, 52, 0.85);
-	color: #e2e8f0;
+	border: 1px solid #cbd5e1;
 }
 
 /* Chart.js yearly line chart */
@@ -137,10 +262,10 @@ body.ioroot-yb-reports .ioroot-yb-reports-chartjs {
 	height: 420px;
 	max-width: 100%;
 	padding: 8px 8px 0;
-	border: 1px solid rgba(56, 189, 248, 0.15);
+	border: 1px solid #e2e8f0;
 	border-radius: 10px;
-	background: rgba(1, 15, 22, 0.55);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+	background: #fff;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-chartjs canvas {
@@ -154,19 +279,14 @@ body.ioroot-yb-reports .ioroot-yb-reports-actions {
 
 body.ioroot-yb-reports .ioroot-yb-reports-btn.button {
 	border-radius: 8px;
-	font-weight: 600;
-	color: #e2e8f0 !important;
-	background: rgba(15, 40, 52, 0.9) !important;
-	border: 1px solid rgba(56, 189, 248, 0.35) !important;
-	box-shadow:
-		0 1px 2px rgba(0, 0, 0, 0.35),
-		inset 0 1px 0 rgba(255, 255, 255, 0.06);
+	font-weight: 500;
+	border-color: #cbd5e1;
+	box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-btn.button:hover {
-	border-color: rgba(103, 232, 249, 0.45) !important;
-	background: rgba(21, 55, 72, 0.95) !important;
-	color: #f8fafc !important;
+	border-color: #94a3b8;
+	background: #f8fafc;
 }
 
 /* Tables */
@@ -185,10 +305,10 @@ body.ioroot-yb-reports .ioroot-yb-reports-table-scroll--wide {
 body.ioroot-yb-reports .ioroot-yb-reports-table {
 	margin: 0 16px 16px;
 	width: calc(100% - 32px);
-	border: 1px solid rgba(56, 189, 248, 0.12) !important;
+	border: 1px solid #e2e8f0 !important;
 	border-radius: 10px;
 	overflow: hidden;
-	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+	box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-table thead th {
@@ -196,9 +316,9 @@ body.ioroot-yb-reports .ioroot-yb-reports-table thead th {
 	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.05em;
-	color: #94a3b8;
-	background: rgba(1, 29, 41, 0.9) !important;
-	border-bottom: 1px solid rgba(56, 189, 248, 0.15) !important;
+	color: #475569;
+	background: #f8fafc !important;
+	border-bottom: 1px solid #e2e8f0 !important;
 	padding: 12px 14px !important;
 }
 
@@ -206,16 +326,15 @@ body.ioroot-yb-reports .ioroot-yb-reports-table tbody td {
 	padding: 12px 14px !important;
 	font-size: 14px;
 	vertical-align: middle;
-	color: #e2e8f0;
-	border-color: rgba(148, 163, 184, 0.1) !important;
+	border-color: #f1f5f9 !important;
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-table tbody tr:nth-child(odd) td {
-	background: rgba(255, 255, 255, 0.03) !important;
+	background: #fcfdfe !important;
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-table tbody tr:hover td {
-	background: rgba(56, 189, 248, 0.08) !important;
+	background: #f0fdfa !important;
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-table__class-col {
@@ -226,7 +345,6 @@ body.ioroot-yb-reports .ioroot-yb-reports-table__class-col {
 body.ioroot-yb-reports .ioroot-yb-reports-table__class-name {
 	font-size: 14px;
 	vertical-align: top;
-	color: #f1f5f9;
 }
 
 /* Occupancy meter */
@@ -242,7 +360,7 @@ body.ioroot-yb-reports .ioroot-yb-reports-meter {
 body.ioroot-yb-reports .ioroot-yb-reports-meter__text {
 	font-weight: 600;
 	font-variant-numeric: tabular-nums;
-	color: #f1f5f9;
+	color: #0f172a;
 	flex-shrink: 0;
 	min-width: 1.5em;
 }
@@ -251,7 +369,7 @@ body.ioroot-yb-reports .ioroot-yb-reports-meter__bar {
 	flex: 1;
 	height: 9px;
 	border-radius: 999px;
-	background: rgba(148, 163, 184, 0.2);
+	background: #e2e8f0;
 	position: relative;
 	overflow: hidden;
 	min-width: 48px;
@@ -266,7 +384,7 @@ body.ioroot-yb-reports .ioroot-yb-reports-meter__bar::after {
 	bottom: 0;
 	width: var(--ioroot-yb-meter, 0%);
 	max-width: 100%;
-	background: linear-gradient(90deg, #0e7490 0%, #14b8a6 45%, #22d3ee 100%);
+	background: linear-gradient(90deg, #0e7490 0%, #14b8a6 55%, #38bdf8 100%);
 	border-radius: inherit;
 	transition: width 0.25s ease;
 }
@@ -284,16 +402,16 @@ body.ioroot-yb-reports .ioroot-yb-reports-session__empty {
 	font-size: 13px;
 	font-style: italic;
 	color: #94a3b8;
-	background: rgba(255, 255, 255, 0.04);
+	background: #f8fafc;
 	border-radius: 8px;
-	border: 1px dashed rgba(148, 163, 184, 0.25);
+	border: 1px dashed #e2e8f0;
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-session__when {
 	margin-bottom: 10px;
 	font-size: 13px;
 	font-weight: 600;
-	color: #f1f5f9;
+	color: #0f172a;
 	line-height: 1.35;
 }
 
@@ -302,10 +420,10 @@ body.ioroot-yb-reports .ioroot-yb-reports-mini {
 	border-collapse: separate;
 	border-spacing: 0;
 	font-size: 12px;
-	border: 1px solid rgba(56, 189, 248, 0.12);
+	border: 1px solid #e2e8f0;
 	border-radius: 8px;
 	overflow: hidden;
-	background: rgba(1, 15, 22, 0.45);
+	background: #fff;
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-mini thead th {
@@ -314,9 +432,9 @@ body.ioroot-yb-reports .ioroot-yb-reports-mini thead th {
 	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.04em;
-	color: #94a3b8;
-	background: rgba(1, 29, 41, 0.85) !important;
-	border-bottom: 1px solid rgba(56, 189, 248, 0.12) !important;
+	color: #64748b;
+	background: #f1f5f9 !important;
+	border-bottom: 1px solid #e2e8f0 !important;
 	text-align: left;
 }
 
@@ -328,9 +446,8 @@ body.ioroot-yb-reports .ioroot-yb-reports-mini__seats {
 
 body.ioroot-yb-reports .ioroot-yb-reports-mini tbody td {
 	padding: 8px 10px !important;
-	border-top: 1px solid rgba(148, 163, 184, 0.1) !important;
+	border-top: 1px solid #f1f5f9 !important;
 	word-break: break-word;
-	color: #e2e8f0;
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-mini tbody tr:first-child td {
@@ -344,13 +461,12 @@ body.ioroot-yb-reports .ioroot-yb-reports-mini__empty {
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-mini a {
-	color: #67e8f9;
+	color: #0e7490;
 	text-decoration: none;
 	font-weight: 500;
 }
 
 body.ioroot-yb-reports .ioroot-yb-reports-mini a:hover {
-	color: #a5f3fc;
 	text-decoration: underline;
 	text-underline-offset: 2px;
 }

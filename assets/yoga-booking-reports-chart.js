@@ -63,7 +63,6 @@
 							boxHeight: 14,
 							padding: 12,
 							usePointStyle: true,
-							color: '#cbd5e1',
 						},
 					},
 					tooltip: {
@@ -111,36 +110,18 @@
 								month: "MMM ''yy",
 							},
 						},
-						grid: {
-							color: 'rgba(148, 163, 184, 0.12)',
-						},
-						ticks: {
-							color: '#94a3b8',
-						},
-						border: {
-							color: 'rgba(56, 189, 248, 0.2)',
-						},
 						title: {
 							display: true,
 							text: cfg.i18n.dateAxis,
-							color: '#94a3b8',
 						},
 					},
 					y: {
 						beginAtZero: true,
-						grid: {
-							color: 'rgba(148, 163, 184, 0.12)',
-						},
-						border: {
-							color: 'rgba(56, 189, 248, 0.2)',
-						},
 						title: {
 							display: true,
 							text: cfg.i18n.studentsBooked,
-							color: '#94a3b8',
 						},
 						ticks: {
-							color: '#94a3b8',
 							// Return null for non-integer ticks so Chart.js hides the label *and* grid line
 							// (rounding the label alone still drew multiple lines at 0.2, 0.4, … all reading "0").
 							callback: function ( tickValue ) {
