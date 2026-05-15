@@ -30,7 +30,7 @@ abstract class Extra_Fields {
 	}
 
 	public static function register_location_rule_type( array $types ): array {
-		$types['IORoot Stripe Bookings']['yb_form_class_id'] = __( 'Booking form class ID', 'ioroot-yoga-bookings' );
+		$types['IORoot Bookings']['yb_form_class_id'] = __( 'Booking form class ID', 'ioroot-yoga-bookings' );
 		return $types;
 	}
 

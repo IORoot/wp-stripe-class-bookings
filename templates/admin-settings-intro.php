@@ -1,6 +1,6 @@
 <?php
 /**
- * Intro / welcome panel for Stripe Bookings → Booking Settings (admin).
+ * Intro / welcome panel for Bookings → Settings (admin).
  *
  * Edit this file to change the HTML shown above the settings tabs. You can
  * also override it in your theme as:
@@ -16,13 +16,13 @@
 defined( 'ABSPATH' ) || exit;
 
 $ioroot_yb_settings_url = admin_url( 'edit.php?post_type=' . \IORoot_Yoga_Bookings\CPT::CLASS_PT . '&page=stripe-bookings-settings' );
-$ioroot_yb_reports_url  = admin_url( 'edit.php?post_type=' . \IORoot_Yoga_Bookings\CPT::BOOKING_PT . '&page=stripe-bookings-reports' );
+$ioroot_yb_reports_url  = admin_url( 'edit.php?post_type=' . \IORoot_Yoga_Bookings\CPT::CLASS_PT . '&page=stripe-bookings-reports' );
 $ioroot_yb_new_class_url = admin_url( 'post-new.php?post_type=' . \IORoot_Yoga_Bookings\CPT::CLASS_PT );
 ?>
 <div class="ioroot-yb-welcome" id="ioroot-yb-welcome-panel" role="region" aria-labelledby="ioroot-yb-welcome-heading">
 	<div class="ioroot-yb-welcome__toolbar">
 		<p class="ioroot-yb-welcome__toolbar-summary">
-			<?php esc_html_e( 'Stripe Bookings overview is hidden. Expand to see getting started steps and shortcuts.', 'ioroot-yoga-bookings' ); ?>
+			<?php esc_html_e( 'Bookings overview is hidden. Expand to see getting started steps and shortcuts.', 'ioroot-yoga-bookings' ); ?>
 		</p>
 		<button type="button" class="button ioroot-yb-welcome__panel-toggle" id="ioroot-yb-welcome-toggle" aria-expanded="true" aria-controls="ioroot-yb-welcome-expandable" aria-label="<?php esc_attr_e( 'Hide overview panel', 'ioroot-yoga-bookings' ); ?>" data-ioroot-yb-aria-expanded="<?php esc_attr_e( 'Hide overview panel', 'ioroot-yoga-bookings' ); ?>" data-ioroot-yb-aria-collapsed="<?php esc_attr_e( 'Show overview panel', 'ioroot-yoga-bookings' ); ?>">
 			<span class="ioroot-yb-welcome__panel-toggle-label ioroot-yb-welcome__panel-toggle-label--expanded"><?php esc_html_e( 'Hide panel', 'ioroot-yoga-bookings' ); ?></span>
@@ -65,7 +65,7 @@ $ioroot_yb_new_class_url = admin_url( 'post-new.php?post_type=' . \IORoot_Yoga_B
 					</div>
 					<h2 id="ioroot-yb-welcome-heading" class="ioroot-yb-welcome__title">
 						<span class="ioroot-yb-welcome__title-line"><?php esc_html_e( 'Welcome to', 'ioroot-yoga-bookings' ); ?></span>
-						<span class="ioroot-yb-welcome__title-accent"><?php esc_html_e( 'Stripe Bookings', 'ioroot-yoga-bookings' ); ?></span>
+						<span class="ioroot-yb-welcome__title-accent"><?php esc_html_e( 'Bookings', 'ioroot-yoga-bookings' ); ?></span>
 					</h2>
 				</div>
 

@@ -1,4 +1,4 @@
-/* IORoot Stripe Bookings — booking form & status pages */
+/* IORoot Bookings — booking form & status pages */
 
 .yb-form,
 .yb-status {
@@ -306,9 +306,6 @@
 	background: #fff;
 	border: 1px solid var(--yb-border);
 	border-radius: var(--yb-radius-lg);
-	box-shadow:
-		0 1px 0 rgba(255, 255, 255, 0.8) inset,
-		0 12px 42px rgba(23, 52, 79, 0.09);
 	overflow: hidden;
 }
 
@@ -319,12 +316,12 @@
 	gap: 14px 20px;
 	margin: 0;
 	padding: clamp(22px, 4vw, 32px);
-	background: linear-gradient(
+	/* background: linear-gradient(
 		145deg,
 		rgba(168, 215, 240, 0.45) 0%,
 		rgba(255, 255, 255, 0.92) 42%,
 		#f6f4ef 100%
-	);
+	); */
 	border-bottom: 1px solid var(--yb-border);
 }
 

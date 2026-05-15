@@ -1,5 +1,5 @@
 /**
- * Stripe Bookings — Reports yearly line chart (Chart.js + zoom).
+ * Bookings — Reports yearly line chart (Chart.js + zoom).
  *
  * Expects window.IOROOT_YB_REPORTS_CHART from wp_localize_script.
  */

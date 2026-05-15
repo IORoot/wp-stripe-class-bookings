@@ -56,18 +56,17 @@ abstract class CPT {
 			self::BOOKING_PT,
 			[
 				'labels'       => [
-					'name'               => __( 'Stripe Bookings', 'ioroot-yoga-bookings' ),
+					'name'               => __( 'Bookings', 'ioroot-yoga-bookings' ),
 					'singular_name'      => __( 'Booking', 'ioroot-yoga-bookings' ),
 					'edit_item'          => __( 'Edit Booking', 'ioroot-yoga-bookings' ),
 					'view_item'          => __( 'View Booking', 'ioroot-yoga-bookings' ),
 					'search_items'       => __( 'Search Bookings', 'ioroot-yoga-bookings' ),
-					'menu_name'          => __( 'Stripe Bookings', 'ioroot-yoga-bookings' ),
+					'menu_name'          => __( 'Bookings', 'ioroot-yoga-bookings' ),
 				],
 				'public'       => false,
 				'show_ui'      => true,
-				'show_in_menu' => true,
-				'menu_icon'    => 'dashicons-tickets-alt',
-				'menu_position' => 27,
+				// Nest under Stripe Classes so bookings + reports live in one menu.
+				'show_in_menu' => 'edit.php?post_type=' . self::CLASS_PT,
 				'capabilities' => [
 					'create_posts' => 'do_not_allow',
 				],

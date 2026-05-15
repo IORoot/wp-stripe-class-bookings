@@ -1,11 +1,11 @@
-# IORoot Stripe Bookings
+# IORoot Bookings
 
 A small Stripe Checkout booking system for classes, built around ACF Pro.
 
 ## What it does
 
 - One **Stripe Class** post per class type (location, day, start time, duration, price, capacity, description) — managed via ACF.
-- A `[stripe_booking class_id="123"]` shortcode (and matching Elementor widget) renders a booking form: the next available dates (configurable), a quantity picker (1–4, capped by remaining seats), name + email fields, and a "Book & pay with Stripe" button.
+- A `[stripe_booking class_id="123"]` shortcode (and matching Elementor widget) renders a booking form: the next available dates (count set per class on the Stripe Class edit screen), a quantity picker (1–4, capped by remaining seats), name + email fields, and a "Book & pay with Stripe" button.
 - Pressing the button creates a 30-minute soft-hold booking and a Stripe Checkout Session via the official `stripe-php` SDK with an inline product (`price_data`), then redirects the customer to Stripe.
 - A signed Stripe webhook flips the booking to `paid`, captures the customer name/email Stripe collected, and fires a customer + admin email.
 - Three result pages are auto-created on activation: **Booking Confirmed**, **Booking Cancelled**, **Booking Error** — driven by `[stripe_booking_status]`.
@@ -18,8 +18,8 @@ A small Stripe Checkout booking system for classes, built around ACF Pro.
 
 ## Setup
 
-1. Activate **IORoot Stripe Bookings** in Plugins.
-2. Visit **Stripe Classes → Booking Settings** in the admin sidebar.
+1. Activate **IORoot Bookings** in Plugins.
+2. Visit **Stripe Classes → Settings** in the admin sidebar.
 3. Paste your **Stripe test** publishable key and secret key.
 4. In Stripe Dashboard → Developers → Webhooks, add an endpoint pointing at the URL shown on the settings page (`/wp-json/stripe-bookings/v1/stripe-webhook`) listening for:
    - `checkout.session.completed`
@@ -27,7 +27,7 @@ A small Stripe Checkout booking system for classes, built around ACF Pro.
    - `checkout.session.async_payment_failed`
 5. Paste the webhook signing secret into the plugin settings.
 6. Add classes under **Stripe Classes**.
-7. Drop the **Stripe Booking** Elementor widget on a page (or use `[stripe_booking class_id="123"]`).
+7. Drop the **Booking** Elementor widget on a page (or use `[stripe_booking class_id="123"]`).
 
 ## Cancelling
 

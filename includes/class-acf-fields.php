@@ -40,8 +40,8 @@ abstract class ACF_Fields {
 		}
 		acf_add_options_page(
 			[
-				'page_title' => __( 'Stripe Bookings Settings', 'ioroot-yoga-bookings' ),
-				'menu_title' => __( 'Booking Settings', 'ioroot-yoga-bookings' ),
+				'page_title' => __( 'Settings', 'ioroot-yoga-bookings' ),
+				'menu_title' => __( 'Settings', 'ioroot-yoga-bookings' ),
 				'menu_slug'  => self::SETTINGS_MENU_SLUG,
 				'parent_slug' => 'edit.php?post_type=' . CPT::CLASS_PT,
 				'capability' => 'manage_options',
@@ -54,8 +54,8 @@ abstract class ACF_Fields {
 	public static function register_native_settings_page(): void {
 		$hook = add_submenu_page(
 			'edit.php?post_type=' . CPT::CLASS_PT,
-			__( 'Stripe Bookings Settings', 'ioroot-yoga-bookings' ),
-			__( 'Booking Settings', 'ioroot-yoga-bookings' ),
+			__( 'Settings', 'ioroot-yoga-bookings' ),
+			__( 'Settings', 'ioroot-yoga-bookings' ),
 			'manage_options',
 			self::SETTINGS_MENU_SLUG,
 			[ self::class, 'render_native_settings_page' ]
@@ -78,7 +78,7 @@ abstract class ACF_Fields {
 		}
 
 		echo '<div class="wrap">';
-		echo '<h1>' . esc_html__( 'Stripe Bookings Settings', 'ioroot-yoga-bookings' ) . '</h1>';
+		echo '<h1>' . esc_html__( 'Settings', 'ioroot-yoga-bookings' ) . '</h1>';
 
 		if ( ! function_exists( 'acf_form' ) ) {
 			echo '<p>' . esc_html__( 'ACF form renderer is unavailable. Please activate Advanced Custom Fields.', 'ioroot-yoga-bookings' ) . '</p>';
@@ -108,7 +108,7 @@ abstract class ACF_Fields {
 	}
 
 	/**
-	 * Booking Settings screen: body class (reliable CSS scope), assets, intro meta box.
+	 * Settings screen: body class (reliable CSS scope), assets, intro meta box.
 	 *
 	 * Runs on load-{screen} so we never depend on get_current_screen() inside acf/input/admin_head.
 	 */
@@ -143,7 +143,7 @@ abstract class ACF_Fields {
 	}
 
 	/**
-	 * Stripe Class add/edit screen: same admin design language as Booking Settings.
+	 * Stripe Class add/edit screen: same admin design language as Settings.
 	 */
 	public static function maybe_enqueue_stripe_class_edit_admin(): void {
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
@@ -218,7 +218,7 @@ abstract class ACF_Fields {
 		$path = $theme ? (string) $theme : IOROOT_YB_DIR . 'templates/' . $relative;
 
 		/**
-		 * Filter the path to the Booking Settings intro template.
+		 * Filter the path to the Settings intro template.
 		 *
 		 * @param string $path Absolute filesystem path.
 		 */
@@ -447,7 +447,7 @@ abstract class ACF_Fields {
 						'type'          => 'true_false',
 						'default_value' => 0,
 						'ui'            => 1,
-						'instructions'  => __( 'Enable this to hide the Stripe booking form and show a single button linking to another URL.', 'ioroot-yoga-bookings' ),
+						'instructions'  => __( 'Enable this to hide the booking form and show a single button linking to another URL.', 'ioroot-yoga-bookings' ),
 						'wrapper'       => [
 							'width' => '50',
 						],
@@ -499,10 +499,11 @@ abstract class ACF_Fields {
 							'sunday'    => __( 'Sunday', 'ioroot-yoga-bookings' ),
 						],
 						'default_value' => 'sunday',
+						'instructions'   => __( 'Repeating Day.', 'ioroot-yoga-bookings' ),
 						'allow_null'    => 0,
 						'required'      => 1,
 						'wrapper'       => [
-							'width' => '25',
+							'width' => '50',
 						],
 						'conditional_logic' => $recurring_booking_condition,
 					],
@@ -555,6 +556,7 @@ abstract class ACF_Fields {
 						'label'         => __( 'Duration (minutes)', 'ioroot-yoga-bookings' ),
 						'name'          => 'duration_minutes',
 						'type'          => 'number',
+						'instructions'   => __( 'In minutes.', 'ioroot-yoga-bookings' ),
 						'default_value' => 45,
 						'min'           => 1,
 						'required'      => 1,
@@ -598,6 +600,21 @@ abstract class ACF_Fields {
 						'default_value' => 1,
 						'ui'            => 1,
 						'instructions'  => __( 'When enabled, each date includes the number of seats left.', 'ioroot-yoga-bookings' ),
+						'wrapper'       => [
+							'width' => '25',
+						],
+						'conditional_logic' => $internal_booking_condition,
+					],
+					[
+						'key'           => 'field_yb_class_upcoming_dates_count',
+						'label'         => __( 'Dates shown in booking dropdown', 'ioroot-yoga-bookings' ),
+						'name'          => 'upcoming_dates_count',
+						'type'          => 'number',
+						'default_value' => 3,
+						'min'           => 1,
+						'max'           => 12,
+						'step'          => 1,
+						'instructions'  => __( 'How many upcoming dates appear in this class’s booking form (independent per class).', 'ioroot-yoga-bookings' ),
 						'wrapper'       => [
 							'width' => '25',
 						],
@@ -704,7 +721,7 @@ abstract class ACF_Fields {
 		acf_add_local_field_group(
 			[
 				'key'      => 'group_yb_settings',
-				'title'    => __( 'Stripe Bookings Settings', 'ioroot-yoga-bookings' ),
+				'title'    => __( 'Settings', 'ioroot-yoga-bookings' ),
 				'fields'   => [
 					[
 						'key'   => 'field_yb_tab_stripe',
@@ -730,17 +747,6 @@ abstract class ACF_Fields {
 						'type'          => 'text',
 						'default_value' => '{class_name} — {class_date}, {class_time}',
 						'instructions'  => __( 'Supports placeholders: {class_name}, {class_date}, {class_time}, {location}, {seats}, {customer_name}, {booking_id}.', 'ioroot-yoga-bookings' ),
-					],
-					[
-						'key'           => 'field_yb_upcoming_dates_count',
-						'label'         => __( 'Classes shown in booking date dropdown', 'ioroot-yoga-bookings' ),
-						'name'          => 'upcoming_dates_count',
-						'type'          => 'number',
-						'default_value' => 3,
-						'min'           => 1,
-						'max'           => 12,
-						'step'          => 1,
-						'instructions'  => __( 'How many upcoming class dates to show in the booking form dropdown.', 'ioroot-yoga-bookings' ),
 					],
 					[
 						'key'     => 'field_yb_pub_test',
@@ -868,7 +874,7 @@ abstract class ACF_Fields {
 						'type'    => 'message',
 						'message' => sprintf(
 							'%s<br><br><strong>%s</strong><br><code>%s</code>',
-							esc_html__( 'You can add custom ACF fields to a booking form by creating a new ACF Field Group and setting its Location Rule to "IORoot Stripe Bookings → Booking form class ID". Then choose the class ID the field group should appear on.', 'ioroot-yoga-bookings' ),
+							esc_html__( 'You can add custom ACF fields to a booking form by creating a new ACF Field Group and setting its Location Rule to "IORoot Bookings → Booking form class ID". Then choose the class ID the field group should appear on.', 'ioroot-yoga-bookings' ),
 							esc_html__( 'Tip:', 'ioroot-yoga-bookings' ),
 							esc_html__( 'Supported field types include text, email, number, url, textarea, select, radio and true/false.', 'ioroot-yoga-bookings' )
 						),
@@ -1449,7 +1455,7 @@ PHP;
 	<pre class="ioroot-yb-doc__pre"><code><?php echo esc_html( $ex_action ); ?></code></pre>
 
 	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'ACF fields on the booking form', 'ioroot-yoga-bookings' ); ?></h3>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Create a Field Group in ACF and set the location rule to “IORoot Stripe Bookings → Booking form class ID”, then pick the Stripe Class post ID. Supported types include text, email, number, textarea, select, radio, true/false.', 'ioroot-yoga-bookings' ); ?></p>
+	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Create a Field Group in ACF and set the location rule to “IORoot Bookings → Booking form class ID”, then pick the Stripe Class post ID. Supported types include text, email, number, textarea, select, radio, true/false.', 'ioroot-yoga-bookings' ); ?></p>
 
 	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Email merge tags in templates', 'ioroot-yoga-bookings' ); ?></h3>
 	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'See the Emails tab for the full list. For ACF extras on the form:', 'ioroot-yoga-bookings' ); ?> <code>{acf:field_xxxxx}</code>, <code>{field_xxxxx}</code>, <?php esc_html_e( 'or', 'ioroot-yoga-bookings' ); ?> <code>{extra_fields}</code> <?php esc_html_e( 'for a summary block.', 'ioroot-yoga-bookings' ); ?></p>
@@ -1539,9 +1545,94 @@ PHP;
 	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Test vs live webhooks', 'ioroot-yoga-bookings' ); ?></h3>
 	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Stripe keeps separate webhook configurations for test and live. Create endpoints in both if you use both modes, each with its own signing secret, and paste the matching secret when you switch Mode in this plugin.', 'ioroot-yoga-bookings' ); ?></p>
 
+	<?php echo wp_kses_post( self::help_webhooks_localhost_message() ); ?>
+
 	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Verify delivery', 'ioroot-yoga-bookings' ); ?></h3>
 	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'In Stripe → Webhooks → your endpoint → “Attempts” / logs, you should see 2xx responses after a test payment. If you see 403 or signature errors, the signing secret in WordPress does not match that endpoint.', 'ioroot-yoga-bookings' ); ?></p>
 </div>
+		<?php
+		return (string) ob_get_clean();
+	}
+
+	/**
+	 * Help tab: localhost / tunnel guidance for Stripe webhooks (HTML fragment).
+	 */
+	private static function help_webhooks_localhost_message(): string {
+		$webhook_full         = rest_url( IOROOT_YB_REST_NS . '/stripe-webhook' );
+		$webhook_path_parsed  = wp_parse_url( $webhook_full, PHP_URL_PATH );
+		$webhook_path_example = is_string( $webhook_path_parsed ) && '' !== $webhook_path_parsed
+			? $webhook_path_parsed
+			: '/wp-json/' . IOROOT_YB_REST_NS . '/stripe-webhook';
+
+		ob_start();
+		?>
+	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Localhost', 'ioroot-yoga-bookings' ); ?></h3>
+	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'For local development, Stripe’s servers cannot reach http://localhost or http://127.0.0.1 on your machine. You need a publicly reachable HTTPS URL that forwards traffic to the WordPress site that loads this plugin.', 'ioroot-yoga-bookings' ); ?></p>
+
+	<h4 class="ioroot-yb-doc__h4"><?php esc_html_e( 'Tunnels (recommended)', 'ioroot-yoga-bookings' ); ?></h4>
+	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'A tunnel gives you a temporary public hostname with HTTPS. Point your Stripe webhook endpoint at the tunnel URL plus the same REST path WordPress uses (see “Your endpoint URL” above).', 'ioroot-yoga-bookings' ); ?></p>
+	<ul class="ioroot-yb-doc__ul">
+		<li>
+			<strong>ngrok</strong> —
+			<?php esc_html_e( 'Install ngrok, then forward the port where you can open WordPress in a browser (Docker example below uses 8101).', 'ioroot-yoga-bookings' ); ?>
+			<pre class="ioroot-yb-doc__pre"><code>ngrok http 8101</code></pre>
+			<?php
+			printf(
+				'<p class="ioroot-yb-doc__muted">%s</p>',
+				sprintf(
+					/* translators: %s: REST webhook path (e.g. /wp-json/stripe-bookings/v1/stripe-webhook) */
+					esc_html__( 'ngrok prints an https://….ngrok-free.app (or similar) URL. In Stripe, set the endpoint to that origin plus your webhook path, e.g. https://abc123.ngrok-free.app%s', 'ioroot-yoga-bookings' ),
+					esc_html( $webhook_path_example )
+				)
+			);
+			?>
+		</li>
+		<li>
+			<strong>Cloudflare Tunnel (cloudflared)</strong> —
+			<?php esc_html_e( 'Useful for longer-lived dev URLs and teams.', 'ioroot-yoga-bookings' ); ?>
+			<pre class="ioroot-yb-doc__pre"><code>cloudflared tunnel --url http://localhost:8101</code></pre>
+		</li>
+		<li>
+			<strong>localtunnel</strong> —
+			<pre class="ioroot-yb-doc__pre"><code>npx localtunnel --port 8101</code></pre>
+		</li>
+		<li>
+			<strong>nip.io / sslip.io</strong> —
+			<?php esc_html_e( 'These map a hostname to an IP address (e.g. 127.0.0.1.nip.io). They help WordPress see a stable hostname, but Stripe’s dashboard still expects a proper HTTPS endpoint. Use them together with a reverse proxy or TLS terminator, or prefer ngrok / Cloudflare Tunnel for webhooks.', 'ioroot-yoga-bookings' ); ?>
+		</li>
+	</ul>
+	<p class="ioroot-yb-doc__note"><?php esc_html_e( 'Also see the Developer tab → “Local testing with Stripe CLI”: stripe listen forwards webhooks without exposing WordPress, which is ideal for verifying handler code.', 'ioroot-yoga-bookings' ); ?></p>
+
+	<h4 class="ioroot-yb-doc__h4"><?php esc_html_e( 'Port forwarding and “which port?”', 'ioroot-yoga-bookings' ); ?></h4>
+	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Your tunnel must target the host port that actually reaches WordPress—not necessarily port 80 inside a container.', 'ioroot-yoga-bookings' ); ?></p>
+	<ul class="ioroot-yb-doc__ul">
+		<li><?php esc_html_e( 'Native PHP / local server: if the site runs at http://localhost:8080, run ngrok (or similar) against 8080.', 'ioroot-yoga-bookings' ); ?></li>
+		<li><?php esc_html_e( 'Docker Desktop: if compose maps 8101 on your Mac to port 80 in the container (e.g. "8101:80"), tunnel to 8101 on the host.', 'ioroot-yoga-bookings' ); ?></li>
+		<li><?php esc_html_e( 'Home/office router: only needed if you intentionally expose a machine to the internet without a tunnel. Stripe will hit your public IP: ensure the router forwards the chosen external port to your dev PC’s LAN IP and that a web server answers there.', 'ioroot-yoga-bookings' ); ?></li>
+	</ul>
+	<pre class="ioroot-yb-doc__pre"><code># Example docker-compose port publish (host:container)
+ports:
+  - "8101:80"</code></pre>
+
+	<h4 class="ioroot-yb-doc__h4"><?php esc_html_e( 'Docker: publish and reach the right interface', 'ioroot-yoga-bookings' ); ?></h4>
+	<ul class="ioroot-yb-doc__ul">
+		<li><?php esc_html_e( 'Publish ports explicitly. Without a ports: mapping, nothing on the host can reach the container’s web server.', 'ioroot-yoga-bookings' ); ?></li>
+		<li><?php esc_html_e( 'Bind to all interfaces when you need access from another device or a tunnel helper: use 0.0.0.0 in the mapping (Docker defaults this for host ports in many setups).', 'ioroot-yoga-bookings' ); ?></li>
+		<li><?php esc_html_e( 'If a second process (tunnel, reverse proxy) runs in another container and must reach WordPress on the host, Docker Desktop often provides host.docker.internal as the host gateway.', 'ioroot-yoga-bookings' ); ?></li>
+	</ul>
+	<pre class="ioroot-yb-doc__pre"><code>docker compose ps
+curl -I http://127.0.0.1:8101/wp-json/</code></pre>
+
+	<h4 class="ioroot-yb-doc__h4"><?php esc_html_e( 'Firewalls (host and container)', 'ioroot-yoga-bookings' ); ?></h4>
+	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Tunnels usually work outbound-only (your machine initiates to ngrok), so home routers are fine—but corporate networks may block tunnel domains or non-standard TLS.', 'ioroot-yoga-bookings' ); ?></p>
+	<ul class="ioroot-yb-doc__ul">
+		<li><?php esc_html_e( 'macOS: System Settings → Network → Firewall — allow incoming for your local web server or Docker if you expose ports directly.', 'ioroot-yoga-bookings' ); ?></li>
+		<li><?php esc_html_e( 'Windows: Windows Security → Firewall & network protection — allow the app (e.g. Docker Desktop) or the inbound port.', 'ioroot-yoga-bookings' ); ?></li>
+		<li><?php esc_html_e( 'Linux (ufw): allow the published host port, e.g.', 'ioroot-yoga-bookings' ); ?> <code>sudo ufw allow 8101/tcp</code> <?php esc_html_e( 'then reload rules.', 'ioroot-yoga-bookings' ); ?></li>
+		<li><?php esc_html_e( 'Cloud VPS: add a security group / firewall rule allowing HTTPS (443) from the internet to the instance running WordPress (or to the tunnel endpoint if the tunnel runs on the server).', 'ioroot-yoga-bookings' ); ?></li>
+		<li><?php esc_html_e( 'Container-only firewalls (iptables/nftables inside a custom image) are rare on dev images but can block traffic; test with curl from the host into the published port first.', 'ioroot-yoga-bookings' ); ?></li>
+	</ul>
+	<p class="ioroot-yb-doc__muted"><?php esc_html_e( 'After the tunnel is up, confirm WordPress “Site Address (URL)” in Settings → General matches what customers use (often the tunnel URL while testing), so rest_url() and Stripe return URLs stay consistent.', 'ioroot-yoga-bookings' ); ?></p>
 		<?php
 		return (string) ob_get_clean();
 	}
@@ -1581,7 +1672,7 @@ PHP;
 	<ol class="ioroot-yb-doc__ol">
 		<li><?php esc_html_e( 'Create Stripe Classes (menu on the left) with schedule, price, and capacity.', 'ioroot-yoga-bookings' ); ?></li>
 		<li><?php esc_html_e( 'Assign result pages under Result pages if the defaults are not suitable.', 'ioroot-yoga-bookings' ); ?></li>
-		<li><?php esc_html_e( 'Place the Elementor “Stripe Booking” widget or shortcode on a page.', 'ioroot-yoga-bookings' ); ?></li>
+		<li><?php esc_html_e( 'Place the Elementor “Booking” widget or shortcode on a page.', 'ioroot-yoga-bookings' ); ?></li>
 	</ol>
 
 	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Shortcode', 'ioroot-yoga-bookings' ); ?></h3>

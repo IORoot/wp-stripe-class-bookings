@@ -28,7 +28,7 @@ abstract class Bookings {
 		if ( ! isset( $schedules['yb_five_minutes'] ) ) {
 			$schedules['yb_five_minutes'] = [
 				'interval' => 5 * MINUTE_IN_SECONDS,
-				'display'  => __( 'Every 5 minutes (Stripe Bookings)', 'ioroot-yoga-bookings' ),
+				'display'  => __( 'Every 5 minutes (Bookings)', 'ioroot-yoga-bookings' ),
 			];
 		}
 		return $schedules;

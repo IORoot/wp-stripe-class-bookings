@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin reports for Stripe Bookings.
+ * Admin reports for Bookings.
  *
  * @package IORoot_Yoga_Bookings
  */
@@ -34,7 +34,7 @@ abstract class Reports {
 	 */
 	public static function filter_body_class( string $classes ): string {
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-		if ( $screen && $screen->id === CPT::BOOKING_PT . '_page_stripe-bookings-reports' ) {
+		if ( $screen && $screen->id === CPT::CLASS_PT . '_page_stripe-bookings-reports' ) {
 			return $classes . ' ioroot-yb-reports';
 		}
 		return $classes;
@@ -42,7 +42,7 @@ abstract class Reports {
 
 	public static function register_menu(): void {
 		self::$page_hook = (string) add_submenu_page(
-			'edit.php?post_type=' . CPT::BOOKING_PT,
+			'edit.php?post_type=' . CPT::CLASS_PT,
 			__( 'Reports', 'ioroot-yoga-bookings' ),
 			__( 'Reports', 'ioroot-yoga-bookings' ),
 			'manage_options',
@@ -137,7 +137,7 @@ abstract class Reports {
 							/>
 						</div>
 						<div class="ioroot-yb-reports-hero__text">
-							<h1 class="ioroot-yb-reports-hero__title"><?php esc_html_e( 'Stripe Bookings Reports', 'ioroot-yoga-bookings' ); ?></h1>
+							<h1 class="ioroot-yb-reports-hero__title"><?php esc_html_e( 'Bookings Reports', 'ioroot-yoga-bookings' ); ?></h1>
 							<p class="ioroot-yb-reports-hero__lead">
 								<?php esc_html_e( 'Historic trends, upcoming occupancy, and per-class guest lists in one place.', 'ioroot-yoga-bookings' ); ?>
 							</p>
@@ -161,7 +161,7 @@ abstract class Reports {
 						</p>
 					</div>
 					<form class="ioroot-yb-reports-year-form" method="get" action="<?php echo esc_url( admin_url( 'edit.php' ) ); ?>">
-						<input type="hidden" name="post_type" value="<?php echo esc_attr( CPT::BOOKING_PT ); ?>" />
+						<input type="hidden" name="post_type" value="<?php echo esc_attr( CPT::CLASS_PT ); ?>" />
 						<input type="hidden" name="page" value="stripe-bookings-reports" />
 						<label class="ioroot-yb-reports-year-form__label" for="ioroot-yb-reports-year"><?php esc_html_e( 'Year', 'ioroot-yoga-bookings' ); ?></label>
 						<select class="ioroot-yb-reports-year-form__select" id="ioroot-yb-reports-year" name="yb_year">

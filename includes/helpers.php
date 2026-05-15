@@ -229,11 +229,13 @@ abstract class Helpers {
 	}
 
 	/**
-	 * Number of upcoming dates shown in booking dropdowns.
+	 * Number of upcoming dates shown in the booking form dropdown for a class.
+	 *
+	 * @param array<string, mixed> $class_data Shape from {@see get_class_data()}.
 	 */
-	public static function upcoming_dates_count(): int {
-		$count = (int) self::get_option( 'upcoming_dates_count', 3 );
-		return max( 1, min( 12, $count ) );
+	public static function class_upcoming_dates_count( array $class_data ): int {
+		$n = isset( $class_data['upcoming_dates_count'] ) ? (int) $class_data['upcoming_dates_count'] : 3;
+		return max( 1, min( 12, $n ) );
 	}
 
 	/**
@@ -274,6 +276,10 @@ abstract class Helpers {
 			$image_id = (int) $class_image['ID'];
 		}
 
+		$upcoming_raw = function_exists( 'get_field' ) ? get_field( 'upcoming_dates_count', $class_id ) : null;
+		$upcoming_n   = ( null !== $upcoming_raw && '' !== $upcoming_raw && false !== $upcoming_raw ) ? (int) $upcoming_raw : 3;
+		$upcoming_n   = max( 1, min( 12, $upcoming_n ) );
+
 		return [
 			'id'              => $class_id,
 			'name'            => get_the_title( $class_id ),
@@ -292,6 +298,7 @@ abstract class Helpers {
 			'price'           => function_exists( 'get_field' ) ? (float) get_field( 'price_gbp', $class_id ) : 0.0,
 			'capacity'        => function_exists( 'get_field' ) ? (int) get_field( 'capacity', $class_id ) : 0,
 			'show_seats_remaining' => function_exists( 'get_field' ) ? (bool) get_field( 'show_seats_remaining', $class_id ) : true,
+			'upcoming_dates_count' => $upcoming_n,
 			'class_active'    => function_exists( 'get_field' ) ? (bool) get_field( 'class_active', $class_id ) : true,
 			'cancelled_dates' => array_values( $cancelled_dates ),
 		];
