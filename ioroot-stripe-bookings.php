@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name: IORoot Bookings
- * Description: Stripe Checkout booking system for classes. ACF-driven class types, capacity-aware date dropdowns, customer + admin emails, Elementor widget and shortcode.
+ * Plugin Name: Stripe Class Bookings
+ * Description: Stripe Class Bookings — Stripe Checkout for classes. ACF-driven class types, capacity-aware date dropdowns, customer + admin emails, Elementor widget and shortcode.
  * Plugin URI: https://ioroot.com
  * Version: 2.1.4
  * Author: IORoot.com

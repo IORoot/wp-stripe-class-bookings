@@ -56,12 +56,12 @@ abstract class CPT {
 			self::BOOKING_PT,
 			[
 				'labels'       => [
-					'name'               => __( 'Bookings', 'ioroot-yoga-bookings' ),
+					'name'               => __( 'Stripe Class Bookings', 'ioroot-yoga-bookings' ),
 					'singular_name'      => __( 'Booking', 'ioroot-yoga-bookings' ),
 					'edit_item'          => __( 'Edit Booking', 'ioroot-yoga-bookings' ),
 					'view_item'          => __( 'View Booking', 'ioroot-yoga-bookings' ),
 					'search_items'       => __( 'Search Bookings', 'ioroot-yoga-bookings' ),
-					'menu_name'          => __( 'Bookings', 'ioroot-yoga-bookings' ),
+					'menu_name'          => __( 'Stripe Class Bookings', 'ioroot-yoga-bookings' ),
 				],
 				'public'       => false,
 				'show_ui'      => true,

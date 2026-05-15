@@ -874,7 +874,7 @@ abstract class ACF_Fields {
 						'type'    => 'message',
 						'message' => sprintf(
 							'%s<br><br><strong>%s</strong><br><code>%s</code>',
-							esc_html__( 'You can add custom ACF fields to a booking form by creating a new ACF Field Group and setting its Location Rule to "IORoot Bookings → Booking form class ID". Then choose the class ID the field group should appear on.', 'ioroot-yoga-bookings' ),
+							esc_html__( 'You can add custom ACF fields to a booking form by creating a new ACF Field Group and setting its Location Rule to "Stripe Class Bookings → Booking form class ID". Then choose the class ID the field group should appear on.', 'ioroot-yoga-bookings' ),
 							esc_html__( 'Tip:', 'ioroot-yoga-bookings' ),
 							esc_html__( 'Supported field types include text, email, number, url, textarea, select, radio and true/false.', 'ioroot-yoga-bookings' )
 						),
@@ -1455,7 +1455,7 @@ PHP;
 	<pre class="ioroot-yb-doc__pre"><code><?php echo esc_html( $ex_action ); ?></code></pre>
 
 	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'ACF fields on the booking form', 'ioroot-yoga-bookings' ); ?></h3>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Create a Field Group in ACF and set the location rule to “IORoot Bookings → Booking form class ID”, then pick the Stripe Class post ID. Supported types include text, email, number, textarea, select, radio, true/false.', 'ioroot-yoga-bookings' ); ?></p>
+	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Create a Field Group in ACF and set the location rule to “Stripe Class Bookings → Booking form class ID”, then pick the Stripe Class post ID. Supported types include text, email, number, textarea, select, radio, true/false.', 'ioroot-yoga-bookings' ); ?></p>
 
 	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Email merge tags in templates', 'ioroot-yoga-bookings' ); ?></h3>
 	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'See the Emails tab for the full list. For ACF extras on the form:', 'ioroot-yoga-bookings' ); ?> <code>{acf:field_xxxxx}</code>, <code>{field_xxxxx}</code>, <?php esc_html_e( 'or', 'ioroot-yoga-bookings' ); ?> <code>{extra_fields}</code> <?php esc_html_e( 'for a summary block.', 'ioroot-yoga-bookings' ); ?></p>
@@ -1672,7 +1672,7 @@ curl -I http://127.0.0.1:8101/wp-json/</code></pre>
 	<ol class="ioroot-yb-doc__ol">
 		<li><?php esc_html_e( 'Create Stripe Classes (menu on the left) with schedule, price, and capacity.', 'ioroot-yoga-bookings' ); ?></li>
 		<li><?php esc_html_e( 'Assign result pages under Result pages if the defaults are not suitable.', 'ioroot-yoga-bookings' ); ?></li>
-		<li><?php esc_html_e( 'Place the Elementor “Booking” widget or shortcode on a page.', 'ioroot-yoga-bookings' ); ?></li>
+		<li><?php esc_html_e( 'Place the Elementor “Stripe Class Booking” widget or shortcode on a page.', 'ioroot-yoga-bookings' ); ?></li>
 	</ol>
 
 	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Shortcode', 'ioroot-yoga-bookings' ); ?></h3>

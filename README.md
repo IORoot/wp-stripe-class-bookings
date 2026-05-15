@@ -1,4 +1,4 @@
-# IORoot Bookings
+# Stripe Class Bookings
 
 A small Stripe Checkout booking system for classes, built around ACF Pro.
 
@@ -18,7 +18,7 @@ A small Stripe Checkout booking system for classes, built around ACF Pro.
 
 ## Setup
 
-1. Activate **IORoot Bookings** in Plugins.
+1. Activate **Stripe Class Bookings** in Plugins.
 2. Visit **Stripe Classes → Settings** in the admin sidebar.
 3. Paste your **Stripe test** publishable key and secret key.
 4. In Stripe Dashboard → Developers → Webhooks, add an endpoint pointing at the URL shown on the settings page (`/wp-json/stripe-bookings/v1/stripe-webhook`) listening for:
@@ -27,7 +27,7 @@ A small Stripe Checkout booking system for classes, built around ACF Pro.
    - `checkout.session.async_payment_failed`
 5. Paste the webhook signing secret into the plugin settings.
 6. Add classes under **Stripe Classes**.
-7. Drop the **Booking** Elementor widget on a page (or use `[stripe_booking class_id="123"]`).
+7. Drop the **Stripe Class Booking** Elementor widget on a page (or use `[stripe_booking class_id="123"]`).
 
 ## Cancelling
 

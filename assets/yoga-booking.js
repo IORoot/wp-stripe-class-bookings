@@ -1,4 +1,4 @@
-/* IORoot Bookings — frontend behaviour */
+/* Stripe Class Bookings — frontend behaviour */
 ( function () {
 	'use strict';
 

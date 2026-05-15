@@ -1,6 +1,6 @@
 <?php
 /**
- * Elementor widget: Booking form.
+ * Elementor widget: Stripe Class Booking form.
  *
  * @package IORoot_Yoga_Bookings
  */
@@ -23,7 +23,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 	}
 
 	public function get_title() {
-		return esc_html__( 'Booking', 'ioroot-yoga-bookings' );
+		return esc_html__( 'Stripe Class Booking', 'ioroot-yoga-bookings' );
 	}
 
 	public function get_icon() {
@@ -50,7 +50,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->start_controls_section(
 			'section_content',
 			[
-				'label' => esc_html__( 'Booking', 'ioroot-yoga-bookings' ),
+				'label' => esc_html__( 'Stripe Class Booking', 'ioroot-yoga-bookings' ),
 			]
 		);
 

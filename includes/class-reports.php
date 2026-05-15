@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin reports for Bookings.
+ * Admin reports for Stripe Class Bookings.
  *
  * @package IORoot_Yoga_Bookings
  */
@@ -137,7 +137,7 @@ abstract class Reports {
 							/>
 						</div>
 						<div class="ioroot-yb-reports-hero__text">
-							<h1 class="ioroot-yb-reports-hero__title"><?php esc_html_e( 'Bookings Reports', 'ioroot-yoga-bookings' ); ?></h1>
+							<h1 class="ioroot-yb-reports-hero__title"><?php esc_html_e( 'Stripe Class Bookings Reports', 'ioroot-yoga-bookings' ); ?></h1>
 							<p class="ioroot-yb-reports-hero__lead">
 								<?php esc_html_e( 'Historic trends, upcoming occupancy, and per-class guest lists in one place.', 'ioroot-yoga-bookings' ); ?>
 							</p>
