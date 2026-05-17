@@ -1525,6 +1525,27 @@ PHP;
 	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Your endpoint URL (exact)', 'ioroot-yoga-bookings' ); ?></h3>
 	<pre class="ioroot-yb-doc__pre"><code><?php echo esc_html( $webhook_url ); ?></code></pre>
 
+	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Troubleshooting', 'ioroot-yoga-bookings' ); ?></h3>
+	<ul class="ioroot-yb-doc__ul">
+		<li>
+			<strong><?php esc_html_e( 'Apache HTML 404 on /wp-json/…', 'ioroot-yoga-bookings' ); ?></strong>
+			<?php esc_html_e( 'If curl or Stripe gets an HTML “Not Found” page from Apache (not JSON from WordPress), the request never reached WordPress. Common causes:', 'ioroot-yoga-bookings' ); ?>
+			<ul class="ioroot-yb-doc__ul">
+				<li><?php esc_html_e( 'Permalinks are set to Plain, or rewrite rules were never saved — go to Settings → Permalinks, choose something other than Plain (e.g. Post name), and click Save Changes once. That refreshes rules so /wp-json/… is routed to WordPress.', 'ioroot-yoga-bookings' ); ?></li>
+				<li><?php esc_html_e( 'Missing or ignored .htaccess rewrites in Docker — ensure the web server allows overrides (AllowOverride) for the document root so WordPress can write rewrite rules.', 'ioroot-yoga-bookings' ); ?></li>
+			</ul>
+			<?php esc_html_e( 'Always paste the URL shown above: rest_url() matches your permalink structure (pretty /wp-json/… vs ?rest_route=… on Plain).', 'ioroot-yoga-bookings' ); ?>
+		</li>
+		<li>
+			<strong><?php esc_html_e( '400 JSON { "error": "invalid_signature" }', 'ioroot-yoga-bookings' ); ?></strong>
+			<?php esc_html_e( 'The route is working; Stripe must send a signed payload. A manual curl with an empty body will fail signature verification. Use Stripe CLI forward or a real Dashboard test event.', 'ioroot-yoga-bookings' ); ?>
+		</li>
+		<li>
+			<strong><?php esc_html_e( 'Wrong host in redirects or Link headers', 'ioroot-yoga-bookings' ); ?></strong>
+			<?php esc_html_e( 'Settings → General → WordPress Address and Site Address should match the URL Stripe and browsers use (public hostname, tunnel URL, or IP:port). Mismatches break checkout return URLs and can confuse which webhook URL to register.', 'ioroot-yoga-bookings' ); ?>
+		</li>
+	</ul>
+
 	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Steps in Stripe Dashboard', 'ioroot-yoga-bookings' ); ?></h3>
 	<ol class="ioroot-yb-doc__ol ioroot-yb-doc__ol--spaced">
 		<li><?php esc_html_e( 'Open Developers → Webhooks.', 'ioroot-yoga-bookings' ); ?></li>
