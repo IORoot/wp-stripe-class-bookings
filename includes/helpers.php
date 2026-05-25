@@ -234,6 +234,9 @@ abstract class Helpers {
 	 * @param array<string, mixed> $class_data Shape from {@see get_class_data()}.
 	 */
 	public static function class_upcoming_dates_count( array $class_data ): int {
+		if ( ! empty( $class_data['is_one_off_event'] ) ) {
+			return 1;
+		}
 		$n = isset( $class_data['upcoming_dates_count'] ) ? (int) $class_data['upcoming_dates_count'] : 3;
 		return max( 1, min( 12, $n ) );
 	}

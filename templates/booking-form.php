@@ -24,12 +24,29 @@ $waiver_page_url = $show_waiver
 $show_mailchimp_optin = (bool) \IORoot_Yoga_Bookings\Helpers::get_option( 'enable_mailchimp_optin', false );
 $extra_fields = \IORoot_Yoga_Bookings\Extra_Fields::get_fields_for_class( (int) $class_data['id'] );
 $show_seats_remaining = ! array_key_exists( 'show_seats_remaining', $class_data ) || ! empty( $class_data['show_seats_remaining'] );
+$is_one_off_fixed_date  = ! empty( $class_data['is_one_off_event'] );
+$primary_date           = null;
+if ( $is_one_off_fixed_date && ! empty( $dates ) ) {
+	foreach ( $dates as $d ) {
+		if ( empty( $d['cancelled'] ) ) {
+			$primary_date = $d;
+			break;
+		}
+	}
+	if ( ! $primary_date ) {
+		$primary_date = $dates[0];
+	}
+	if ( ! empty( $primary_date['cancelled'] ) ) {
+		$has_dates = false;
+	}
+}
 $labels = apply_filters(
 	'ioroot_sb_booking_labels',
 	[
 		'name'                  => __( 'Your name', 'ioroot-yoga-bookings' ),
 		'email'                 => __( 'Email address', 'ioroot-yoga-bookings' ),
 		'date'                  => __( 'Choose a date', 'ioroot-yoga-bookings' ),
+		'event_date'            => __( 'Event date', 'ioroot-yoga-bookings' ),
 		'seats'                 => __( 'How many people?', 'ioroot-yoga-bookings' ),
 		'total'                 => __( 'Total', 'ioroot-yoga-bookings' ),
 		'book_button'           => __( 'Book & pay with Stripe', 'ioroot-yoga-bookings' ),
@@ -109,7 +126,7 @@ do_action( 'ioroot_sb_booking_template_start', $class_data, $dates );
 		<p class="yb-form__notice yb-form__notice--warn"><?php echo esc_html( $labels['no_dates_hint'] ); ?></p>
 	<?php else : ?>
 		<?php do_action( 'ioroot_sb_booking_before_form', $class_data, $dates ); ?>
-		<form class="yb-form__form" novalidate>
+		<form class="yb-form__form" novalidate data-yb-show-seats-remaining="<?php echo $show_seats_remaining ? '1' : '0'; ?>"<?php echo $is_one_off_fixed_date ? ' data-yb-one-off-date="1"' : ''; ?>>
 			<?php do_action( 'ioroot_sb_booking_form_top', $class_data, $dates ); ?>
 			<div class="yb-form__card">
 			<div class="yb-form__grid yb-form__grid--2">
@@ -125,30 +142,68 @@ do_action( 'ioroot_sb_booking_template_start', $class_data, $dates );
 			</div>
 
 			<div class="yb-form__row">
-				<label class="yb-form__label" for="yb-date-<?php echo esc_attr( (string) $class_data['id'] ); ?>"><?php echo esc_html( $labels['date'] ); ?></label>
-				<select class="yb-form__input yb-form__select" id="yb-date-<?php echo esc_attr( (string) $class_data['id'] ); ?>" name="class_date" data-yb-dates="<?php echo esc_attr( wp_json_encode( $dates ) ); ?>">
-					<?php foreach ( $dates as $i => $d ) : ?>
-						<?php $is_cancelled = ! empty( $d['cancelled'] ); ?>
-						<option value="<?php echo esc_attr( $d['date'] ); ?>" data-remaining="<?php echo esc_attr( (string) $d['remaining'] ); ?>" data-cancelled="<?php echo $is_cancelled ? '1' : '0'; ?>"<?php echo $is_cancelled ? ' disabled class="yb-form__option--cancelled"' : ''; ?>>
+				<?php if ( $is_one_off_fixed_date && $primary_date ) : ?>
+					<span class="yb-form__label" id="yb-date-label-<?php echo esc_attr( (string) $class_data['id'] ); ?>"><?php echo esc_html( $labels['event_date'] ); ?></span>
+					<?php if ( ! empty( $primary_date['cancelled'] ) ) : ?>
+						<p class="yb-form__date-fixed yb-form__date-fixed--cancelled" aria-labelledby="yb-date-label-<?php echo esc_attr( (string) $class_data['id'] ); ?>">
 							<?php
-							if ( $is_cancelled ) {
-								echo esc_html__( 'Cancelled — ', 'ioroot-yoga-bookings' );
-								echo esc_html( $d['label'] );
-							} else {
-								echo esc_html( $d['label'] );
-								if ( $show_seats_remaining ) {
-									echo ' · ';
-									echo esc_html( sprintf(
+							echo esc_html__( 'Cancelled — ', 'ioroot-yoga-bookings' );
+							echo esc_html( (string) $primary_date['label'] );
+							?>
+						</p>
+					<?php else : ?>
+						<p class="yb-form__date-fixed" data-yb-date-display aria-labelledby="yb-date-label-<?php echo esc_attr( (string) $class_data['id'] ); ?>">
+							<?php
+							echo esc_html( (string) $primary_date['label'] );
+							if ( $show_seats_remaining ) {
+								echo ' · ';
+								echo esc_html(
+									sprintf(
 										/* translators: %d: seats remaining */
-										_n( '%d seat left', '%d seats left', $d['remaining'], 'ioroot-yoga-bookings' ),
-										$d['remaining']
-									) );
-								}
+										_n( '%d seat left', '%d seats left', (int) $primary_date['remaining'], 'ioroot-yoga-bookings' ),
+										(int) $primary_date['remaining']
+									)
+								);
 							}
 							?>
-						</option>
-					<?php endforeach; ?>
-				</select>
+						</p>
+						<input
+							type="hidden"
+							id="yb-date-<?php echo esc_attr( (string) $class_data['id'] ); ?>"
+							name="class_date"
+							value="<?php echo esc_attr( (string) $primary_date['date'] ); ?>"
+							data-remaining="<?php echo esc_attr( (string) (int) $primary_date['remaining'] ); ?>"
+							data-cancelled="0"
+						>
+					<?php endif; ?>
+				<?php else : ?>
+					<label class="yb-form__label" for="yb-date-<?php echo esc_attr( (string) $class_data['id'] ); ?>"><?php echo esc_html( $labels['date'] ); ?></label>
+					<select class="yb-form__input yb-form__select" id="yb-date-<?php echo esc_attr( (string) $class_data['id'] ); ?>" name="class_date" data-yb-dates="<?php echo esc_attr( wp_json_encode( $dates ) ); ?>">
+						<?php foreach ( $dates as $i => $d ) : ?>
+							<?php $is_cancelled = ! empty( $d['cancelled'] ); ?>
+							<option value="<?php echo esc_attr( $d['date'] ); ?>" data-remaining="<?php echo esc_attr( (string) $d['remaining'] ); ?>" data-cancelled="<?php echo $is_cancelled ? '1' : '0'; ?>"<?php echo $is_cancelled ? ' disabled class="yb-form__option--cancelled"' : ''; ?>>
+								<?php
+								if ( $is_cancelled ) {
+									echo esc_html__( 'Cancelled — ', 'ioroot-yoga-bookings' );
+									echo esc_html( $d['label'] );
+								} else {
+									echo esc_html( $d['label'] );
+									if ( $show_seats_remaining ) {
+										echo ' · ';
+										echo esc_html(
+											sprintf(
+												/* translators: %d: seats remaining */
+												_n( '%d seat left', '%d seats left', $d['remaining'], 'ioroot-yoga-bookings' ),
+												$d['remaining']
+											)
+										);
+									}
+								}
+								?>
+							</option>
+						<?php endforeach; ?>
+					</select>
+				<?php endif; ?>
 			</div>
 
 			<div class="yb-form__row">

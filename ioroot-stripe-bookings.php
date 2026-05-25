@@ -3,14 +3,17 @@
  * Plugin Name: Stripe Class Bookings
  * Description: Stripe Class Bookings — Stripe Checkout for classes. ACF-driven class types, capacity-aware date dropdowns, customer + admin emails, Elementor widget and shortcode.
  * Plugin URI: https://ioroot.com
- * Version: 2.1.4
+ * Version: 1.0.0
  * Author: IORoot.com
  * Text Domain: ioroot-yoga-bookings
+ * License: GPL v2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * 
  */
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'IOROOT_YB_VERSION', '2.1.4' );
+define( 'IOROOT_YB_VERSION', '1.0.0' );
 define( 'IOROOT_YB_FILE', __FILE__ );
 define( 'IOROOT_YB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'IOROOT_YB_URL', plugin_dir_url( __FILE__ ) );

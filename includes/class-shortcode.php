@@ -56,7 +56,9 @@ abstract class Shortcode {
 		wp_enqueue_style( 'ioroot-yb' );
 		wp_enqueue_script( 'ioroot-yb' );
 
-		$dates_count     = Helpers::class_upcoming_dates_count( $class_data );
+		$dates_count     = ! empty( $class_data['is_one_off_event'] )
+			? 1
+			: Helpers::class_upcoming_dates_count( $class_data );
 		$dates           = Bookings::next_available_dates( $class_data, $dates_count );
 		$show_heading    = '1' === (string) $atts['heading'];
 		$max_seats_today = $dates ? (int) $dates[0]['remaining'] : 0;

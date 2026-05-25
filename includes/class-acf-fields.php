@@ -618,7 +618,7 @@ abstract class ACF_Fields {
 						'wrapper'       => [
 							'width' => '25',
 						],
-						'conditional_logic' => $internal_booking_condition,
+						'conditional_logic' => $recurring_booking_condition,
 					],
 					[
 						'key'           => 'field_yb_location',

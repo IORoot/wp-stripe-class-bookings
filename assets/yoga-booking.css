@@ -114,6 +114,15 @@
 	min-width: 0;
 }
 
+.yb-form__waiver-body p {
+	margin-top: 0;
+	margin-bottom: 0.65em;
+}
+
+.yb-form__waiver-body p:last-child {
+	margin-bottom: 0;
+}
+
 .yb-form__waiver-body a {
 	text-decoration: underline;
 	text-underline-offset: 2px;
@@ -189,6 +198,26 @@
 .yb-form__select option[disabled] {
 	text-decoration: line-through;
 	color: #8a8a8a;
+}
+
+.yb-form__date-fixed {
+	margin: 0;
+	padding: 11px 14px;
+	font-size: 15px;
+	line-height: 1.45;
+	color: var(--yb-fg);
+	background: rgba(255, 255, 255, .45);
+	border: 1px solid var(--yb-border);
+	border-radius: var(--yb-radius-sm);
+}
+
+.yb-form__date-fixed--cancelled {
+	text-decoration: line-through;
+	color: #8a8a8a;
+}
+
+.yb-form--layout-modern .yb-form__date-fixed {
+	background: rgba(255, 255, 255, .72);
 }
 
 .yb-form__input--error {

@@ -391,7 +391,10 @@ abstract class REST {
 		if ( ! $class_data ) {
 			return new \WP_REST_Response( [ 'error' => 'not_found' ], 404 );
 		}
-		$dates = Bookings::next_available_dates( $class_data, Helpers::class_upcoming_dates_count( $class_data ) );
+		$dates_count = ! empty( $class_data['is_one_off_event'] )
+			? 1
+			: Helpers::class_upcoming_dates_count( $class_data );
+		$dates       = Bookings::next_available_dates( $class_data, $dates_count );
 		return new \WP_REST_Response( [
 			'class_active' => (bool) $class_data['class_active'],
 			'dates'        => $dates,

@@ -51,23 +51,32 @@
 		button.setAttribute( 'aria-busy', on ? 'true' : 'false' );
 	}
 
+	function getDateRemaining( dateField ) {
+		if ( ! dateField ) {
+			return 0;
+		}
+		if ( dateField.tagName === 'SELECT' ) {
+			if ( dateField.options.length && dateField.selectedIndex < 0 ) {
+				const firstSelectable = Array.prototype.findIndex.call( dateField.options, function ( option ) {
+					return ! option.disabled;
+				} );
+				if ( firstSelectable >= 0 ) {
+					dateField.selectedIndex = firstSelectable;
+				}
+			}
+			const opt = dateField.options[ dateField.selectedIndex ];
+			return opt ? Math.max( 0, parseInt( opt.dataset.remaining || '0', 10 ) ) : 0;
+		}
+		return Math.max( 0, parseInt( dateField.dataset.remaining || '0', 10 ) );
+	}
+
 	function updateSeatsOptions( form ) {
-		const dateSel = form.querySelector( '[name="class_date"]' );
+		const dateField = form.querySelector( '[name="class_date"]' );
 		const seatsSel = form.querySelector( '[name="seats"]' );
 		const totalEl = form.querySelector( '.yb-form__total' );
-		if ( ! dateSel || ! seatsSel ) return;
+		if ( ! dateField || ! seatsSel ) return;
 
-		if ( dateSel.options.length && dateSel.selectedIndex < 0 ) {
-			const firstSelectable = Array.prototype.findIndex.call( dateSel.options, function ( option ) {
-				return ! option.disabled;
-			} );
-			if ( firstSelectable >= 0 ) {
-				dateSel.selectedIndex = firstSelectable;
-			}
-		}
-
-		const opt = dateSel.options[ dateSel.selectedIndex ];
-		const remaining = opt ? Math.max( 0, parseInt( opt.dataset.remaining || '0', 10 ) ) : 0;
+		const remaining = getDateRemaining( dateField );
 		const max = Math.max( 1, Math.min( 4, remaining ) );
 
 		const previous = parseInt( seatsSel.value, 10 ) || 1;
@@ -97,6 +106,18 @@
 		totalEl.textContent = formatPrice( unit * seats );
 	}
 
+	function formatDateOptionLabel( d, showSeatsRemaining ) {
+		if ( d.cancelled ) {
+			return 'Cancelled - ' + d.label;
+		}
+		let text = d.label;
+		if ( showSeatsRemaining ) {
+			const seatsLabel = ( d.remaining === 1 ) ? '1 seat left' : ( d.remaining + ' seats left' );
+			text += ' · ' + seatsLabel;
+		}
+		return text;
+	}
+
 	async function refreshAvailability( wrapper ) {
 		const classId = wrapper.dataset.ybClassId;
 		if ( ! classId ) return;
@@ -104,9 +125,32 @@
 			const res = await fetch( cfg.rest_url + 'availability?class_id=' + encodeURIComponent( classId ) );
 			if ( ! res.ok ) return;
 			const data = await res.json();
-			const dateSel = wrapper.querySelector( '[name="class_date"]' );
-			if ( ! dateSel ) return;
-			dateSel.innerHTML = '';
+			const form = wrapper.querySelector( '.yb-form__form' ) || wrapper;
+			const dateField = wrapper.querySelector( '[name="class_date"]' );
+			if ( ! dateField || ! ( data.dates || [] ).length ) return;
+
+			const showSeatsRemaining = form.dataset.ybShowSeatsRemaining === '1';
+			const isOneOff = form.dataset.ybOneOffDate === '1';
+
+			if ( isOneOff && dateField.tagName !== 'SELECT' ) {
+				const d = data.dates[ 0 ];
+				const display = wrapper.querySelector( '[data-yb-date-display]' );
+				dateField.value = d.date;
+				dateField.dataset.remaining = String( d.remaining );
+				dateField.dataset.cancelled = d.cancelled ? '1' : '0';
+				if ( display ) {
+					display.textContent = formatDateOptionLabel( d, showSeatsRemaining );
+					display.classList.toggle( 'yb-form__date-fixed--cancelled', !! d.cancelled );
+				}
+				updateSeatsOptions( form );
+				return;
+			}
+
+			if ( dateField.tagName !== 'SELECT' ) {
+				return;
+			}
+
+			dateField.innerHTML = '';
 			( data.dates || [] ).forEach( function ( d ) {
 				const o = document.createElement( 'option' );
 				o.value = d.date;
@@ -115,14 +159,11 @@
 				if ( d.cancelled ) {
 					o.disabled = true;
 					o.className = 'yb-form__option--cancelled';
-					o.textContent = 'Cancelled - ' + d.label;
-				} else {
-					const seatsLabel = ( d.remaining === 1 ) ? '1 seat left' : ( d.remaining + ' seats left' );
-					o.textContent = d.label + ' · ' + seatsLabel;
 				}
-				dateSel.appendChild( o );
+				o.textContent = formatDateOptionLabel( d, showSeatsRemaining );
+				dateField.appendChild( o );
 			} );
-			updateSeatsOptions( wrapper.querySelector( '.yb-form__form' ) || wrapper );
+			updateSeatsOptions( form );
 		} catch ( e ) { /* ignore */ }
 	}
 
