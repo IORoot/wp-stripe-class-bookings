@@ -30,7 +30,10 @@ abstract class Extra_Fields {
 	}
 
 	public static function register_location_rule_type( array $types ): array {
-		$types['Stripe Class Bookings']['yb_form_class_id'] = __( 'Booking form class ID', 'ioroot-yoga-bookings' );
+		$label = __( 'Booking form class ID', 'wp-stripe-class-bookings' );
+		$types['Class Bookings with Stripe']['yb_form_class_id'] = $label;
+		// Legacy ACF location group label (existing field groups may reference this).
+		$types['Stripe Class Bookings']['yb_form_class_id'] = $label;
 		return $types;
 	}
 
@@ -106,12 +109,11 @@ abstract class Extra_Fields {
 			$type     = (string) ( $field['type'] ?? 'text' );
 			$label    = (string) ( $field['label'] ?? '' );
 			$required = ! empty( $field['required'] );
-			$req_attr = $required ? ' required data-yb-required="1"' : '';
 			$star     = $required ? ' *' : '';
 
 			echo '<div class="yb-form__row">';
 			echo '<label class="yb-form__label" for="' . esc_attr( $id ) . '">' . esc_html( $label . $star ) . '</label>';
-			self::render_input_for_field( $field, $id, $name, $req_attr );
+			self::render_input_for_field( $field, $id, $name, $required );
 			echo '</div>';
 		}
 	}
@@ -119,20 +121,24 @@ abstract class Extra_Fields {
 	/**
 	 * @param array<string, mixed> $field
 	 */
-	private static function render_input_for_field( array $field, string $id, string $name, string $req_attr ): void {
+	private static function render_input_for_field( array $field, string $id, string $name, bool $required ): void {
 		$type = (string) ( $field['type'] ?? 'text' );
 		$placeholder = isset( $field['placeholder'] ) ? (string) $field['placeholder'] : '';
 
 		if ( 'textarea' === $type ) {
-			echo '<textarea class="yb-form__input" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '"' . $req_attr . ' placeholder="' . esc_attr( $placeholder ) . '"></textarea>';
+			echo '<textarea class="yb-form__input" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '"';
+			self::render_required_attrs( $required );
+			echo ' placeholder="' . esc_attr( $placeholder ) . '"></textarea>';
 			return;
 		}
 
 		if ( in_array( $type, [ 'select', 'radio' ], true ) ) {
 			$choices = (array) ( $field['choices'] ?? [] );
-			echo '<select class="yb-form__input yb-form__select" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '"' . $req_attr . '>';
+			echo '<select class="yb-form__input yb-form__select" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '"';
+			self::render_required_attrs( $required );
+			echo '>';
 			if ( empty( $field['required'] ) ) {
-				echo '<option value="">' . esc_html__( 'Select an option', 'ioroot-yoga-bookings' ) . '</option>';
+				echo '<option value="">' . esc_html__( 'Select an option', 'wp-stripe-class-bookings' ) . '</option>';
 			}
 			foreach ( $choices as $value => $choice_label ) {
 				echo '<option value="' . esc_attr( (string) $value ) . '">' . esc_html( (string) $choice_label ) . '</option>';
@@ -143,7 +149,9 @@ abstract class Extra_Fields {
 
 		if ( 'true_false' === $type ) {
 			echo '<label class="yb-form__check">';
-			echo '<input class="yb-form__check-input" id="' . esc_attr( $id ) . '" type="checkbox" name="' . esc_attr( $name ) . '" value="1"' . $req_attr . '>';
+			echo '<input class="yb-form__check-input" id="' . esc_attr( $id ) . '" type="checkbox" name="' . esc_attr( $name ) . '" value="1"';
+			self::render_required_attrs( $required );
+			echo '>';
 			echo '<span class="yb-form__check-label">' . esc_html( (string) ( $field['message'] ?? '' ) ) . '</span>';
 			echo '</label>';
 			return;
@@ -157,7 +165,16 @@ abstract class Extra_Fields {
 		} elseif ( 'url' === $type ) {
 			$html_type = 'url';
 		}
-		echo '<input class="yb-form__input" id="' . esc_attr( $id ) . '" type="' . esc_attr( $html_type ) . '" name="' . esc_attr( $name ) . '"' . $req_attr . ' placeholder="' . esc_attr( $placeholder ) . '">';
+		echo '<input class="yb-form__input" id="' . esc_attr( $id ) . '" type="' . esc_attr( $html_type ) . '" name="' . esc_attr( $name ) . '"';
+		self::render_required_attrs( $required );
+		echo ' placeholder="' . esc_attr( $placeholder ) . '">';
+	}
+
+	private static function render_required_attrs( bool $required ): void {
+		if ( ! $required ) {
+			return;
+		}
+		echo ' required="required" data-yb-required="1"';
 	}
 
 	/**
@@ -174,7 +191,7 @@ abstract class Extra_Fields {
 		foreach ( $fields as $field ) {
 			$key   = (string) ( $field['key'] ?? '' );
 			$type  = (string) ( $field['type'] ?? 'text' );
-			$label = (string) ( $field['label'] ?? __( 'Field', 'ioroot-yoga-bookings' ) );
+			$label = (string) ( $field['label'] ?? __( 'Field', 'wp-stripe-class-bookings' ) );
 			$val   = $submitted[ $key ] ?? '';
 
 			if ( 'true_false' === $type ) {
@@ -191,7 +208,7 @@ abstract class Extra_Fields {
 						'yb_required',
 						sprintf(
 							/* translators: %s: field label */
-							__( 'Please complete: %s.', 'ioroot-yoga-bookings' ),
+							__( 'Please complete: %s.', 'wp-stripe-class-bookings' ),
 							$label
 						),
 						[ 'field' => 'extra_fields[' . $key . ']' ]
@@ -202,12 +219,28 @@ abstract class Extra_Fields {
 			if ( 'email' === $type && '' !== (string) $val ) {
 				$val = sanitize_email( (string) $val );
 				if ( ! is_email( (string) $val ) ) {
-					return new \WP_Error( 'yb_validation', sprintf( __( '%s must be a valid email.', 'ioroot-yoga-bookings' ), $label ), [ 'field' => 'extra_fields[' . $key . ']' ] );
+					return new \WP_Error(
+						'yb_validation',
+						sprintf(
+							/* translators: %s: extra field label */
+							__( '%s must be a valid email.', 'wp-stripe-class-bookings' ),
+							$label
+						),
+						[ 'field' => 'extra_fields[' . $key . ']' ]
+					);
 				}
 			} elseif ( 'number' === $type && '' !== (string) $val ) {
 				$val = is_numeric( $val ) ? (string) $val : '';
 				if ( '' === $val ) {
-					return new \WP_Error( 'yb_validation', sprintf( __( '%s must be a number.', 'ioroot-yoga-bookings' ), $label ), [ 'field' => 'extra_fields[' . $key . ']' ] );
+					return new \WP_Error(
+						'yb_validation',
+						sprintf(
+							/* translators: %s: extra field label */
+							__( '%s must be a number.', 'wp-stripe-class-bookings' ),
+							$label
+						),
+						[ 'field' => 'extra_fields[' . $key . ']' ]
+					);
 				}
 			} elseif ( 'url' === $type && '' !== (string) $val ) {
 				$val = esc_url_raw( (string) $val );
@@ -300,7 +333,7 @@ abstract class Extra_Fields {
 	 */
 	private static function format_value_for_output( $raw, string $type, array $field ): string {
 		if ( 'true_false' === $type ) {
-			return rest_sanitize_boolean( $raw ) ? __( 'Yes', 'ioroot-yoga-bookings' ) : __( 'No', 'ioroot-yoga-bookings' );
+			return rest_sanitize_boolean( $raw ) ? __( 'Yes', 'wp-stripe-class-bookings' ) : __( 'No', 'wp-stripe-class-bookings' );
 		}
 		$value = is_scalar( $raw ) ? trim( (string) $raw ) : '';
 		if ( '' === $value ) {

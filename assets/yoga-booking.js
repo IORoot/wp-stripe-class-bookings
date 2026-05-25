@@ -1,4 +1,4 @@
-/* Stripe Class Bookings — frontend behaviour */
+/* Class Bookings with Stripe — frontend behaviour */
 ( function () {
 	'use strict';
 

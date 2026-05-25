@@ -72,13 +72,13 @@ abstract class Mailchimp {
 		);
 
 		if ( is_wp_error( $res ) ) {
-			error_log( '[ioroot-yoga-bookings] Mailchimp subscribe failed: ' . $res->get_error_message() );
+			error_log( '[wp-stripe-class-bookings] Mailchimp subscribe failed: ' . $res->get_error_message() );
 			return;
 		}
 
 		$code = (int) wp_remote_retrieve_response_code( $res );
 		if ( $code < 200 || $code >= 300 ) {
-			error_log( '[ioroot-yoga-bookings] Mailchimp subscribe HTTP ' . $code . ' for booking #' . $booking_id );
+			error_log( '[wp-stripe-class-bookings] Mailchimp subscribe HTTP ' . $code . ' for booking #' . $booking_id );
 			return;
 		}
 

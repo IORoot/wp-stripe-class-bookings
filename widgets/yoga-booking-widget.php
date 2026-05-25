@@ -1,6 +1,6 @@
 <?php
 /**
- * Elementor widget: Stripe Class Booking form.
+ * Elementor widget: Class Booking with Stripe form.
  *
  * @package IORoot_Yoga_Bookings
  */
@@ -23,7 +23,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 	}
 
 	public function get_title() {
-		return esc_html__( 'Stripe Class Booking', 'ioroot-yoga-bookings' );
+		return esc_html__( 'Class Booking with Stripe', 'wp-stripe-class-bookings' );
 	}
 
 	public function get_icon() {
@@ -50,31 +50,31 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->start_controls_section(
 			'section_content',
 			[
-				'label' => esc_html__( 'Stripe Class Booking', 'ioroot-yoga-bookings' ),
+				'label' => esc_html__( 'Class Booking with Stripe', 'wp-stripe-class-bookings' ),
 			]
 		);
 
 		$this->add_control(
 			'source',
 			[
-				'label'   => esc_html__( 'Class source', 'ioroot-yoga-bookings' ),
+				'label'   => esc_html__( 'Class source', 'wp-stripe-class-bookings' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'manual',
 				'options' => [
-					'manual'        => esc_html__( 'Manual: pick a Stripe Class', 'ioroot-yoga-bookings' ),
-					'current_field' => esc_html__( 'Current post field: stripe-booking-id', 'ioroot-yoga-bookings' ),
+					'manual'        => esc_html__( 'Manual: pick a Class', 'wp-stripe-class-bookings' ),
+					'current_field' => esc_html__( 'Current post field: stripe-booking-id', 'wp-stripe-class-bookings' ),
 				],
-				'description' => esc_html__( 'Use "Current post field" inside loop/off-canvas templates where the source post has an ACF field named stripe-booking-id (internally stripe_booking_id).', 'ioroot-yoga-bookings' ),
+				'description' => esc_html__( 'Use "Current post field" inside loop/off-canvas templates where the source post has an ACF field named stripe-booking-id (internally stripe_booking_id).', 'wp-stripe-class-bookings' ),
 			]
 		);
 
 		$this->add_control(
 			'class_id',
 			[
-				'label'       => esc_html__( 'Stripe class', 'ioroot-yoga-bookings' ),
+				'label'       => esc_html__( 'Stripe class', 'wp-stripe-class-bookings' ),
 				'type'        => Controls_Manager::SELECT,
 				'options'     => $this->get_class_options(),
-				'description' => esc_html__( 'Choose which class this booking form should sell.', 'ioroot-yoga-bookings' ),
+				'description' => esc_html__( 'Choose which class this booking form should sell.', 'wp-stripe-class-bookings' ),
 				'condition'   => [
 					'source' => 'manual',
 				],
@@ -84,10 +84,10 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_control(
 			'current_field_key',
 			[
-				'label'       => esc_html__( 'Field key on current post', 'ioroot-yoga-bookings' ),
+				'label'       => esc_html__( 'Field key on current post', 'wp-stripe-class-bookings' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => 'stripe_booking_id',
-				'description' => esc_html__( 'ACF/meta field that stores the Stripe Class ID (for example: 1209).', 'ioroot-yoga-bookings' ),
+				'description' => esc_html__( 'ACF/meta field that stores the Class ID (for example: 1209).', 'wp-stripe-class-bookings' ),
 				'condition'   => [
 					'source' => 'current_field',
 				],
@@ -97,10 +97,10 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_control(
 			'show_heading',
 			[
-				'label'        => esc_html__( 'Show class heading', 'ioroot-yoga-bookings' ),
+				'label'        => esc_html__( 'Show class heading', 'wp-stripe-class-bookings' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Show', 'ioroot-yoga-bookings' ),
-				'label_off'    => esc_html__( 'Hide', 'ioroot-yoga-bookings' ),
+				'label_on'     => esc_html__( 'Show', 'wp-stripe-class-bookings' ),
+				'label_off'    => esc_html__( 'Hide', 'wp-stripe-class-bookings' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
 			]
@@ -111,7 +111,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->start_controls_section(
 			'section_style',
 			[
-				'label' => esc_html__( 'Style', 'ioroot-yoga-bookings' ),
+				'label' => esc_html__( 'Style', 'wp-stripe-class-bookings' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -119,7 +119,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_responsive_control(
 			'form_max_width',
 			[
-				'label'      => esc_html__( 'Form max width', 'ioroot-yoga-bookings' ),
+				'label'      => esc_html__( 'Form max width', 'wp-stripe-class-bookings' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%', 'vw' ],
 				'range'      => [
@@ -146,7 +146,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_responsive_control(
 			'form_padding',
 			[
-				'label'      => esc_html__( 'Form padding', 'ioroot-yoga-bookings' ),
+				'label'      => esc_html__( 'Form padding', 'wp-stripe-class-bookings' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em', 'rem' ],
 				'selectors'  => [
@@ -160,7 +160,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_responsive_control(
 			'form_fields_gap',
 			[
-				'label'      => esc_html__( 'Fields spacing', 'ioroot-yoga-bookings' ),
+				'label'      => esc_html__( 'Fields spacing', 'wp-stripe-class-bookings' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'em', 'rem' ],
 				'range'      => [
@@ -178,7 +178,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_responsive_control(
 			'form_row_internal_gap',
 			[
-				'label'      => esc_html__( 'Label/input spacing', 'ioroot-yoga-bookings' ),
+				'label'      => esc_html__( 'Label/input spacing', 'wp-stripe-class-bookings' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'em', 'rem' ],
 				'range'      => [
@@ -196,7 +196,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_control(
 			'form_background_color',
 			[
-				'label'     => esc_html__( 'Form background', 'ioroot-yoga-bookings' ),
+				'label'     => esc_html__( 'Form background', 'wp-stripe-class-bookings' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					/* Paint the card, not the outer shell (modern layout stays visible) */
@@ -209,7 +209,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_control(
 			'form_title_color',
 			[
-				'label'     => esc_html__( 'Title color', 'ioroot-yoga-bookings' ),
+				'label'     => esc_html__( 'Title color', 'wp-stripe-class-bookings' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .yb-form__title, {{WRAPPER}} .yb-status__title' => 'color: {{VALUE}};',
@@ -220,7 +220,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_control(
 			'stripe_button_style_heading',
 			[
-				'label'     => esc_html__( 'Book & pay button', 'ioroot-yoga-bookings' ),
+				'label'     => esc_html__( 'Book & pay button', 'wp-stripe-class-bookings' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -230,7 +230,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'stripe_button_typography',
-				'label'    => esc_html__( 'Typography', 'ioroot-yoga-bookings' ),
+				'label'    => esc_html__( 'Typography', 'wp-stripe-class-bookings' ),
 				'selector' => '{{WRAPPER}} .yb-form .yb-form__button',
 			]
 		);
@@ -238,7 +238,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_control(
 			'stripe_button_text_color',
 			[
-				'label'     => esc_html__( 'Text color', 'ioroot-yoga-bookings' ),
+				'label'     => esc_html__( 'Text color', 'wp-stripe-class-bookings' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .yb-form .yb-form__button' => 'color: {{VALUE}};',
@@ -249,7 +249,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_control(
 			'stripe_button_background_color',
 			[
-				'label'     => esc_html__( 'Background color', 'ioroot-yoga-bookings' ),
+				'label'     => esc_html__( 'Background color', 'wp-stripe-class-bookings' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .yb-form .yb-form__button' => 'background-color: {{VALUE}};',
@@ -261,7 +261,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'     => 'stripe_button_border',
-				'label'    => esc_html__( 'Border', 'ioroot-yoga-bookings' ),
+				'label'    => esc_html__( 'Border', 'wp-stripe-class-bookings' ),
 				'selector' => '{{WRAPPER}} .yb-form .yb-form__button',
 			]
 		);
@@ -269,7 +269,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_responsive_control(
 			'stripe_button_border_radius',
 			[
-				'label'      => esc_html__( 'Border radius', 'ioroot-yoga-bookings' ),
+				'label'      => esc_html__( 'Border radius', 'wp-stripe-class-bookings' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em', 'rem' ],
 				'selectors'  => [
@@ -281,7 +281,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_responsive_control(
 			'stripe_button_padding',
 			[
-				'label'      => esc_html__( 'Padding', 'ioroot-yoga-bookings' ),
+				'label'      => esc_html__( 'Padding', 'wp-stripe-class-bookings' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em', 'rem' ],
 				'selectors'  => [
@@ -293,7 +293,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_control(
 			'external_button_style_heading',
 			[
-				'label'     => esc_html__( 'External link button', 'ioroot-yoga-bookings' ),
+				'label'     => esc_html__( 'External link button', 'wp-stripe-class-bookings' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -303,7 +303,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'external_button_typography',
-				'label'    => esc_html__( 'Typography', 'ioroot-yoga-bookings' ),
+				'label'    => esc_html__( 'Typography', 'wp-stripe-class-bookings' ),
 				'selector' => '{{WRAPPER}} .yb-form .yb-form__button--link',
 			]
 		);
@@ -311,7 +311,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_control(
 			'external_button_text_color',
 			[
-				'label'     => esc_html__( 'Text color', 'ioroot-yoga-bookings' ),
+				'label'     => esc_html__( 'Text color', 'wp-stripe-class-bookings' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .yb-form .yb-form__button--link' => 'color: {{VALUE}};',
@@ -322,7 +322,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_control(
 			'external_button_background_color',
 			[
-				'label'     => esc_html__( 'Background color', 'ioroot-yoga-bookings' ),
+				'label'     => esc_html__( 'Background color', 'wp-stripe-class-bookings' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .yb-form .yb-form__button--link' => 'background-color: {{VALUE}};',
@@ -334,7 +334,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'     => 'external_button_border',
-				'label'    => esc_html__( 'Border', 'ioroot-yoga-bookings' ),
+				'label'    => esc_html__( 'Border', 'wp-stripe-class-bookings' ),
 				'selector' => '{{WRAPPER}} .yb-form .yb-form__button--link',
 			]
 		);
@@ -342,7 +342,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_responsive_control(
 			'external_button_border_radius',
 			[
-				'label'      => esc_html__( 'Border radius', 'ioroot-yoga-bookings' ),
+				'label'      => esc_html__( 'Border radius', 'wp-stripe-class-bookings' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em', 'rem' ],
 				'selectors'  => [
@@ -354,7 +354,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$this->add_responsive_control(
 			'external_button_padding',
 			[
-				'label'      => esc_html__( 'Padding', 'ioroot-yoga-bookings' ),
+				'label'      => esc_html__( 'Padding', 'wp-stripe-class-bookings' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em', 'rem' ],
 				'selectors'  => [
@@ -367,7 +367,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 	}
 
 	private function get_class_options(): array {
-		$options = [ '' => esc_html__( '— Select a class —', 'ioroot-yoga-bookings' ) ];
+		$options = [ '' => esc_html__( '— Select a class —', 'wp-stripe-class-bookings' ) ];
 		$posts   = get_posts( [
 			'post_type'      => CPT::CLASS_PT,
 			'post_status'    => [ 'publish', 'draft', 'private' ],
@@ -405,14 +405,15 @@ class Widget_Stripe_Booking extends Widget_Base {
 
 		if ( ! $class_id ) {
 			if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
-				echo '<div class="yb-form yb-form--error">' . esc_html__( 'No Stripe Class ID found. Pick a class manually or ensure the current post has stripe_booking_id (or legacy yoga_class_stripe_id) set.', 'ioroot-yoga-bookings' ) . '</div>';
+				echo '<div class="yb-form yb-form--error">' . esc_html__( 'No Class ID found. Pick a class manually or ensure the current post has stripe_booking_id (or legacy yoga_class_stripe_id) set.', 'wp-stripe-class-bookings' ) . '</div>';
 			}
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Shortcode::render_booking() returns escaped HTML from templates.
 		echo Shortcode::render_booking( [
 			'class_id' => (string) $class_id,
 			'heading'  => ( ( $settings['show_heading'] ?? 'yes' ) === 'yes' ) ? '1' : '0',
-		] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		] );
 	}
 }

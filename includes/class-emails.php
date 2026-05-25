@@ -147,7 +147,18 @@ abstract class Emails {
 		if ( ! is_readable( $path ) ) {
 			return '';
 		}
-		return (string) file_get_contents( $path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$raw = (string) file_get_contents( $path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		return self::strip_template_php_guard( $raw );
+	}
+
+	/**
+	 * Remove optional ABSPATH guard from template files (not part of email body).
+	 */
+	private static function strip_template_php_guard( string $raw ): string {
+		if ( preg_match( '/\A<\?php\b.*?\?>\s*/s', $raw ) ) {
+			return (string) preg_replace( '/\A<\?php\b.*?\?>\s*/s', '', $raw, 1 );
+		}
+		return $raw;
 	}
 
 	private static function default_customer_subject(): string {

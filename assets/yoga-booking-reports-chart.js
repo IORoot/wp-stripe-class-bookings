@@ -1,5 +1,5 @@
 /**
- * Stripe Class Bookings — Reports yearly line chart (Chart.js + zoom).
+ * Class Bookings with Stripe — Reports yearly line chart (Chart.js + zoom).
  *
  * Expects window.IOROOT_YB_REPORTS_CHART from wp_localize_script.
  */

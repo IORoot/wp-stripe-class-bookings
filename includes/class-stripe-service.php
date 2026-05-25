@@ -129,7 +129,7 @@ abstract class Stripe_Service {
 		}
 
 		$tags = [
-			'{class_name}'    => (string) ( $class_data['name'] ?? __( 'Yoga class', 'ioroot-yoga-bookings' ) ),
+			'{class_name}'    => (string) ( $class_data['name'] ?? __( 'Yoga class', 'wp-stripe-class-bookings' ) ),
 			'{class_date}'    => $date_human,
 			'{class_time}'    => $time_human,
 			'{location}'      => (string) ( $class_data['location'] ?? '' ),
@@ -140,7 +140,7 @@ abstract class Stripe_Service {
 		];
 		$title = trim( preg_replace( '/\s+/', ' ', strtr( $tpl, $tags ) ) ?? '' );
 		if ( '' === $title ) {
-			$title = (string) ( $class_data['name'] ?? __( 'Yoga class', 'ioroot-yoga-bookings' ) );
+			$title = (string) ( $class_data['name'] ?? __( 'Yoga class', 'wp-stripe-class-bookings' ) );
 		}
 		return substr( $title, 0, 127 );
 	}

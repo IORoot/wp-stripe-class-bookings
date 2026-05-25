@@ -1,3 +1,12 @@
+<?php
+/**
+ * Default admin email body (plain text).
+ *
+ * @package IORoot_Yoga_Bookings
+ */
+
+defined( 'ABSPATH' ) || exit;
+?>
 New booking received.
 
 - Customer: {customer_name} <{customer_email}>

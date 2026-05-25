@@ -1,4 +1,4 @@
-# Stripe Class Bookings — WordPress.org submission copy
+# Class Bookings with Stripe — WordPress.org submission copy
 
 Use the sections below when submitting to the [WordPress Plugin Directory](https://wordpress.org/plugins/developers/add/). The **Short Description** field uses the first paragraph only. Paste the **Description**, **FAQ**, and **Changelog** blocks into the corresponding fields on the submission form (or into `readme.txt` if you add one later).
 
@@ -12,13 +12,13 @@ Stripe Checkout booking for classes: capacity-aware dates, soft holds, webhooks,
 
 ## Description
 
-**Stripe Class Bookings** is a WordPress plugin for studios, instructors, and venues that sell places on scheduled classes. It connects your site to **Stripe Checkout** (Stripe’s hosted payment page) so customers pick a date, choose how many seats they need, and pay securely without you building a custom cart or WooCommerce store.
+**Class Bookings with Stripe** is a WordPress plugin for studios, instructors, and venues that sell places on scheduled classes. It connects your site to **Stripe Checkout** (Stripe’s hosted payment page) so customers pick a date, choose how many seats they need, and pay securely without you building a custom cart or WooCommerce store.
 
-The plugin is built around **Advanced Custom Fields (ACF)**. Each class is a **Stripe Class** in the admin: you set location, schedule, price, capacity, and optional extras. The booking form is embedded with a shortcode or Elementor widget. When someone clicks **Book & pay with Stripe**, the plugin creates a temporary reservation, opens a Stripe Checkout Session, and sends the customer to Stripe to complete payment. A signed webhook confirms payment, updates the booking, and can send customer and admin emails.
+The plugin is built around **Advanced Custom Fields (ACF)**. Each class is a **Class** in the admin: you set location, schedule, price, capacity, and optional extras. The booking form is embedded with a shortcode or Elementor widget. When someone clicks **Book & pay with Stripe**, the plugin creates a temporary reservation, opens a Stripe Checkout Session, and sends the customer to Stripe to complete payment. A signed webhook confirms payment, updates the booking, and can send customer and admin emails.
 
 ### What you can manage
 
-* **Stripe Classes** — Weekly recurring classes, one-off events, or classes that link out to an external booking URL (ClassFor, Eventbrite, etc.) instead of the built-in form.
+* **Classes** — Weekly recurring classes, one-off events, or classes that link out to an external booking URL (ClassFor, Eventbrite, etc.) instead of the built-in form.
 * **Capacity** — Per class and per date; remaining seats account for paid bookings and active soft-holds.
 * **Cancelled dates** — Block individual dates via a repeater on the class; the form skips them automatically.
 * **Pause bookings** — Toggle **Class is active (bookable)** off to stop new bookings without deleting the class.
@@ -34,7 +34,7 @@ Stripe Checkout is Stripe’s hosted, PCI-compliant payment flow. This plugin do
 
 **1. Customer submits the form**
 
-The front-end form (shortcode `[stripe_booking class_id="123"]` or the **Stripe Class Booking** Elementor widget) collects:
+The front-end form (shortcode `[stripe_booking class_id="123"]` or the **Class Booking with Stripe** Elementor widget) collects:
 
 * Class date (from a capacity-aware dropdown of upcoming dates)
 * Number of seats (1–4, capped by seats remaining)
@@ -90,7 +90,7 @@ Seats taken for a (class, date) = **paid** bookings + **pending** bookings whose
 
 * **Shortcode:** `[stripe_booking class_id="123"]` — also accepts `class_slug`, `stripe_booking_id`, or legacy `yoga_booking` alias.
 * **Status shortcode:** `[stripe_booking_status type="success"]` (or `cancelled`, `error`).
-* **Elementor:** **Stripe Class Booking** widget — pick a class by ID or read `stripe_booking_id` from the current post in loops/templates.
+* **Elementor:** **Class Booking with Stripe** widget — pick a class by ID or read `stripe_booking_id` from the current post in loops/templates.
 
 ### Requirements and bundled dependencies
 
@@ -107,22 +107,22 @@ Bookings store customer name, email, class, date, seats, payment status, and opt
 
 ### Support
 
-Documentation and setup notes are included in the plugin admin under **Stripe Classes → Settings**. For issues and feature requests, use the support forum on WordPress.org once published, or the contact URL on the plugin listing.
+Documentation and setup notes are included in the plugin admin under **Classes → Settings**. For issues and feature requests, use the support forum on WordPress.org once published, or the contact URL on the plugin listing.
 
 ---
 
 ## Installation
 
 1. Upload the plugin folder to `/wp-content/plugins/` or install via **Plugins → Add New**.
-2. Activate **Stripe Class Bookings**.
-3. Go to **Stripe Classes → Settings**.
+2. Activate **Class Bookings with Stripe**.
+3. Go to **Classes → Settings**.
 4. Enter your Stripe **publishable** and **secret** keys (test or live mode).
 5. In Stripe Dashboard → **Developers → Webhooks**, add an endpoint:
    `https://yoursite.com/wp-json/stripe-bookings/v1/stripe-webhook`
    Enable events: `checkout.session.completed`, `checkout.session.expired`, `checkout.session.async_payment_failed`.
 6. Paste the **webhook signing secret** into plugin settings.
-7. Create classes under **Stripe Classes → Add New**.
-8. Place `[stripe_booking class_id="123"]` on a page, or add the **Stripe Class Booking** Elementor widget.
+7. Create classes under **Classes → Add New**.
+8. Place `[stripe_booking class_id="123"]` on a page, or add the **Class Booking with Stripe** Elementor widget.
 9. Confirm the auto-created result pages (**Booking Confirmed**, **Booking Cancelled**, **Booking Error**) or assign your own in settings.
 
 ---
@@ -159,7 +159,7 @@ The first successful checkout creation gets a soft-hold. The second request rece
 
 = Can I cancel a single date without disabling the whole class? =
 
-Yes. On the Stripe Class edit screen, add the date to the **Cancelled dates** repeater.
+Yes. On the Class edit screen, add the date to the **Cancelled dates** repeater.
 
 = Can I send customers elsewhere instead of Stripe? =
 
@@ -167,7 +167,7 @@ Yes. Enable **Booking mode: use external link** on a class and set the external 
 
 = Does it work with Elementor? =
 
-Yes. Register the **Stripe Class Booking** widget when Elementor is active. You can also use the shortcode in any editor.
+Yes. Register the **Class Booking with Stripe** widget when Elementor is active. You can also use the shortcode in any editor.
 
 = Which currency is supported? =
 
@@ -196,14 +196,14 @@ Yes. `[yoga_booking]` and `[yoga_booking_status]` remain as aliases for older si
 = 1.0.0 =
 
 * Initial public release.
-* Stripe Class custom post type with ACF-driven fields: schedule, price, capacity, location, duration, cancelled dates, active flag, and external booking link mode.
+* Class custom post type with ACF-driven fields: schedule, price, capacity, location, duration, cancelled dates, active flag, and external booking link mode.
 * Booking custom post type with statuses: pending (soft-hold), paid, expired.
 * Stripe Checkout Session creation via bundled stripe-php SDK with inline `price_data` line items and session metadata.
 * REST API: checkout creation, signed Stripe webhook handler, booking status polling, and availability refresh.
 * 30-minute soft-holds with capacity counting and cron-based hold expiry.
 * Front-end booking form with date dropdown, seat quantity (1–4), name, email, and optional form extras.
 * Shortcodes: `[stripe_booking]`, `[stripe_booking_status]`, plus `yoga_*` aliases.
-* Elementor **Stripe Class Booking** widget with manual class ID or current-post field support.
+* Elementor **Class Booking with Stripe** widget with manual class ID or current-post field support.
 * Auto-created result pages on activation: Booking Confirmed, Booking Cancelled, Booking Error.
 * Customisable customer and admin email templates with merge tags via `wp_mail()`.
 * Optional waiver acceptance and Mailchimp audience subscription after successful payment.
@@ -220,7 +220,7 @@ Yes. `[yoga_booking]` and `[yoga_booking_status]` remain as aliases for older si
 If you add a `readme.txt` for WordPress.org SVN, start with:
 
 ```
-=== Stripe Class Bookings ===
+=== Class Bookings with Stripe ===
 Contributors: ioroot
 Tags: stripe, booking, classes, checkout, events, elementor, acf
 Requires at least: 6.0

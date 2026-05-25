@@ -49,7 +49,7 @@ abstract class Shortcode {
 
 		$class_data = $class_id ? Helpers::get_class_data( $class_id ) : null;
 		if ( ! $class_data ) {
-			return '<div class="yb-form yb-form--error">' . esc_html__( 'No class selected.', 'ioroot-yoga-bookings' ) . '</div>';
+			return '<div class="yb-form yb-form--error">' . esc_html__( 'No class selected.', 'wp-stripe-class-bookings' ) . '</div>';
 		}
 		$class_data = apply_filters( 'ioroot_sb_booking_class_data', $class_data, $atts );
 
@@ -175,7 +175,15 @@ abstract class Shortcode {
 	 */
 	private static function get_template_path( string $relative, string $context = '' ): string {
 		$relative = ltrim( $relative, '/' );
-		$theme    = locate_template( [ 'ioroot-stripe-bookings/' . $relative, 'ioroot-yoga-bookings/' . $relative ], false, false );
+		$theme    = locate_template(
+			[
+				'wp-stripe-class-bookings/' . $relative,
+				'ioroot-stripe-bookings/' . $relative,
+				'ioroot-yoga-bookings/' . $relative,
+			],
+			false,
+			false
+		);
 		$path     = $theme ?: IOROOT_YB_DIR . 'templates/' . $relative;
 		return (string) apply_filters( 'ioroot_sb_template_path', $path, $relative, $context );
 	}
