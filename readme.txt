@@ -1,6 +1,6 @@
 === Class Bookings with Stripe ===
 Contributors: ioroot
-Tags: stripe, booking, classes, checkout, events, elementor, acf
+Tags: stripe, booking, classes, checkout, elementor
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4

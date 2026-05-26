@@ -49,7 +49,7 @@ abstract class Shortcode {
 
 		$class_data = $class_id ? Helpers::get_class_data( $class_id ) : null;
 		if ( ! $class_data ) {
-			return '<div class="yb-form yb-form--error">' . esc_html__( 'No class selected.', 'wp-stripe-class-bookings' ) . '</div>';
+			return '<div class="yb-form yb-form--error">' . esc_html__( 'No class selected.', 'class-bookings-with-stripe' ) . '</div>';
 		}
 		$class_data = apply_filters( 'ioroot_sb_booking_class_data', $class_data, $atts );
 
@@ -107,7 +107,8 @@ abstract class Shortcode {
 		$session_id = isset( $_GET['booking'] ) ? sanitize_text_field( wp_unslash( (string) $_GET['booking'] ) ) : '';
 		$reason     = isset( $_GET['reason'] ) ? sanitize_key( wp_unslash( (string) $_GET['reason'] ) ) : '';
 		$msg        = isset( $_GET['msg'] ) ? sanitize_text_field( wp_unslash( (string) $_GET['msg'] ) ) : '';
-		$origin     = isset( $_GET['from'] ) ? Helpers::sanitise_internal_url( wp_unslash( (string) $_GET['from'] ), home_url( '/' ) ) : home_url( '/' );
+		$origin_raw = isset( $_GET['from'] ) ? sanitize_text_field( wp_unslash( (string) $_GET['from'] ) ) : '';
+		$origin     = '' !== $origin_raw ? Helpers::sanitise_internal_url( $origin_raw, home_url( '/' ) ) : home_url( '/' );
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		wp_enqueue_style( 'ioroot-yb' );
@@ -177,6 +178,7 @@ abstract class Shortcode {
 		$relative = ltrim( $relative, '/' );
 		$theme    = locate_template(
 			[
+				'class-bookings-with-stripe/' . $relative,
 				'wp-stripe-class-bookings/' . $relative,
 				'ioroot-stripe-bookings/' . $relative,
 				'ioroot-yoga-bookings/' . $relative,

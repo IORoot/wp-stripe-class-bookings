@@ -30,7 +30,7 @@ abstract class Extra_Fields {
 	}
 
 	public static function register_location_rule_type( array $types ): array {
-		$label = __( 'Booking form class ID', 'wp-stripe-class-bookings' );
+		$label = __( 'Booking form class ID', 'class-bookings-with-stripe' );
 		$types['Class Bookings with Stripe']['yb_form_class_id'] = $label;
 		// Legacy ACF location group label (existing field groups may reference this).
 		$types['Stripe Class Bookings']['yb_form_class_id'] = $label;
@@ -138,7 +138,7 @@ abstract class Extra_Fields {
 			self::render_required_attrs( $required );
 			echo '>';
 			if ( empty( $field['required'] ) ) {
-				echo '<option value="">' . esc_html__( 'Select an option', 'wp-stripe-class-bookings' ) . '</option>';
+				echo '<option value="">' . esc_html__( 'Select an option', 'class-bookings-with-stripe' ) . '</option>';
 			}
 			foreach ( $choices as $value => $choice_label ) {
 				echo '<option value="' . esc_attr( (string) $value ) . '">' . esc_html( (string) $choice_label ) . '</option>';
@@ -191,7 +191,7 @@ abstract class Extra_Fields {
 		foreach ( $fields as $field ) {
 			$key   = (string) ( $field['key'] ?? '' );
 			$type  = (string) ( $field['type'] ?? 'text' );
-			$label = (string) ( $field['label'] ?? __( 'Field', 'wp-stripe-class-bookings' ) );
+			$label = (string) ( $field['label'] ?? __( 'Field', 'class-bookings-with-stripe' ) );
 			$val   = $submitted[ $key ] ?? '';
 
 			if ( 'true_false' === $type ) {
@@ -208,7 +208,7 @@ abstract class Extra_Fields {
 						'yb_required',
 						sprintf(
 							/* translators: %s: field label */
-							__( 'Please complete: %s.', 'wp-stripe-class-bookings' ),
+							__( 'Please complete: %s.', 'class-bookings-with-stripe' ),
 							$label
 						),
 						[ 'field' => 'extra_fields[' . $key . ']' ]
@@ -223,7 +223,7 @@ abstract class Extra_Fields {
 						'yb_validation',
 						sprintf(
 							/* translators: %s: extra field label */
-							__( '%s must be a valid email.', 'wp-stripe-class-bookings' ),
+							__( '%s must be a valid email.', 'class-bookings-with-stripe' ),
 							$label
 						),
 						[ 'field' => 'extra_fields[' . $key . ']' ]
@@ -236,7 +236,7 @@ abstract class Extra_Fields {
 						'yb_validation',
 						sprintf(
 							/* translators: %s: extra field label */
-							__( '%s must be a number.', 'wp-stripe-class-bookings' ),
+							__( '%s must be a number.', 'class-bookings-with-stripe' ),
 							$label
 						),
 						[ 'field' => 'extra_fields[' . $key . ']' ]
@@ -333,7 +333,7 @@ abstract class Extra_Fields {
 	 */
 	private static function format_value_for_output( $raw, string $type, array $field ): string {
 		if ( 'true_false' === $type ) {
-			return rest_sanitize_boolean( $raw ) ? __( 'Yes', 'wp-stripe-class-bookings' ) : __( 'No', 'wp-stripe-class-bookings' );
+			return rest_sanitize_boolean( $raw ) ? __( 'Yes', 'class-bookings-with-stripe' ) : __( 'No', 'class-bookings-with-stripe' );
 		}
 		$value = is_scalar( $raw ) ? trim( (string) $raw ) : '';
 		if ( '' === $value ) {

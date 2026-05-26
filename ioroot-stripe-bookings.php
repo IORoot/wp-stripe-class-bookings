@@ -5,7 +5,7 @@
  * Plugin URI: https://ioroot.com
  * Version: 1.0.0
  * Author: IORoot.com
- * Text Domain: wp-stripe-class-bookings
+ * Text Domain: class-bookings-with-stripe
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * 
@@ -14,7 +14,7 @@
 defined( 'ABSPATH' ) || exit;
 
 define( 'IOROOT_YB_VERSION', '1.0.0' );
-define( 'IOROOT_YB_TEXT_DOMAIN', 'wp-stripe-class-bookings' );
+define( 'IOROOT_YB_TEXT_DOMAIN', 'class-bookings-with-stripe' );
 define( 'IOROOT_YB_FILE', __FILE__ );
 define( 'IOROOT_YB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'IOROOT_YB_URL', plugin_dir_url( __FILE__ ) );

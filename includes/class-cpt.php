@@ -31,14 +31,14 @@ abstract class CPT {
 			self::CLASS_PT,
 			[
 				'labels'       => [
-					'name'               => __( 'Classes', 'wp-stripe-class-bookings' ),
-					'singular_name'      => __( 'Class', 'wp-stripe-class-bookings' ),
-					'add_new_item'       => __( 'Add Class', 'wp-stripe-class-bookings' ),
-					'edit_item'          => __( 'Edit Class', 'wp-stripe-class-bookings' ),
-					'new_item'           => __( 'New Class', 'wp-stripe-class-bookings' ),
-					'view_item'          => __( 'View Class', 'wp-stripe-class-bookings' ),
-					'search_items'       => __( 'Search Classes', 'wp-stripe-class-bookings' ),
-					'menu_name'          => __( 'Class Bookings with Stripe', 'wp-stripe-class-bookings' ),
+					'name'               => __( 'Classes', 'class-bookings-with-stripe' ),
+					'singular_name'      => __( 'Class', 'class-bookings-with-stripe' ),
+					'add_new_item'       => __( 'Add Class', 'class-bookings-with-stripe' ),
+					'edit_item'          => __( 'Edit Class', 'class-bookings-with-stripe' ),
+					'new_item'           => __( 'New Class', 'class-bookings-with-stripe' ),
+					'view_item'          => __( 'View Class', 'class-bookings-with-stripe' ),
+					'search_items'       => __( 'Search Classes', 'class-bookings-with-stripe' ),
+					'menu_name'          => __( 'Stripe Class', 'class-bookings-with-stripe' ),
 				],
 				'public'       => false,
 				'show_ui'      => true,
@@ -56,12 +56,12 @@ abstract class CPT {
 			self::BOOKING_PT,
 			[
 				'labels'       => [
-					'name'               => __( 'Bookings', 'wp-stripe-class-bookings' ),
-					'singular_name'      => __( 'Booking', 'wp-stripe-class-bookings' ),
-					'edit_item'          => __( 'Edit Booking', 'wp-stripe-class-bookings' ),
-					'view_item'          => __( 'View Booking', 'wp-stripe-class-bookings' ),
-					'search_items'       => __( 'Search Bookings', 'wp-stripe-class-bookings' ),
-					'menu_name'          => __( 'Bookings', 'wp-stripe-class-bookings' ),
+					'name'               => __( 'Bookings', 'class-bookings-with-stripe' ),
+					'singular_name'      => __( 'Booking', 'class-bookings-with-stripe' ),
+					'edit_item'          => __( 'Edit Booking', 'class-bookings-with-stripe' ),
+					'view_item'          => __( 'View Booking', 'class-bookings-with-stripe' ),
+					'search_items'       => __( 'Search Bookings', 'class-bookings-with-stripe' ),
+					'menu_name'          => __( 'Bookings', 'class-bookings-with-stripe' ),
 				],
 				'public'       => false,
 				'show_ui'      => true,
@@ -84,16 +84,16 @@ abstract class CPT {
 		foreach ( $columns as $key => $label ) {
 			$new[ $key ] = $label;
 			if ( 'cb' === $key ) {
-				$new['yb_image'] = __( 'Image', 'wp-stripe-class-bookings' );
+				$new['yb_image'] = __( 'Image', 'class-bookings-with-stripe' );
 			}
 			if ( 'title' === $key ) {
-				$new['yb_id']       = __( 'Class ID', 'wp-stripe-class-bookings' );
-				$new['yb_location'] = __( 'Location', 'wp-stripe-class-bookings' );
-				$new['yb_when']     = __( 'When', 'wp-stripe-class-bookings' );
-				$new['yb_type']     = __( 'Type', 'wp-stripe-class-bookings' );
-				$new['yb_price']    = __( 'Price', 'wp-stripe-class-bookings' );
-				$new['yb_capacity'] = __( 'Capacity', 'wp-stripe-class-bookings' );
-				$new['yb_status']   = __( 'Status', 'wp-stripe-class-bookings' );
+				$new['yb_id']       = __( 'Class ID', 'class-bookings-with-stripe' );
+				$new['yb_location'] = __( 'Location', 'class-bookings-with-stripe' );
+				$new['yb_when']     = __( 'When', 'class-bookings-with-stripe' );
+				$new['yb_type']     = __( 'Type', 'class-bookings-with-stripe' );
+				$new['yb_price']    = __( 'Price', 'class-bookings-with-stripe' );
+				$new['yb_capacity'] = __( 'Capacity', 'class-bookings-with-stripe' );
+				$new['yb_status']   = __( 'Status', 'class-bookings-with-stripe' );
 			}
 		}
 		return $new;
@@ -176,11 +176,11 @@ abstract class CPT {
 				break;
 			case 'yb_type':
 				if ( ! empty( $class['use_external_link'] ) ) {
-					echo '<span class="yb-class-type-pill yb-class-type-pill--external">' . esc_html__( 'External link', 'wp-stripe-class-bookings' ) . '</span>';
+					echo '<span class="yb-class-type-pill yb-class-type-pill--external">' . esc_html__( 'External link', 'class-bookings-with-stripe' ) . '</span>';
 				} elseif ( ! empty( $class['is_one_off_event'] ) ) {
-					echo '<span class="yb-class-type-pill yb-class-type-pill--event">' . esc_html__( 'One-off event', 'wp-stripe-class-bookings' ) . '</span>';
+					echo '<span class="yb-class-type-pill yb-class-type-pill--event">' . esc_html__( 'One-off event', 'class-bookings-with-stripe' ) . '</span>';
 				} else {
-					echo '<span class="yb-class-type-pill yb-class-type-pill--class">' . esc_html__( 'Class', 'wp-stripe-class-bookings' ) . '</span>';
+					echo '<span class="yb-class-type-pill yb-class-type-pill--class">' . esc_html__( 'Class', 'class-bookings-with-stripe' ) . '</span>';
 				}
 				break;
 			case 'yb_price':
@@ -191,9 +191,9 @@ abstract class CPT {
 				break;
 			case 'yb_status':
 				if ( ! $class['class_active'] ) {
-					echo '<strong style="color:#b00;">' . esc_html__( 'Cancelled', 'wp-stripe-class-bookings' ) . '</strong>';
+					echo '<strong style="color:#b00;">' . esc_html__( 'Cancelled', 'class-bookings-with-stripe' ) . '</strong>';
 				} else {
-					echo esc_html__( 'Active', 'wp-stripe-class-bookings' );
+					echo esc_html__( 'Active', 'class-bookings-with-stripe' );
 				}
 				break;
 		}
@@ -209,12 +209,12 @@ abstract class CPT {
 		}
 		$shortcode = sprintf( '[stripe_booking class_id="%d"]', (int) $post->ID );
 		echo '<div class="misc-pub-section misc-pub-yb-class-id">';
-		echo '<span>' . esc_html__( 'Class ID:', 'wp-stripe-class-bookings' ) . ' <code>#' . esc_html( (string) $post->ID ) . '</code></span>';
+		echo '<span>' . esc_html__( 'Class ID:', 'class-bookings-with-stripe' ) . ' <code>#' . esc_html( (string) $post->ID ) . '</code></span>';
 		echo '</div>';
 		echo '<div class="misc-pub-section misc-pub-yb-shortcode">';
-		echo '<span>' . esc_html__( 'Shortcode:', 'wp-stripe-class-bookings' ) . '</span><br>';
+		echo '<span>' . esc_html__( 'Shortcode:', 'class-bookings-with-stripe' ) . '</span><br>';
 		echo '<code style="display:inline-block; margin-top:6px; user-select:all;">' . esc_html( $shortcode ) . '</code>';
-		echo '<p style="margin:6px 0 0; color:#646970; font-size:12px;">' . esc_html__( 'Copy and paste this into any page, post, or Elementor shortcode widget.', 'wp-stripe-class-bookings' ) . '</p>';
+		echo '<p style="margin:6px 0 0; color:#646970; font-size:12px;">' . esc_html__( 'Copy and paste this into any page, post, or Elementor shortcode widget.', 'class-bookings-with-stripe' ) . '</p>';
 		echo '</div>';
 	}
 
@@ -222,16 +222,16 @@ abstract class CPT {
 		unset( $columns['date'] );
 		$new = [
 			'cb'           => $columns['cb'] ?? '<input type="checkbox" />',
-			'yb_image'     => __( 'Image', 'wp-stripe-class-bookings' ),
-			'title'        => __( 'Booking', 'wp-stripe-class-bookings' ),
-			'yb_class'     => __( 'Class', 'wp-stripe-class-bookings' ),
-			'yb_date'      => __( 'Class date', 'wp-stripe-class-bookings' ),
-			'yb_customer'  => __( 'Customer', 'wp-stripe-class-bookings' ),
-			'yb_seats'     => __( 'Seats', 'wp-stripe-class-bookings' ),
-			'yb_amount'    => __( 'Amount', 'wp-stripe-class-bookings' ),
-			'yb_status'    => __( 'Status', 'wp-stripe-class-bookings' ),
-			'yb_stripe'    => __( 'Stripe ID', 'wp-stripe-class-bookings' ),
-			'yb_created'   => __( 'Created', 'wp-stripe-class-bookings' ),
+			'yb_image'     => __( 'Image', 'class-bookings-with-stripe' ),
+			'title'        => __( 'Booking', 'class-bookings-with-stripe' ),
+			'yb_class'     => __( 'Class', 'class-bookings-with-stripe' ),
+			'yb_date'      => __( 'Class date', 'class-bookings-with-stripe' ),
+			'yb_customer'  => __( 'Customer', 'class-bookings-with-stripe' ),
+			'yb_seats'     => __( 'Seats', 'class-bookings-with-stripe' ),
+			'yb_amount'    => __( 'Amount', 'class-bookings-with-stripe' ),
+			'yb_status'    => __( 'Status', 'class-bookings-with-stripe' ),
+			'yb_stripe'    => __( 'Stripe ID', 'class-bookings-with-stripe' ),
+			'yb_created'   => __( 'Created', 'class-bookings-with-stripe' ),
 		];
 		return $new;
 	}

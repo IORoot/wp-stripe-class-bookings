@@ -73,25 +73,25 @@ abstract class REST {
 		$extra_fields_raw = is_array( $request['extra_fields'] ?? null ) ? (array) $request['extra_fields'] : [];
 
 		if ( $class_id <= 0 ) {
-			return self::error( 422, 'validation', __( 'Missing class.', 'wp-stripe-class-bookings' ) );
+			return self::error( 422, 'validation', __( 'Missing class.', 'class-bookings-with-stripe' ) );
 		}
 		if ( '' === $email || ! is_email( $email ) ) {
-			return self::error( 422, 'validation', __( 'Please enter a valid email address.', 'wp-stripe-class-bookings' ), [ 'field' => 'customer_email' ] );
+			return self::error( 422, 'validation', __( 'Please enter a valid email address.', 'class-bookings-with-stripe' ), [ 'field' => 'customer_email' ] );
 		}
 		if ( '' === $name ) {
-			return self::error( 422, 'validation', __( 'Please enter your name.', 'wp-stripe-class-bookings' ), [ 'field' => 'customer_name' ] );
+			return self::error( 422, 'validation', __( 'Please enter your name.', 'class-bookings-with-stripe' ), [ 'field' => 'customer_name' ] );
 		}
 		if ( (bool) Helpers::get_option( 'enable_waiver', false ) && ! $waiver_accepted ) {
-			return self::error( 422, 'validation', __( 'Please accept the waiver before continuing to payment.', 'wp-stripe-class-bookings' ), [ 'field' => 'waiver_accepted' ] );
+			return self::error( 422, 'validation', __( 'Please accept the waiver before continuing to payment.', 'class-bookings-with-stripe' ), [ 'field' => 'waiver_accepted' ] );
 		}
 
 		$class_data = Helpers::get_class_data( $class_id );
 		if ( ! $class_data ) {
-			return self::error( 404, 'class_not_found', __( 'That class could not be found.', 'wp-stripe-class-bookings' ) );
+			return self::error( 404, 'class_not_found', __( 'That class could not be found.', 'class-bookings-with-stripe' ) );
 		}
 
 		if ( empty( $class_data['class_active'] ) ) {
-			return self::error( 409, 'class_inactive', __( 'Bookings for this class are currently unavailable.', 'wp-stripe-class-bookings' ) );
+			return self::error( 409, 'class_inactive', __( 'Bookings for this class are currently unavailable.', 'class-bookings-with-stripe' ) );
 		}
 		$extra_fields = Extra_Fields::validate_submission( $class_id, $extra_fields_raw );
 		if ( is_wp_error( $extra_fields ) ) {
@@ -105,12 +105,12 @@ abstract class REST {
 
 		$reason = Bookings::validate_date( $class_data, $class_date );
 		if ( '' !== $reason ) {
-			return self::error( 409, $reason, __( 'That date is no longer available. Please choose another.', 'wp-stripe-class-bookings' ) );
+			return self::error( 409, $reason, __( 'That date is no longer available. Please choose another.', 'class-bookings-with-stripe' ) );
 		}
 
 		$remaining = Bookings::seats_remaining( $class_data, $class_date );
 		if ( $remaining <= 0 ) {
-			return self::error( 409, 'capacity_full', __( 'Sorry, this class just filled up. Please choose another date.', 'wp-stripe-class-bookings' ) );
+			return self::error( 409, 'capacity_full', __( 'Sorry, this class just filled up. Please choose another date.', 'class-bookings-with-stripe' ) );
 		}
 		if ( $seats < 1 || $seats > $remaining ) {
 			return self::error(
@@ -118,7 +118,7 @@ abstract class REST {
 				'capacity_full',
 				sprintf(
 					/* translators: %d: seats remaining */
-					_n( 'Only %d seat is left for that date.', 'Only %d seats are left for that date.', $remaining, 'wp-stripe-class-bookings' ),
+					_n( 'Only %d seat is left for that date.', 'Only %d seats are left for that date.', $remaining, 'class-bookings-with-stripe' ),
 					$remaining
 				),
 				[ 'remaining' => $remaining ]
@@ -126,7 +126,7 @@ abstract class REST {
 		}
 
 		if ( '' === Helpers::stripe_secret_key() ) {
-			return self::error( 502, 'stripe_error', __( 'Payments are not configured. Please contact us.', 'wp-stripe-class-bookings' ) );
+			return self::error( 502, 'stripe_error', __( 'Payments are not configured. Please contact us.', 'class-bookings-with-stripe' ) );
 		}
 
 		$unit_pence  = Helpers::to_pence( $class_data['price'] );
@@ -145,7 +145,7 @@ abstract class REST {
 		] );
 
 		if ( is_wp_error( $booking_id ) ) {
-			return self::error( 500, 'internal', __( 'Could not start a booking. Please try again.', 'wp-stripe-class-bookings' ) );
+			return self::error( 500, 'internal', __( 'Could not start a booking. Please try again.', 'class-bookings-with-stripe' ) );
 		}
 
 		$success_url = Result_Pages::success_url( '{CHECKOUT_SESSION_ID}', $origin );
@@ -164,13 +164,13 @@ abstract class REST {
 				$cancel_url
 			);
 		} catch ( \Stripe\Exception\ApiErrorException $e ) {
-			error_log( '[wp-stripe-class-bookings] Stripe API error: ' . $e->getMessage() );
+			Helpers::debug_log( '[class-bookings-with-stripe] Stripe API error: ' . $e->getMessage() );
 			Bookings::set_status( $booking_id, Bookings::STATUS_EXPIRED );
-			return self::error( 502, 'stripe_error', __( 'Could not connect to Stripe. Please try again.', 'wp-stripe-class-bookings' ) );
+			return self::error( 502, 'stripe_error', __( 'Could not connect to Stripe. Please try again.', 'class-bookings-with-stripe' ) );
 		} catch ( \Throwable $e ) {
-			error_log( '[wp-stripe-class-bookings] Checkout error: ' . $e->getMessage() );
+			Helpers::debug_log( '[class-bookings-with-stripe] Checkout error: ' . $e->getMessage() );
 			Bookings::set_status( $booking_id, Bookings::STATUS_EXPIRED );
-			return self::error( 502, 'stripe_error', __( 'Could not start the payment. Please try again.', 'wp-stripe-class-bookings' ) );
+			return self::error( 502, 'stripe_error', __( 'Could not start the payment. Please try again.', 'class-bookings-with-stripe' ) );
 		}
 
 		Bookings::attach_stripe_session( $booking_id, $session->id );
@@ -188,16 +188,18 @@ abstract class REST {
 		$payload    = $request->get_body();
 		$sig_header = $request->get_header( 'stripe_signature' );
 		if ( ! $sig_header ) {
-			$sig_header = (string) ( $_SERVER['HTTP_STRIPE_SIGNATURE'] ?? '' );
+			$sig_header = isset( $_SERVER['HTTP_STRIPE_SIGNATURE'] )
+				? sanitize_text_field( wp_unslash( (string) $_SERVER['HTTP_STRIPE_SIGNATURE'] ) )
+				: '';
 		}
 
 		try {
 			$event = Stripe_Service::verify_webhook( $payload, (string) $sig_header );
 		} catch ( \Stripe\Exception\SignatureVerificationException $e ) {
-			error_log( '[wp-stripe-class-bookings] Webhook signature failed: ' . $e->getMessage() );
+			Helpers::debug_log( '[class-bookings-with-stripe] Webhook signature failed: ' . $e->getMessage() );
 			return new \WP_REST_Response( [ 'error' => 'invalid_signature' ], 400 );
 		} catch ( \Throwable $e ) {
-			error_log( '[wp-stripe-class-bookings] Webhook error: ' . $e->getMessage() );
+			Helpers::debug_log( '[class-bookings-with-stripe] Webhook error: ' . $e->getMessage() );
 			return new \WP_REST_Response( [ 'error' => 'invalid_payload' ], 400 );
 		}
 
@@ -219,8 +221,8 @@ abstract class REST {
 		if ( ! $booking_id ) {
 			$session_id = is_object( $session ) ? (string) ( $session->id ?? '' ) : '';
 			$meta_booking_id = is_object( $session ) && isset( $session->metadata->booking_id ) ? (string) $session->metadata->booking_id : '';
-			error_log(
-				'[wp-stripe-class-bookings] checkout.session.completed could not resolve booking. session_id=' .
+			Helpers::debug_log(
+				'[class-bookings-with-stripe] checkout.session.completed could not resolve booking. session_id=' .
 				$session_id .
 				' metadata.booking_id=' .
 				$meta_booking_id
@@ -228,14 +230,14 @@ abstract class REST {
 			return;
 		}
 		if ( Bookings::STATUS_PAID === Bookings::get_status( $booking_id ) ) {
-			error_log( '[wp-stripe-class-bookings] checkout.session.completed already paid. booking_id=' . $booking_id );
+			Helpers::debug_log( '[class-bookings-with-stripe] checkout.session.completed already paid. booking_id=' . $booking_id );
 			return; // idempotent
 		}
 
 		$payment_status = is_object( $session ) ? ( $session->payment_status ?? '' ) : '';
 		if ( 'paid' !== $payment_status && 'no_payment_required' !== $payment_status ) {
-			error_log(
-				'[wp-stripe-class-bookings] checkout.session.completed ignored due to payment_status=' .
+			Helpers::debug_log(
+				'[class-bookings-with-stripe] checkout.session.completed ignored due to payment_status=' .
 				(string) $payment_status .
 				' booking_id=' .
 				$booking_id
@@ -280,7 +282,7 @@ abstract class REST {
 			'ID'         => $booking_id,
 			'post_title' => sprintf(
 				'%s · %s · %s',
-				$name ?: __( 'Customer', 'wp-stripe-class-bookings' ),
+				$name ?: __( 'Customer', 'class-bookings-with-stripe' ),
 				get_the_title( (int) get_post_meta( $booking_id, '_yb_class_id', true ) ),
 				Helpers::format_date( (string) get_post_meta( $booking_id, '_yb_class_date', true ) )
 			),
@@ -290,7 +292,7 @@ abstract class REST {
 		Mailchimp::subscribe_booking( $booking_id );
 
 		Emails::send_for_booking( $booking_id );
-		error_log( '[wp-stripe-class-bookings] checkout.session.completed marked paid. booking_id=' . $booking_id );
+		Helpers::debug_log( '[class-bookings-with-stripe] checkout.session.completed marked paid. booking_id=' . $booking_id );
 	}
 
 	private static function handle_session_expired( $session ): void {
@@ -377,7 +379,7 @@ abstract class REST {
 			}
 			return $booking_id;
 		} catch ( \Throwable $e ) {
-			error_log( '[wp-stripe-class-bookings] Stripe status reconcile failed: ' . $e->getMessage() );
+			Helpers::debug_log( '[class-bookings-with-stripe] Stripe status reconcile failed: ' . $e->getMessage() );
 			return null;
 		}
 	}

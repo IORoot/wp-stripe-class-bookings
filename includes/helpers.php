@@ -389,4 +389,17 @@ abstract class Helpers {
 		}
 		return $url;
 	}
+
+	/**
+	 * Write a diagnostic line when WP_DEBUG and WP_DEBUG_LOG are enabled.
+	 *
+	 * @param string $message Log message.
+	 */
+	public static function debug_log( string $message ): void {
+		if ( ! ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) ) {
+			return;
+		}
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Only when site owner enables debug logging.
+		error_log( $message );
+	}
 }

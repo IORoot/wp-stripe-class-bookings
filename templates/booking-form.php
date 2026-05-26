@@ -12,6 +12,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View template; variables are local to this include.
+
 $is_active = ! empty( $class_data['class_active'] );
 $has_dates = $is_active && ! empty( $dates );
 $use_external_link = ! empty( $class_data['use_external_link'] );
@@ -43,22 +45,22 @@ if ( $is_one_off_fixed_date && ! empty( $dates ) ) {
 $labels = apply_filters(
 	'ioroot_sb_booking_labels',
 	[
-		'name'                  => __( 'Your name', 'wp-stripe-class-bookings' ),
-		'email'                 => __( 'Email address', 'wp-stripe-class-bookings' ),
-		'date'                  => __( 'Choose a date', 'wp-stripe-class-bookings' ),
-		'event_date'            => __( 'Event date', 'wp-stripe-class-bookings' ),
-		'seats'                 => __( 'How many people?', 'wp-stripe-class-bookings' ),
-		'total'                 => __( 'Total', 'wp-stripe-class-bookings' ),
-		'book_button'           => __( 'Book & pay with Stripe', 'wp-stripe-class-bookings' ),
-		'external_button'       => __( 'Continue to booking', 'wp-stripe-class-bookings' ),
-		'external_hint'         => __( 'This class uses an external booking page.', 'wp-stripe-class-bookings' ),
-		'invalid_external_hint' => __( 'External booking is enabled, but no URL has been set for this class yet.', 'wp-stripe-class-bookings' ),
-		'inactive_hint'         => __( 'Booking is currently unavailable for this class.', 'wp-stripe-class-bookings' ),
-		'no_dates_hint'         => __( 'No upcoming dates available — please check back soon or contact us.', 'wp-stripe-class-bookings' ),
-		'redirect_hint'         => __( 'You will be redirected to Stripe to complete your payment securely.', 'wp-stripe-class-bookings' ),
-		'waiver_label'          => (string) \IORoot_Yoga_Bookings\Helpers::get_option( 'waiver_label', __( 'I confirm I have read and accept the class waiver and participate at my own risk.', 'wp-stripe-class-bookings' ) ),
-		'waiver_page_link_text' => __( 'View full waiver', 'wp-stripe-class-bookings' ),
-		'mailchimp_optin_label' => (string) \IORoot_Yoga_Bookings\Helpers::get_option( 'mailchimp_optin_label', __( 'Yes, I would like to join the mailing list for class updates and news.', 'wp-stripe-class-bookings' ) ),
+		'name'                  => __( 'Your name', 'class-bookings-with-stripe' ),
+		'email'                 => __( 'Email address', 'class-bookings-with-stripe' ),
+		'date'                  => __( 'Choose a date', 'class-bookings-with-stripe' ),
+		'event_date'            => __( 'Event date', 'class-bookings-with-stripe' ),
+		'seats'                 => __( 'How many people?', 'class-bookings-with-stripe' ),
+		'total'                 => __( 'Total', 'class-bookings-with-stripe' ),
+		'book_button'           => __( 'Book & pay with Stripe', 'class-bookings-with-stripe' ),
+		'external_button'       => __( 'Continue to booking', 'class-bookings-with-stripe' ),
+		'external_hint'         => __( 'This class uses an external booking page.', 'class-bookings-with-stripe' ),
+		'invalid_external_hint' => __( 'External booking is enabled, but no URL has been set for this class yet.', 'class-bookings-with-stripe' ),
+		'inactive_hint'         => __( 'Booking is currently unavailable for this class.', 'class-bookings-with-stripe' ),
+		'no_dates_hint'         => __( 'No upcoming dates available — please check back soon or contact us.', 'class-bookings-with-stripe' ),
+		'redirect_hint'         => __( 'You will be redirected to Stripe to complete your payment securely.', 'class-bookings-with-stripe' ),
+		'waiver_label'          => (string) \IORoot_Yoga_Bookings\Helpers::get_option( 'waiver_label', __( 'I confirm I have read and accept the class waiver and participate at my own risk.', 'class-bookings-with-stripe' ) ),
+		'waiver_page_link_text' => __( 'View full waiver', 'class-bookings-with-stripe' ),
+		'mailchimp_optin_label' => (string) \IORoot_Yoga_Bookings\Helpers::get_option( 'mailchimp_optin_label', __( 'Yes, I would like to join the mailing list for class updates and news.', 'class-bookings-with-stripe' ) ),
 	],
 	$class_data,
 	$dates
@@ -99,7 +101,7 @@ do_action( 'ioroot_sb_booking_template_start', $class_data, $dates );
 				</div>
 				<?php if ( $show_price_badge ) : ?>
 					<div class="yb-form__price-badge">
-						<span class="yb-form__price-badge-label"><?php esc_html_e( 'From', 'wp-stripe-class-bookings' ); ?></span>
+						<span class="yb-form__price-badge-label"><?php esc_html_e( 'From', 'class-bookings-with-stripe' ); ?></span>
 						<span class="yb-form__price-badge-value"><?php echo esc_html( \IORoot_Yoga_Bookings\Helpers::format_price( (float) $class_data['price'] ) ); ?></span>
 					</div>
 				<?php endif; ?>
@@ -147,7 +149,7 @@ do_action( 'ioroot_sb_booking_template_start', $class_data, $dates );
 					<?php if ( ! empty( $primary_date['cancelled'] ) ) : ?>
 						<p class="yb-form__date-fixed yb-form__date-fixed--cancelled" aria-labelledby="yb-date-label-<?php echo esc_attr( (string) $class_data['id'] ); ?>">
 							<?php
-							echo esc_html__( 'Cancelled — ', 'wp-stripe-class-bookings' );
+							echo esc_html__( 'Cancelled — ', 'class-bookings-with-stripe' );
 							echo esc_html( (string) $primary_date['label'] );
 							?>
 						</p>
@@ -160,7 +162,7 @@ do_action( 'ioroot_sb_booking_template_start', $class_data, $dates );
 								echo esc_html(
 									sprintf(
 										/* translators: %d: seats remaining */
-										_n( '%d seat left', '%d seats left', (int) $primary_date['remaining'], 'wp-stripe-class-bookings' ),
+										_n( '%d seat left', '%d seats left', (int) $primary_date['remaining'], 'class-bookings-with-stripe' ),
 										(int) $primary_date['remaining']
 									)
 								);
@@ -184,7 +186,7 @@ do_action( 'ioroot_sb_booking_template_start', $class_data, $dates );
 							<option value="<?php echo esc_attr( $d['date'] ); ?>" data-remaining="<?php echo esc_attr( (string) $d['remaining'] ); ?>" data-cancelled="<?php echo $is_cancelled ? '1' : '0'; ?>"<?php echo $is_cancelled ? ' disabled class="yb-form__option--cancelled"' : ''; ?>>
 								<?php
 								if ( $is_cancelled ) {
-									echo esc_html__( 'Cancelled — ', 'wp-stripe-class-bookings' );
+									echo esc_html__( 'Cancelled — ', 'class-bookings-with-stripe' );
 									echo esc_html( $d['label'] );
 								} else {
 									echo esc_html( $d['label'] );
@@ -193,7 +195,7 @@ do_action( 'ioroot_sb_booking_template_start', $class_data, $dates );
 										echo esc_html(
 											sprintf(
 												/* translators: %d: seats remaining */
-												_n( '%d seat left', '%d seats left', $d['remaining'], 'wp-stripe-class-bookings' ),
+												_n( '%d seat left', '%d seats left', $d['remaining'], 'class-bookings-with-stripe' ),
 												$d['remaining']
 											)
 										);
@@ -243,7 +245,7 @@ do_action( 'ioroot_sb_booking_template_start', $class_data, $dates );
 							id="<?php echo esc_attr( $waiver_input_id ); ?>"
 							value="1"
 							required
-							aria-label="<?php echo esc_attr__( 'Accept the waiver', 'wp-stripe-class-bookings' ); ?>"
+							aria-label="<?php echo esc_attr__( 'Accept the waiver', 'class-bookings-with-stripe' ); ?>"
 							aria-describedby="<?php echo esc_attr( $waiver_desc_id ); ?>"
 						>
 						<div class="yb-form__waiver-body" id="<?php echo esc_attr( $waiver_desc_id ); ?>" data-yb-waiver-label>

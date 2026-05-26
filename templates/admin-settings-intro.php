@@ -4,7 +4,7 @@
  *
  * Edit this file to change the HTML shown above the settings tabs. You can
  * also override it in your theme as:
- *   wp-stripe-class-bookings/admin-settings-intro.php
+ *   class-bookings-with-stripe/admin-settings-intro.php
  *   ioroot-stripe-bookings/admin-settings-intro.php (legacy)
  *   ioroot-yoga-bookings/admin-settings-intro.php (legacy)
  *
@@ -23,11 +23,11 @@ $ioroot_yb_new_class_url = admin_url( 'post-new.php?post_type=' . \IORoot_Yoga_B
 <div class="ioroot-yb-welcome" id="ioroot-yb-welcome-panel" role="region" aria-labelledby="ioroot-yb-welcome-heading">
 	<div class="ioroot-yb-welcome__toolbar">
 		<p class="ioroot-yb-welcome__toolbar-summary">
-			<?php esc_html_e( 'Class Bookings with Stripe overview is hidden. Expand to see getting started steps and shortcuts.', 'wp-stripe-class-bookings' ); ?>
+			<?php esc_html_e( 'Class Bookings with Stripe overview is hidden. Expand to see getting started steps and shortcuts.', 'class-bookings-with-stripe' ); ?>
 		</p>
-		<button type="button" class="button ioroot-yb-welcome__panel-toggle" id="ioroot-yb-welcome-toggle" aria-expanded="true" aria-controls="ioroot-yb-welcome-expandable" aria-label="<?php esc_attr_e( 'Hide overview panel', 'wp-stripe-class-bookings' ); ?>" data-ioroot-yb-aria-expanded="<?php esc_attr_e( 'Hide overview panel', 'wp-stripe-class-bookings' ); ?>" data-ioroot-yb-aria-collapsed="<?php esc_attr_e( 'Show overview panel', 'wp-stripe-class-bookings' ); ?>">
-			<span class="ioroot-yb-welcome__panel-toggle-label ioroot-yb-welcome__panel-toggle-label--expanded"><?php esc_html_e( 'Hide panel', 'wp-stripe-class-bookings' ); ?></span>
-			<span class="ioroot-yb-welcome__panel-toggle-label ioroot-yb-welcome__panel-toggle-label--collapsed"><?php esc_html_e( 'Show panel', 'wp-stripe-class-bookings' ); ?></span>
+		<button type="button" class="button ioroot-yb-welcome__panel-toggle" id="ioroot-yb-welcome-toggle" aria-expanded="true" aria-controls="ioroot-yb-welcome-expandable" aria-label="<?php esc_attr_e( 'Hide overview panel', 'class-bookings-with-stripe' ); ?>" data-ioroot-yb-aria-expanded="<?php esc_attr_e( 'Hide overview panel', 'class-bookings-with-stripe' ); ?>" data-ioroot-yb-aria-collapsed="<?php esc_attr_e( 'Show overview panel', 'class-bookings-with-stripe' ); ?>">
+			<span class="ioroot-yb-welcome__panel-toggle-label ioroot-yb-welcome__panel-toggle-label--expanded"><?php esc_html_e( 'Hide panel', 'class-bookings-with-stripe' ); ?></span>
+			<span class="ioroot-yb-welcome__panel-toggle-label ioroot-yb-welcome__panel-toggle-label--collapsed"><?php esc_html_e( 'Show panel', 'class-bookings-with-stripe' ); ?></span>
 			<span class="ioroot-yb-welcome__panel-toggle-chevron dashicons dashicons-arrow-up-alt2" aria-hidden="true"></span>
 		</button>
 	</div>
@@ -45,10 +45,10 @@ $ioroot_yb_new_class_url = admin_url( 'post-new.php?post_type=' . \IORoot_Yoga_B
 				<div class="ioroot-yb-welcome__badges">
 					<span class="ioroot-yb-welcome__pill ioroot-yb-welcome__pill--brand">
 						<span class="ioroot-yb-welcome__pill-dot" aria-hidden="true"></span>
-						<?php esc_html_e( 'IORoot', 'wp-stripe-class-bookings' ); ?>
+						<?php esc_html_e( 'IORoot', 'class-bookings-with-stripe' ); ?>
 					</span>
 					<span class="ioroot-yb-welcome__pill">
-						<?php esc_html_e( 'Getting started', 'wp-stripe-class-bookings' ); ?>
+						<?php esc_html_e( 'Getting started', 'class-bookings-with-stripe' ); ?>
 					</span>
 				</div>
 
@@ -65,53 +65,53 @@ $ioroot_yb_new_class_url = admin_url( 'post-new.php?post_type=' . \IORoot_Yoga_B
 						/>
 					</div>
 					<h2 id="ioroot-yb-welcome-heading" class="ioroot-yb-welcome__title">
-						<span class="ioroot-yb-welcome__title-line"><?php esc_html_e( 'Welcome to', 'wp-stripe-class-bookings' ); ?></span>
-						<span class="ioroot-yb-welcome__title-accent"><?php esc_html_e( 'Class Bookings with Stripe', 'wp-stripe-class-bookings' ); ?></span>
+						<span class="ioroot-yb-welcome__title-line"><?php esc_html_e( 'Welcome to', 'class-bookings-with-stripe' ); ?></span>
+						<span class="ioroot-yb-welcome__title-accent"><?php esc_html_e( 'Class Bookings with Stripe', 'class-bookings-with-stripe' ); ?></span>
 					</h2>
 				</div>
 
 				<p class="ioroot-yb-welcome__lede">
-					<?php esc_html_e( 'Work through the steps below once. When you are ready for day-to-day tasks, use the shortcuts on the right.', 'wp-stripe-class-bookings' ); ?>
+					<?php esc_html_e( 'Work through the steps below once. When you are ready for day-to-day tasks, use the shortcuts on the right.', 'class-bookings-with-stripe' ); ?>
 				</p>
 
 				<ol class="ioroot-yb-welcome__timeline">
 					<li class="ioroot-yb-welcome__timeline-item">
 						<span class="ioroot-yb-welcome__timeline-marker" aria-hidden="true">1</span>
 						<div class="ioroot-yb-welcome__timeline-body">
-							<strong><?php esc_html_e( 'Connect Stripe keys and webhook', 'wp-stripe-class-bookings' ); ?></strong>
-							<span><?php esc_html_e( 'Open the Stripe tab, add your publishable and secret keys, set test or live mode, and register the webhook signing secret from your Stripe dashboard.', 'wp-stripe-class-bookings' ); ?></span>
+							<strong><?php esc_html_e( 'Connect Stripe keys and webhook', 'class-bookings-with-stripe' ); ?></strong>
+							<span><?php esc_html_e( 'Open the Stripe tab, add your publishable and secret keys, set test or live mode, and register the webhook signing secret from your Stripe dashboard.', 'class-bookings-with-stripe' ); ?></span>
 						</div>
 					</li>
 					<li class="ioroot-yb-welcome__timeline-item">
 						<span class="ioroot-yb-welcome__timeline-marker" aria-hidden="true">2</span>
 						<div class="ioroot-yb-welcome__timeline-body">
-							<strong><?php esc_html_e( 'Add custom fields and embed the booking form', 'wp-stripe-class-bookings' ); ?></strong>
-							<span><?php esc_html_e( 'Optional extras live under Form extras (ACF). Then place the Elementor block or shortcode on the page where customers should book.', 'wp-stripe-class-bookings' ); ?></span>
+							<strong><?php esc_html_e( 'Add custom fields and embed the booking form', 'class-bookings-with-stripe' ); ?></strong>
+							<span><?php esc_html_e( 'Optional extras live under Form extras (ACF). Then place the Elementor block or shortcode on the page where customers should book.', 'class-bookings-with-stripe' ); ?></span>
 						</div>
 					</li>
 					<li class="ioroot-yb-welcome__timeline-item">
 						<span class="ioroot-yb-welcome__timeline-marker" aria-hidden="true">3</span>
 						<div class="ioroot-yb-welcome__timeline-body">
-							<strong><?php esc_html_e( 'Set up emails', 'wp-stripe-class-bookings' ); ?></strong>
-							<span><?php esc_html_e( 'Use the Emails tab for subjects and bodies, merge tags, and admin notifications (emails always use WordPress wp_mail()).', 'wp-stripe-class-bookings' ); ?></span>
+							<strong><?php esc_html_e( 'Set up emails', 'class-bookings-with-stripe' ); ?></strong>
+							<span><?php esc_html_e( 'Use the Emails tab for subjects and bodies, merge tags, and admin notifications (emails always use WordPress wp_mail()).', 'class-bookings-with-stripe' ); ?></span>
 						</div>
 					</li>
 				</ol>
 			</div>
 
-			<aside class="ioroot-yb-welcome__aside" aria-label="<?php esc_attr_e( 'Quick reference', 'wp-stripe-class-bookings' ); ?>">
+			<aside class="ioroot-yb-welcome__aside" aria-label="<?php esc_attr_e( 'Quick reference', 'class-bookings-with-stripe' ); ?>">
 				<div class="ioroot-yb-welcome__bento ioroot-yb-welcome__bento--stack">
 					<div class="ioroot-yb-welcome__tile ioroot-yb-welcome__tile--wide ioroot-yb-welcome__tile--cta-row">
 						<div class="ioroot-yb-welcome__tile-icon-wrap ioroot-yb-welcome__tile-icon-wrap--violet">
 							<span class="ioroot-yb-welcome__tile-icon dashicons dashicons-email" aria-hidden="true"></span>
 						</div>
 						<div class="ioroot-yb-welcome__tile-copy">
-							<strong><?php esc_html_e( 'Email Templates', 'wp-stripe-class-bookings' ); ?></strong>
-							<p><?php esc_html_e( 'Edit customer and admin messages, merge tags, and admin notification address. Mail is sent with WordPress wp_mail().', 'wp-stripe-class-bookings' ); ?></p>
+							<strong><?php esc_html_e( 'Email Templates', 'class-bookings-with-stripe' ); ?></strong>
+							<p><?php esc_html_e( 'Edit customer and admin messages, merge tags, and admin notification address. Mail is sent with WordPress wp_mail().', 'class-bookings-with-stripe' ); ?></p>
 						</div>
 						<div class="ioroot-yb-welcome__tile-aside">
 							<a class="button ioroot-yb-welcome__tile-action ioroot-yb-welcome__tile-action--violet" href="<?php echo esc_url( $ioroot_yb_settings_url . '#yb-tab-field_yb_tab_emails' ); ?>">
-								<?php esc_html_e( 'Open Emails tab', 'wp-stripe-class-bookings' ); ?>
+								<?php esc_html_e( 'Open Emails tab', 'class-bookings-with-stripe' ); ?>
 							</a>
 						</div>
 					</div>
@@ -120,12 +120,12 @@ $ioroot_yb_new_class_url = admin_url( 'post-new.php?post_type=' . \IORoot_Yoga_B
 							<span class="ioroot-yb-welcome__tile-icon dashicons dashicons-chart-area" aria-hidden="true"></span>
 						</div>
 						<div class="ioroot-yb-welcome__tile-copy">
-							<strong><?php esc_html_e( 'Reports', 'wp-stripe-class-bookings' ); ?></strong>
-							<p><?php esc_html_e( 'Historic trends, upcoming attendance, and guest lists by class.', 'wp-stripe-class-bookings' ); ?></p>
+							<strong><?php esc_html_e( 'Reports', 'class-bookings-with-stripe' ); ?></strong>
+							<p><?php esc_html_e( 'Historic trends, upcoming attendance, and guest lists by class.', 'class-bookings-with-stripe' ); ?></p>
 						</div>
 						<div class="ioroot-yb-welcome__tile-aside">
 							<a class="button ioroot-yb-welcome__tile-action ioroot-yb-welcome__tile-action--teal" href="<?php echo esc_url( $ioroot_yb_reports_url ); ?>">
-								<?php esc_html_e( 'Open reports', 'wp-stripe-class-bookings' ); ?>
+								<?php esc_html_e( 'Open reports', 'class-bookings-with-stripe' ); ?>
 							</a>
 						</div>
 					</div>
@@ -134,12 +134,12 @@ $ioroot_yb_new_class_url = admin_url( 'post-new.php?post_type=' . \IORoot_Yoga_B
 							<span class="ioroot-yb-welcome__tile-icon dashicons dashicons-calendar-alt" aria-hidden="true"></span>
 						</div>
 						<div class="ioroot-yb-welcome__tile-copy">
-							<strong><?php esc_html_e( 'Weekly Classes / One-off Events / External Links', 'wp-stripe-class-bookings' ); ?></strong>
-							<p><?php esc_html_e( 'Add a Class, set schedule or single dates, price, capacity, or an external booking URL.', 'wp-stripe-class-bookings' ); ?></p>
+							<strong><?php esc_html_e( 'Weekly Classes / One-off Events / External Links', 'class-bookings-with-stripe' ); ?></strong>
+							<p><?php esc_html_e( 'Add a Class, set schedule or single dates, price, capacity, or an external booking URL.', 'class-bookings-with-stripe' ); ?></p>
 						</div>
 						<div class="ioroot-yb-welcome__tile-aside">
 							<a class="button ioroot-yb-welcome__tile-action ioroot-yb-welcome__tile-action--amber" href="<?php echo esc_url( $ioroot_yb_new_class_url ); ?>">
-								<?php esc_html_e( 'Add new class', 'wp-stripe-class-bookings' ); ?>
+								<?php esc_html_e( 'Add new class', 'class-bookings-with-stripe' ); ?>
 							</a>
 						</div>
 					</div>
@@ -148,12 +148,12 @@ $ioroot_yb_new_class_url = admin_url( 'post-new.php?post_type=' . \IORoot_Yoga_B
 							<span class="ioroot-yb-welcome__tile-icon dashicons dashicons-admin-plugins" aria-hidden="true"></span>
 						</div>
 						<div class="ioroot-yb-welcome__tile-copy">
-							<strong><?php esc_html_e( 'Extend with ACF', 'wp-stripe-class-bookings' ); ?></strong>
-							<p><?php esc_html_e( 'Form Extras: waiver, Mailchimp opt-in, and custom ACF fields on the booking form.', 'wp-stripe-class-bookings' ); ?></p>
+							<strong><?php esc_html_e( 'Extend with ACF', 'class-bookings-with-stripe' ); ?></strong>
+							<p><?php esc_html_e( 'Form Extras: waiver, Mailchimp opt-in, and custom ACF fields on the booking form.', 'class-bookings-with-stripe' ); ?></p>
 						</div>
 						<div class="ioroot-yb-welcome__tile-aside">
 							<a class="button ioroot-yb-welcome__tile-action ioroot-yb-welcome__tile-action--emerald" href="<?php echo esc_url( $ioroot_yb_settings_url . '#yb-tab-field_yb_tab_pages' ); ?>">
-								<?php esc_html_e( 'Open Form extras tab', 'wp-stripe-class-bookings' ); ?>
+								<?php esc_html_e( 'Open Form extras tab', 'class-bookings-with-stripe' ); ?>
 							</a>
 						</div>
 					</div>

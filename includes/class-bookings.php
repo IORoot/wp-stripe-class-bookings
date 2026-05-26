@@ -28,7 +28,7 @@ abstract class Bookings {
 		if ( ! isset( $schedules['yb_five_minutes'] ) ) {
 			$schedules['yb_five_minutes'] = [
 				'interval' => 5 * MINUTE_IN_SECONDS,
-				'display'  => __( 'Every 5 minutes (Class Bookings with Stripe)', 'wp-stripe-class-bookings' ),
+				'display'  => __( 'Every 5 minutes (Class Bookings with Stripe)', 'class-bookings-with-stripe' ),
 			];
 		}
 		return $schedules;
@@ -267,8 +267,8 @@ abstract class Bookings {
 			'post_status' => 'publish',
 			'post_title'  => sprintf(
 				/* translators: 1: customer name, 2: class title, 3: date */
-				__( '%1$s · %2$s · %3$s', 'wp-stripe-class-bookings' ),
-				$name ?: __( 'Pending', 'wp-stripe-class-bookings' ),
+				__( '%1$s · %2$s · %3$s', 'class-bookings-with-stripe' ),
+				$name ?: __( 'Pending', 'class-bookings-with-stripe' ),
 				get_the_title( $class_id ),
 				Helpers::format_date( $class_date )
 			),

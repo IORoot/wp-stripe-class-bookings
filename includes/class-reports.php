@@ -43,8 +43,8 @@ abstract class Reports {
 	public static function register_menu(): void {
 		self::$page_hook = (string) add_submenu_page(
 			'edit.php?post_type=' . CPT::CLASS_PT,
-			__( 'Reports', 'wp-stripe-class-bookings' ),
-			__( 'Reports', 'wp-stripe-class-bookings' ),
+			__( 'Reports', 'class-bookings-with-stripe' ),
+			__( 'Reports', 'class-bookings-with-stripe' ),
 			'manage_options',
 			'stripe-bookings-reports',
 			[ self::class, 'render_page' ]
@@ -137,9 +137,9 @@ abstract class Reports {
 							/>
 						</div>
 						<div class="ioroot-yb-reports-hero__text">
-							<h1 class="ioroot-yb-reports-hero__title"><?php esc_html_e( 'Class Bookings with Stripe — Reports', 'wp-stripe-class-bookings' ); ?></h1>
+							<h1 class="ioroot-yb-reports-hero__title"><?php esc_html_e( 'Class Bookings with Stripe — Reports', 'class-bookings-with-stripe' ); ?></h1>
 							<p class="ioroot-yb-reports-hero__lead">
-								<?php esc_html_e( 'Historic trends, upcoming occupancy, and per-class guest lists in one place.', 'wp-stripe-class-bookings' ); ?>
+								<?php esc_html_e( 'Historic trends, upcoming occupancy, and per-class guest lists in one place.', 'class-bookings-with-stripe' ); ?>
 							</p>
 						</div>
 					</div>
@@ -149,12 +149,12 @@ abstract class Reports {
 			<section class="ioroot-yb-reports-panel" aria-labelledby="ioroot-yb-reports-historic-heading">
 				<div class="ioroot-yb-reports-panel__head ioroot-yb-reports-panel__head--split">
 					<div class="ioroot-yb-reports-panel__head-main">
-						<h2 id="ioroot-yb-reports-historic-heading" class="ioroot-yb-reports-panel__title"><?php esc_html_e( 'Bookings by class (year view)', 'wp-stripe-class-bookings' ); ?></h2>
+						<h2 id="ioroot-yb-reports-historic-heading" class="ioroot-yb-reports-panel__title"><?php esc_html_e( 'Bookings by class (year view)', 'class-bookings-with-stripe' ); ?></h2>
 						<p class="ioroot-yb-reports-panel__desc">
 							<?php
 							printf(
 								/* translators: %s: calendar year (e.g. 2026) */
-								esc_html__( 'One line per Class with paid bookings. X-axis is every day from 1 Jan to 31 Dec %s (students booked that day). Scroll the mouse wheel to zoom; click-drag to pan. Double-click the chart to reset zoom.', 'wp-stripe-class-bookings' ),
+								esc_html__( 'One line per Class with paid bookings. X-axis is every day from 1 Jan to 31 Dec %s (students booked that day). Scroll the mouse wheel to zoom; click-drag to pan. Double-click the chart to reset zoom.', 'class-bookings-with-stripe' ),
 								esc_html( (string) $year )
 							);
 							?>
@@ -163,7 +163,7 @@ abstract class Reports {
 					<form class="ioroot-yb-reports-year-form" method="get" action="<?php echo esc_url( admin_url( 'edit.php' ) ); ?>">
 						<input type="hidden" name="post_type" value="<?php echo esc_attr( CPT::CLASS_PT ); ?>" />
 						<input type="hidden" name="page" value="stripe-bookings-reports" />
-						<label class="ioroot-yb-reports-year-form__label" for="ioroot-yb-reports-year"><?php esc_html_e( 'Year', 'wp-stripe-class-bookings' ); ?></label>
+						<label class="ioroot-yb-reports-year-form__label" for="ioroot-yb-reports-year"><?php esc_html_e( 'Year', 'class-bookings-with-stripe' ); ?></label>
 						<select class="ioroot-yb-reports-year-form__select" id="ioroot-yb-reports-year" name="yb_year">
 							<?php for ( $y = $year_min; $y <= $year_max; $y++ ) : ?>
 								<option value="<?php echo esc_attr( (string) $y ); ?>"<?php selected( $year, $y ); ?>><?php echo esc_html( (string) $y ); ?></option>
@@ -178,41 +178,41 @@ abstract class Reports {
 							<?php
 							printf(
 								/* translators: %d: calendar year */
-								esc_html__( 'No paid bookings with class dates in %d yet. Choose another year or complete a checkout to see data here.', 'wp-stripe-class-bookings' ),
+								esc_html__( 'No paid bookings with class dates in %d yet. Choose another year or complete a checkout to see data here.', 'class-bookings-with-stripe' ),
 								(int) $year
 							);
 							?>
 						</p>
 					</div>
 				<?php else : ?>
-					<div class="ioroot-yb-reports-chartjs" role="img" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: year */ __( 'Students booked per day in %d, by class', 'wp-stripe-class-bookings' ), $year ) ); ?>">
+					<div class="ioroot-yb-reports-chartjs" role="img" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: year */ __( 'Students booked per day in %d, by class', 'class-bookings-with-stripe' ), $year ) ); ?>">
 						<canvas id="ioroot-yb-reports-year-chart"></canvas>
 					</div>
 					<p class="ioroot-yb-reports-actions">
-						<button type="button" class="button button-secondary ioroot-yb-reports-btn" id="ioroot-yb-reports-chart-reset"><?php esc_html_e( 'Reset zoom', 'wp-stripe-class-bookings' ); ?></button>
+						<button type="button" class="button button-secondary ioroot-yb-reports-btn" id="ioroot-yb-reports-chart-reset"><?php esc_html_e( 'Reset zoom', 'class-bookings-with-stripe' ); ?></button>
 					</p>
 				<?php endif; ?>
 			</section>
 
 			<section class="ioroot-yb-reports-panel" aria-labelledby="ioroot-yb-reports-upcoming-heading">
 				<div class="ioroot-yb-reports-panel__head">
-					<h2 id="ioroot-yb-reports-upcoming-heading" class="ioroot-yb-reports-panel__title"><?php esc_html_e( 'Booked people for upcoming classes', 'wp-stripe-class-bookings' ); ?></h2>
-					<p class="ioroot-yb-reports-panel__desc"><?php esc_html_e( 'Next sessions across all active Classes, ordered by date.', 'wp-stripe-class-bookings' ); ?></p>
+					<h2 id="ioroot-yb-reports-upcoming-heading" class="ioroot-yb-reports-panel__title"><?php esc_html_e( 'Booked people for upcoming classes', 'class-bookings-with-stripe' ); ?></h2>
+					<p class="ioroot-yb-reports-panel__desc"><?php esc_html_e( 'Next sessions across all active Classes, ordered by date.', 'class-bookings-with-stripe' ); ?></p>
 				</div>
 				<div class="ioroot-yb-reports-table-scroll">
 					<table class="widefat striped ioroot-yb-reports-table">
 						<thead>
 						<tr>
-							<th scope="col"><?php esc_html_e( 'Class', 'wp-stripe-class-bookings' ); ?></th>
-							<th scope="col"><?php esc_html_e( 'Date', 'wp-stripe-class-bookings' ); ?></th>
-							<th scope="col"><?php esc_html_e( 'Time', 'wp-stripe-class-bookings' ); ?></th>
-							<th scope="col"><?php esc_html_e( 'People booked', 'wp-stripe-class-bookings' ); ?></th>
-							<th scope="col"><?php esc_html_e( 'Capacity', 'wp-stripe-class-bookings' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Class', 'class-bookings-with-stripe' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Date', 'class-bookings-with-stripe' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Time', 'class-bookings-with-stripe' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'People booked', 'class-bookings-with-stripe' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Capacity', 'class-bookings-with-stripe' ); ?></th>
 						</tr>
 						</thead>
 						<tbody>
 						<?php if ( empty( $upcoming_sessions ) ) : ?>
-							<tr><td colspan="5"><?php esc_html_e( 'No upcoming classes found.', 'wp-stripe-class-bookings' ); ?></td></tr>
+							<tr><td colspan="5"><?php esc_html_e( 'No upcoming classes found.', 'class-bookings-with-stripe' ); ?></td></tr>
 						<?php else : ?>
 							<?php foreach ( $upcoming_sessions as $session ) : ?>
 								<?php
@@ -221,16 +221,16 @@ abstract class Reports {
 								$pct    = $cap > 0 ? min( 100, round( 100 * $people / $cap ) ) : 0;
 								?>
 								<tr>
-									<td data-label="<?php esc_attr_e( 'Class', 'wp-stripe-class-bookings' ); ?>"><?php echo esc_html( (string) $session['class_name'] ); ?></td>
-									<td data-label="<?php esc_attr_e( 'Date', 'wp-stripe-class-bookings' ); ?>"><?php echo esc_html( Helpers::format_date( (string) $session['date'] ) ); ?></td>
-									<td data-label="<?php esc_attr_e( 'Time', 'wp-stripe-class-bookings' ); ?>"><?php echo esc_html( Helpers::format_time( (string) $session['start_time'] ) ); ?></td>
-									<td data-label="<?php esc_attr_e( 'People booked', 'wp-stripe-class-bookings' ); ?>">
+									<td data-label="<?php esc_attr_e( 'Class', 'class-bookings-with-stripe' ); ?>"><?php echo esc_html( (string) $session['class_name'] ); ?></td>
+									<td data-label="<?php esc_attr_e( 'Date', 'class-bookings-with-stripe' ); ?>"><?php echo esc_html( Helpers::format_date( (string) $session['date'] ) ); ?></td>
+									<td data-label="<?php esc_attr_e( 'Time', 'class-bookings-with-stripe' ); ?>"><?php echo esc_html( Helpers::format_time( (string) $session['start_time'] ) ); ?></td>
+									<td data-label="<?php esc_attr_e( 'People booked', 'class-bookings-with-stripe' ); ?>">
 										<span class="ioroot-yb-reports-meter">
 											<span class="ioroot-yb-reports-meter__text"><?php echo esc_html( (string) $people ); ?></span>
 											<span class="ioroot-yb-reports-meter__bar" style="--ioroot-yb-meter: <?php echo esc_attr( (string) $pct ); ?>%;"></span>
 										</span>
 									</td>
-									<td data-label="<?php esc_attr_e( 'Capacity', 'wp-stripe-class-bookings' ); ?>"><?php echo esc_html( (string) $cap ); ?></td>
+									<td data-label="<?php esc_attr_e( 'Capacity', 'class-bookings-with-stripe' ); ?>"><?php echo esc_html( (string) $cap ); ?></td>
 								</tr>
 							<?php endforeach; ?>
 						<?php endif; ?>
@@ -241,42 +241,42 @@ abstract class Reports {
 
 			<section class="ioroot-yb-reports-panel" aria-labelledby="ioroot-yb-reports-by-class-heading">
 				<div class="ioroot-yb-reports-panel__head">
-					<h2 id="ioroot-yb-reports-by-class-heading" class="ioroot-yb-reports-panel__title"><?php esc_html_e( 'Next three sessions per Class', 'wp-stripe-class-bookings' ); ?></h2>
-					<p class="ioroot-yb-reports-panel__desc"><?php esc_html_e( 'Guest names and emails for each upcoming date.', 'wp-stripe-class-bookings' ); ?></p>
+					<h2 id="ioroot-yb-reports-by-class-heading" class="ioroot-yb-reports-panel__title"><?php esc_html_e( 'Next three sessions per Class', 'class-bookings-with-stripe' ); ?></h2>
+					<p class="ioroot-yb-reports-panel__desc"><?php esc_html_e( 'Guest names and emails for each upcoming date.', 'class-bookings-with-stripe' ); ?></p>
 				</div>
 				<?php if ( empty( $by_class ) ) : ?>
 					<div class="ioroot-yb-reports-empty">
-						<p><?php esc_html_e( 'No upcoming classes found.', 'wp-stripe-class-bookings' ); ?></p>
+						<p><?php esc_html_e( 'No upcoming classes found.', 'class-bookings-with-stripe' ); ?></p>
 					</div>
 				<?php else : ?>
 					<div class="ioroot-yb-reports-table-scroll ioroot-yb-reports-table-scroll--wide">
 						<table class="widefat striped ioroot-yb-reports-table ioroot-yb-reports-table--nested">
 							<thead>
 							<tr>
-								<th scope="col" class="ioroot-yb-reports-table__class-col"><?php esc_html_e( 'Class', 'wp-stripe-class-bookings' ); ?></th>
-								<th scope="col"><?php esc_html_e( 'Upcoming #1', 'wp-stripe-class-bookings' ); ?></th>
-								<th scope="col"><?php esc_html_e( 'Upcoming #2', 'wp-stripe-class-bookings' ); ?></th>
-								<th scope="col"><?php esc_html_e( 'Upcoming #3', 'wp-stripe-class-bookings' ); ?></th>
+								<th scope="col" class="ioroot-yb-reports-table__class-col"><?php esc_html_e( 'Class', 'class-bookings-with-stripe' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Upcoming #1', 'class-bookings-with-stripe' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Upcoming #2', 'class-bookings-with-stripe' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Upcoming #3', 'class-bookings-with-stripe' ); ?></th>
 							</tr>
 							</thead>
 							<tbody>
 							<?php foreach ( $by_class as $class_row ) : ?>
 								<tr>
-									<td class="ioroot-yb-reports-table__class-name" data-label="<?php esc_attr_e( 'Class', 'wp-stripe-class-bookings' ); ?>">
+									<td class="ioroot-yb-reports-table__class-name" data-label="<?php esc_attr_e( 'Class', 'class-bookings-with-stripe' ); ?>">
 										<strong><?php echo esc_html( (string) $class_row['class_name'] ); ?></strong>
 									</td>
 									<?php for ( $i = 0; $i < 3; $i++ ) : ?>
 										<?php $session = $class_row['sessions'][ $i ] ?? null; ?>
-										<td class="ioroot-yb-reports-session" data-label="<?php echo esc_attr( sprintf( /* translators: %d: slot number 1–3 */ __( 'Upcoming #%d', 'wp-stripe-class-bookings' ), $i + 1 ) ); ?>">
+										<td class="ioroot-yb-reports-session" data-label="<?php echo esc_attr( sprintf( /* translators: %d: slot number 1–3 */ __( 'Upcoming #%d', 'class-bookings-with-stripe' ), $i + 1 ) ); ?>">
 											<?php if ( ! $session ) : ?>
-												<span class="ioroot-yb-reports-session__empty"><?php esc_html_e( 'No session', 'wp-stripe-class-bookings' ); ?></span>
+												<span class="ioroot-yb-reports-session__empty"><?php esc_html_e( 'No session', 'class-bookings-with-stripe' ); ?></span>
 											<?php else : ?>
 												<?php $rows = self::bookings_for_session( (int) $session['class_id'], (string) $session['date'] ); ?>
 												<div class="ioroot-yb-reports-session__when">
 													<?php
 													printf(
 														/* translators: 1: date, 2: time */
-														esc_html__( '%1$s · %2$s', 'wp-stripe-class-bookings' ),
+														esc_html__( '%1$s · %2$s', 'class-bookings-with-stripe' ),
 														esc_html( Helpers::format_date( (string) $session['date'] ) ),
 														esc_html( Helpers::format_time( (string) $session['start_time'] ) )
 													);
@@ -285,14 +285,14 @@ abstract class Reports {
 												<table class="ioroot-yb-reports-mini">
 													<thead>
 													<tr>
-														<th scope="col"><?php esc_html_e( 'Name', 'wp-stripe-class-bookings' ); ?></th>
-														<th scope="col"><?php esc_html_e( 'Email', 'wp-stripe-class-bookings' ); ?></th>
-														<th scope="col" class="ioroot-yb-reports-mini__seats"><?php esc_html_e( 'Seats', 'wp-stripe-class-bookings' ); ?></th>
+														<th scope="col"><?php esc_html_e( 'Name', 'class-bookings-with-stripe' ); ?></th>
+														<th scope="col"><?php esc_html_e( 'Email', 'class-bookings-with-stripe' ); ?></th>
+														<th scope="col" class="ioroot-yb-reports-mini__seats"><?php esc_html_e( 'Seats', 'class-bookings-with-stripe' ); ?></th>
 													</tr>
 													</thead>
 													<tbody>
 													<?php if ( empty( $rows ) ) : ?>
-														<tr><td colspan="3" class="ioroot-yb-reports-mini__empty"><?php esc_html_e( 'No bookings yet.', 'wp-stripe-class-bookings' ); ?></td></tr>
+														<tr><td colspan="3" class="ioroot-yb-reports-mini__empty"><?php esc_html_e( 'No bookings yet.', 'class-bookings-with-stripe' ); ?></td></tr>
 													<?php else : ?>
 														<?php foreach ( $rows as $row ) : ?>
 															<tr>
@@ -459,6 +459,7 @@ abstract class Reports {
 				'posts_per_page' => -1,
 				'fields'         => 'ids',
 				'no_found_rows'  => true,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Admin reports only; bounded meta keys on booking CPT.
 				'meta_query'     => [
 					'relation' => 'AND',
 					[
@@ -501,6 +502,7 @@ abstract class Reports {
 				'orderby'        => 'date',
 				'order'          => 'ASC',
 				'no_found_rows'  => true,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Admin reports only; bounded meta keys on booking CPT.
 				'meta_query'     => [
 					'relation' => 'AND',
 					[
@@ -586,9 +588,9 @@ abstract class Reports {
 		$dates = self::dates_in_calendar_year( $year );
 
 		$i18n = [
-			'studentsBooked' => __( 'Students booked', 'wp-stripe-class-bookings' ),
-			'dateAxis'       => __( 'Date', 'wp-stripe-class-bookings' ),
-			'resetZoom'      => __( 'Reset zoom', 'wp-stripe-class-bookings' ),
+			'studentsBooked' => __( 'Students booked', 'class-bookings-with-stripe' ),
+			'dateAxis'       => __( 'Date', 'class-bookings-with-stripe' ),
+			'resetZoom'      => __( 'Reset zoom', 'class-bookings-with-stripe' ),
 		];
 
 		$query = new \WP_Query(
@@ -598,6 +600,7 @@ abstract class Reports {
 				'posts_per_page' => -1,
 				'fields'         => 'ids',
 				'no_found_rows'  => true,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Admin reports only; bounded meta keys on booking CPT.
 				'meta_query'     => [
 					'relation' => 'AND',
 					[
@@ -668,7 +671,7 @@ abstract class Reports {
 			if ( '' === $title ) {
 				$title = sprintf(
 					/* translators: %d: Class post ID */
-					__( 'Class #%d', 'wp-stripe-class-bookings' ),
+					__( 'Class #%d', 'class-bookings-with-stripe' ),
 					$class_id
 				);
 			}
