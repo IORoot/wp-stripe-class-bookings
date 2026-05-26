@@ -16,6 +16,13 @@ Stripe Checkout booking for classes: capacity-aware dates, soft holds, webhooks,
 
 The plugin is built around **Advanced Custom Fields (ACF)**. Each class is a **Class** in the admin: you set location, schedule, price, capacity, and optional extras. The booking form is embedded with a shortcode or Elementor widget. When someone clicks **Book & pay with Stripe**, the plugin creates a temporary reservation, opens a Stripe Checkout Session, and sends the customer to Stripe to complete payment. A signed webhook confirms payment, updates the booking, and can send customer and admin emails.
 
+### Video tutorials — get started
+
+**New to the plugin?** Watch these first:
+
+* [Quick start: install, API keys & first booking](https://youtu.be/8B6TxXcDt2E)
+* [Full installation & setup guide](https://youtu.be/7HBBGPZfZL0)
+
 ### What you can manage
 
 * **Classes** — Weekly recurring classes, one-off events, or classes that link out to an external booking URL (ClassFor, Eventbrite, etc.) instead of the built-in form.
@@ -108,6 +115,20 @@ Bookings store customer name, email, class, date, seats, payment status, and opt
 ### Support
 
 Documentation and setup notes are included in the plugin admin under **Classes → Settings**. For issues and feature requests, use the support forum on WordPress.org once published, or the contact URL on the plugin listing.
+
+### Video tutorials — full series
+
+Step-by-step guides on YouTube (IORoot):
+
+* [Quick start: install, API keys & first booking](https://youtu.be/8B6TxXcDt2E)
+* [Full installation & setup guide](https://youtu.be/7HBBGPZfZL0)
+* [Stripe webhook setup](https://youtu.be/54MQBsW8qWA)
+* [Result pages, Developer & Help tabs](https://youtu.be/8mMCkKxIH-s)
+* [Creating a weekly repeating class](https://youtu.be/k5dlDzCyvoA)
+* [One-off events & workshops](https://youtu.be/gzN3yzXWajo)
+* [Extra fields & ACF on the booking form](https://youtu.be/BivPyMuCGbQ)
+* [Email setup](https://youtu.be/dqg_DweIVAo)
+* [Bookings list & reports](https://youtu.be/D2UpGlkhJWs)
 
 ---
 
