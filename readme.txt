@@ -16,6 +16,13 @@ Stripe Checkout booking for classes: capacity-aware dates, soft holds, webhooks,
 
 The plugin uses **Advanced Custom Fields (ACF)**. Each bookable class has schedule, price, capacity, and optional extras. Embed the form with a shortcode or Elementor widget. When a customer clicks **Book & pay with Stripe**, the plugin creates a soft-hold, opens a Stripe Checkout Session, and redirects to Stripe. A signed webhook marks the booking paid and can send customer and admin emails.
 
+= Video tutorials — get started =
+
+**New to the plugin?** Watch these first:
+
+* [Quick start: install, API keys & first booking](https://youtu.be/8B6TxXcDt2E)
+* [Full installation & setup guide](https://youtu.be/7HBBGPZfZL0)
+
 = Features =
 
 * **Classes** — Weekly recurring classes, one-off events, or external booking links.
@@ -43,6 +50,20 @@ The plugin uses the bundled **stripe-php** SDK. It does not embed card fields on
 * Stripe account (keys and webhook signing secret)
 * ACF Free or Pro (bundled ACF Free loads if ACF is not active)
 * Elementor (optional, for the Elementor widget)
+
+= Video tutorials — full series =
+
+Step-by-step guides on YouTube (IORoot):
+
+* [Quick start: install, API keys & first booking](https://youtu.be/8B6TxXcDt2E)
+* [Full installation & setup guide](https://youtu.be/7HBBGPZfZL0)
+* [Stripe webhook setup](https://youtu.be/54MQBsW8qWA)
+* [Result pages, Developer & Help tabs](https://youtu.be/8mMCkKxIH-s)
+* [Creating a weekly repeating class](https://youtu.be/k5dlDzCyvoA)
+* [One-off events & workshops](https://youtu.be/gzN3yzXWajo)
+* [Extra fields & ACF on the booking form](https://youtu.be/BivPyMuCGbQ)
+* [Email setup](https://youtu.be/dqg_DweIVAo)
+* [Bookings list & reports](https://youtu.be/D2UpGlkhJWs)
 
 == Installation ==
 
