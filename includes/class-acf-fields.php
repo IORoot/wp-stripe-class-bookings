@@ -209,10 +209,7 @@ abstract class ACF_Fields {
 		$relative = 'admin-settings-intro.php';
 		$theme    = locate_template(
 			[
-				'class-bookings-with-stripe/' . $relative,
-				'wp-stripe-class-bookings/' . $relative,
-				'ioroot-stripe-bookings/' . $relative,
-				'ioroot-yoga-bookings/' . $relative,
+				'class-bookings-with-stripe/' . $relative
 			],
 			false,
 			false
@@ -1400,7 +1397,7 @@ PHP;
 		<li><code>class-bookings-with-stripe/email-customer.php</code> — <?php esc_html_e( 'Customer email HTML wrapper.', 'class-bookings-with-stripe' ); ?></li>
 		<li><code>class-bookings-with-stripe/email-admin.php</code> — <?php esc_html_e( 'Admin email HTML wrapper.', 'class-bookings-with-stripe' ); ?></li>
 	</ul>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Alias folder name (same files):', 'class-bookings-with-stripe' ); ?> <code>ioroot-stripe-bookings/</code></p>
+	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Alias folder name (same files):', 'class-bookings-with-stripe' ); ?> <code>class-bookings-with-stripe/</code></p>
 
 	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Filter: ioroot_sb_template_path', 'class-bookings-with-stripe' ); ?></h3>
 	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Arguments: $path (absolute), $relative (filename), $context (e.g. booking, status). Return a different absolute path to load your file.', 'class-bookings-with-stripe' ); ?></p>

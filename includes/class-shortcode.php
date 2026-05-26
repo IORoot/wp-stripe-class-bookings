@@ -178,10 +178,7 @@ abstract class Shortcode {
 		$relative = ltrim( $relative, '/' );
 		$theme    = locate_template(
 			[
-				'class-bookings-with-stripe/' . $relative,
-				'wp-stripe-class-bookings/' . $relative,
-				'ioroot-stripe-bookings/' . $relative,
-				'ioroot-yoga-bookings/' . $relative,
+				'class-bookings-with-stripe/' . $relative
 			],
 			false,
 			false

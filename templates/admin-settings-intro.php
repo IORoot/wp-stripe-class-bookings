@@ -5,8 +5,6 @@
  * Edit this file to change the HTML shown above the settings tabs. You can
  * also override it in your theme as:
  *   class-bookings-with-stripe/admin-settings-intro.php
- *   ioroot-stripe-bookings/admin-settings-intro.php (legacy)
- *   ioroot-yoga-bookings/admin-settings-intro.php (legacy)
  *
  * This file is included in an admin context; output is not escaped by the
  * plugin — use only trusted markup.
