@@ -41,11 +41,6 @@ final class ACF_Dependency {
 		self::$using_bundled_acf = true;
 		self::register_bundled_admin_restrictions();
 
-		// ACF's supported flag for hiding the admin UI while keeping field APIs.
-		if ( ! defined( 'ACF_LITE' ) ) {
-			define( 'ACF_LITE', true );
-		}
-
 		// This file is the official ACF Free plugin bootstrap.
 		include_once $bootstrap;
 	}
@@ -60,7 +55,10 @@ final class ACF_Dependency {
 		add_filter( 'acf/settings/enable_options_pages_ui', '__return_false' );
 		add_filter( 'register_post_type_args', [ self::class, 'hide_bundled_acf_post_type_ui' ], 10, 2 );
 		add_action( 'admin_menu', [ self::class, 'remove_bundled_acf_menus' ], 999 );
-		add_action( 'admin_init', [ self::class, 'block_bundled_acf_admin_screens' ], 1 );
+		add_action( 'load-edit.php', [ self::class, 'block_bundled_acf_post_type_screen' ] );
+		add_action( 'load-post-new.php', [ self::class, 'block_bundled_acf_post_type_screen' ] );
+		add_action( 'load-post.php', [ self::class, 'block_bundled_acf_post_type_screen' ] );
+		add_action( 'admin_init', [ self::class, 'block_bundled_acf_plugin_pages' ], 1 );
 	}
 
 	/**
@@ -98,37 +96,43 @@ final class ACF_Dependency {
 		remove_submenu_page( $parent, 'acf-tools' );
 	}
 
-	public static function block_bundled_acf_admin_screens(): void {
-		if ( ! self::$using_bundled_acf || ! is_admin() ) {
+	/**
+	 * Redirect list/new/edit screens for bundled ACF internal post types.
+	 */
+	public static function block_bundled_acf_post_type_screen(): void {
+		if ( ! self::$using_bundled_acf ) {
 			return;
 		}
 
-		global $pagenow;
-
-		$internal = self::internal_post_types();
-
-		if ( 'edit.php' === $pagenow || 'post-new.php' === $pagenow ) {
-			$post_type = isset( $_GET['post_type'] ) ? sanitize_key( wp_unslash( (string) $_GET['post_type'] ) ) : '';
-			if ( $post_type && in_array( $post_type, $internal, true ) ) {
-				wp_safe_redirect( admin_url() );
-				exit;
-			}
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || ! is_string( $screen->post_type ) || '' === $screen->post_type ) {
+			return;
 		}
 
-		if ( 'post.php' === $pagenow && isset( $_GET['post'] ) ) {
-			$post_id = (int) $_GET['post'];
-			if ( $post_id && in_array( get_post_type( $post_id ), $internal, true ) ) {
-				wp_safe_redirect( admin_url() );
-				exit;
-			}
+		if ( in_array( $screen->post_type, self::internal_post_types(), true ) ) {
+			wp_safe_redirect( admin_url() );
+			exit;
+		}
+	}
+
+	/**
+	 * Redirect direct hits to bundled ACF plugin admin pages (menus are already removed).
+	 */
+	public static function block_bundled_acf_plugin_pages(): void {
+		if ( ! self::$using_bundled_acf ) {
+			return;
 		}
 
-		if ( isset( $_GET['page'] ) ) {
-			$page = sanitize_key( wp_unslash( (string) $_GET['page'] ) );
-			if ( in_array( $page, [ 'acf-tools', 'acf-settings-updates', 'acf-options-preview' ], true ) ) {
-				wp_safe_redirect( admin_url() );
-				exit;
-			}
+		global $plugin_page;
+
+		if ( ! is_string( $plugin_page ) || '' === $plugin_page ) {
+			return;
+		}
+
+		$page = sanitize_key( $plugin_page );
+		if ( in_array( $page, [ 'acf-tools', 'acf-settings-updates', 'acf-options-preview' ], true ) ) {
+			wp_safe_redirect( admin_url() );
+			exit;
 		}
 	}
 

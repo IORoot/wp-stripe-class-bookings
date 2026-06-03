@@ -112,13 +112,17 @@ abstract class Migration {
 		];
 
 		foreach ( $map as $from => $to ) {
+			if ( $from === $to ) {
+				continue;
+			}
+
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-			$wpdb->update(
-				$wpdb->postmeta,
-				[ 'meta_key' => $to ],
-				[ 'meta_key' => $from ],
-				[ '%s' ],
-				[ '%s' ]
+			$wpdb->query(
+				$wpdb->prepare(
+					"UPDATE {$wpdb->postmeta} SET meta_key = %s WHERE meta_key = %s",
+					$to,
+					$from
+				)
 			);
 		}
 	}
