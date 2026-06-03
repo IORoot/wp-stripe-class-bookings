@@ -68,7 +68,7 @@ abstract class Reports {
 			'clasbowi-chart',
 			CLASBOWI_URL . 'assets/vendor/chart.umd.min.js',
 			[],
-			'4.4.6',
+			'4.5.1',
 			true
 		);
 		wp_enqueue_script(
@@ -89,7 +89,7 @@ abstract class Reports {
 			'clasbowi-chartjs-zoom',
 			CLASBOWI_URL . 'assets/vendor/chartjs-plugin-zoom.min.js',
 			[ 'clasbowi-chart', 'clasbowi-hammer' ],
-			'2.1.0',
+			'2.2.0',
 			true
 		);
 		wp_enqueue_script(

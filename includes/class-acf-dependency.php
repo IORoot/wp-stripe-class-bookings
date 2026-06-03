@@ -50,6 +50,7 @@ final class ACF_Dependency {
 	 */
 	private static function register_bundled_admin_restrictions(): void {
 		add_filter( 'acf/settings/show_admin', '__return_false' );
+		add_filter( 'acf/settings/select2_version', static fn (): int => 4 );
 		add_filter( 'acf/settings/show_updates', '__return_false' );
 		add_filter( 'acf/settings/enable_post_types', '__return_false' );
 		add_filter( 'acf/settings/enable_options_pages_ui', '__return_false' );

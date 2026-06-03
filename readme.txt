@@ -1,5 +1,5 @@
 === Class Bookings with Stripe ===
-Contributors: ioroot
+Contributors: lonetraceur1
 Tags: stripe, booking, classes, checkout, elementor
 Requires at least: 6.0
 Tested up to: 7.0
@@ -64,6 +64,42 @@ Step-by-step guides on YouTube (IORoot):
 * [Extra fields & ACF on the booking form](https://youtu.be/BivPyMuCGbQ)
 * [Email setup](https://youtu.be/dqg_DweIVAo)
 * [Bookings list & reports](https://youtu.be/D2UpGlkhJWs)
+
+== External services ==
+
+This plugin connects to third-party services to process payments and, optionally, add customers to a mailing list. You must configure your own accounts and API keys for these services in **Class Bookings with Stripe → Settings**.
+
+= Stripe =
+
+This plugin uses [Stripe](https://stripe.com/) Checkout to collect payments. Stripe hosts the payment page; card details are entered on Stripe’s site, not in WordPress.
+
+**When data is sent**
+
+* When a customer submits the booking form, your WordPress site calls the Stripe API to create a Checkout Session, then redirects the browser to Stripe’s hosted checkout page.
+* When payment completes, fails, or the session expires, Stripe sends signed webhook events to your site (`/wp-json/clasbowi/v1/stripe-webhook`).
+* If webhooks are delayed, the plugin may call the Stripe API again to retrieve the Checkout Session status when the customer returns to your success page.
+
+**What data is sent**
+
+* To Stripe’s API (server-side): your Stripe secret key (authentication), customer name and email, class and booking details (class name, date, time, location, seats, booking ID), line-item title and price (GBP), and success/cancel return URLs.
+* On Stripe Checkout (customer-facing): payment and billing details the customer enters on Stripe’s hosted page.
+* From Stripe to your site (webhooks): event payloads about the Checkout Session and payment status (no card numbers are stored in WordPress).
+
+This service is provided by Stripe, Inc.: [Terms of Service](https://stripe.com/legal/ssa), [Privacy Policy](https://stripe.com/privacy).
+
+= Mailchimp =
+
+If enabled in plugin settings, this plugin can subscribe customers to a Mailchimp audience when they opt in on the booking form.
+
+**When data is sent**
+
+* After a booking is marked paid (via Stripe webhook), and only when all of the following are true: Mailchimp opt-in is enabled in settings, you have saved a Mailchimp API key and Audience ID, the customer checked the opt-in box on the form, and the booking has not already been synced.
+
+**What data is sent**
+
+* To the Mailchimp Marketing API: the customer’s email address, first name, last name (parsed from the booking name), and subscription status (`pending` if double opt-in is enabled, otherwise `subscribed`). Your Mailchimp API key is sent in the request for authentication.
+
+This service is provided by Intuit Mailchimp: [Terms of Use](https://mailchimp.com/legal/terms/), [Privacy Policy](https://mailchimp.com/legal/privacy/).
 
 == Installation ==
 

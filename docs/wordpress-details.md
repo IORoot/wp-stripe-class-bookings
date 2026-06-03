@@ -242,7 +242,7 @@ If you add a `readme.txt` for WordPress.org SVN, start with:
 
 ```
 === Class Bookings with Stripe ===
-Contributors: ioroot
+Contributors: lonetraceur1
 Tags: stripe, booking, classes, checkout, events, elementor, acf
 Requires at least: 6.0
 Tested up to: 6.8
