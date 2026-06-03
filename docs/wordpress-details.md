@@ -44,7 +44,7 @@ Stripe Checkout is Stripe’s hosted, PCI-compliant payment flow. This plugin do
 The front-end form (shortcode `[stripe_booking class_id="123"]` or the **Class Booking with Stripe** Elementor widget) collects:
 
 * Class date (from a capacity-aware dropdown of upcoming dates)
-* Number of seats (1–4, capped by seats remaining)
+* Number of seats (default 1, up to seats remaining for the chosen date)
 * Name and email (and optional waiver, Mailchimp opt-in, and custom fields)
 
 Submitting calls the WordPress REST API: `POST /wp-json/stripe-bookings/v1/checkout`.
@@ -222,7 +222,7 @@ Yes. `[yoga_booking]` and `[yoga_booking_status]` remain as aliases for older si
 * Stripe Checkout Session creation via bundled stripe-php SDK with inline `price_data` line items and session metadata.
 * REST API: checkout creation, signed Stripe webhook handler, booking status polling, and availability refresh.
 * 30-minute soft-holds with capacity counting and cron-based hold expiry.
-* Front-end booking form with date dropdown, seat quantity (1–4), name, email, and optional form extras.
+* Front-end booking form with date dropdown, seat quantity (1 up to remaining capacity), name, email, and optional form extras.
 * Shortcodes: `[stripe_booking]`, `[stripe_booking_status]`, plus `yoga_*` aliases.
 * Elementor **Class Booking with Stripe** widget with manual class ID or current-post field support.
 * Auto-created result pages on activation: Booking Confirmed, Booking Cancelled, Booking Error.

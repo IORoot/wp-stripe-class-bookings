@@ -61,8 +61,7 @@ abstract class Shortcode {
 			: Helpers::class_upcoming_dates_count( $class_data );
 		$dates           = Bookings::next_available_dates( $class_data, $dates_count );
 		$show_heading    = '1' === (string) $atts['heading'];
-		$max_seats_today = $dates ? (int) $dates[0]['remaining'] : 0;
-		$max_seats_today = max( 0, min( 4, $max_seats_today ) );
+		$max_seats_today = $dates ? max( 0, (int) $dates[0]['remaining'] ) : 0;
 		$template_args   = apply_filters(
 			'ioroot_sb_booking_template_args',
 			[

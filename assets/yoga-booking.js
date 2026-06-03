@@ -77,7 +77,7 @@
 		if ( ! dateField || ! seatsSel ) return;
 
 		const remaining = getDateRemaining( dateField );
-		const max = Math.max( 1, Math.min( 4, remaining ) );
+		const max = Math.max( 1, remaining );
 
 		const previous = parseInt( seatsSel.value, 10 ) || 1;
 		seatsSel.innerHTML = '';

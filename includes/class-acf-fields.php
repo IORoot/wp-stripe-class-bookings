@@ -611,7 +611,6 @@ abstract class ACF_Fields {
 						'type'          => 'number',
 						'default_value' => 3,
 						'min'           => 1,
-						'max'           => 12,
 						'step'          => 1,
 						'instructions'  => __( 'How many upcoming dates appear in this class’s booking form (independent per class).', 'class-bookings-with-stripe' ),
 						'wrapper'       => [
