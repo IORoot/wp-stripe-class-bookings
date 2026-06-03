@@ -41,7 +41,7 @@ What you’ll learn:
 • Quick troubleshooting (404/HTML responses, wrong site URL, test vs live)
 
 Webhook endpoint (replace with your domain):
-https://[YOUR-SITE]/wp-json/stripe-bookings/v1/stripe-webhook
+https://[YOUR-SITE]/wp-json/clasbowi/v1/stripe-webhook
 
 #WordPress #Stripe #Webhooks #ClassBooking #StripeCheckout
 ```
@@ -66,7 +66,7 @@ What you’ll learn:
 • Choose “Weekly class” as the booking type
 • Set day of week, start time, price (GBP), and capacity per session
 • Optional: location, description, cancelled dates, pause bookings
-• Publish and embed with shortcode [stripe_booking class_id="123"] or the Elementor widget
+• Publish and embed with shortcode [clasbowi_booking class_id="123"] or the Elementor widget
 
 Perfect for yoga studios, fitness classes, workshops that run every week.
 
@@ -99,7 +99,7 @@ You’ll see the full flow: customer picks a date → soft-hold → redirect to 
 
 Requirements: WordPress 6.0+, Stripe account, PHP 7.4+. ACF is bundled if you don’t already use Advanced Custom Fields.
 
-Shortcode: [stripe_booking class_id="YOUR_CLASS_ID"]
+Shortcode: [clasbowi_booking class_id="YOUR_CLASS_ID"]
 
 #WordPress #StripeCheckout #QuickStart #ClassBooking #Tutorial
 ```
@@ -122,7 +122,7 @@ A guided tour of the advanced settings tabs in Class Bookings with Stripe — ev
 Result pages tab
 • Booking Confirmed, Booking Cancelled, and Booking Error pages
 • Auto-created on activation; how to change which pages customers land on after Checkout
-• Shortcode [stripe_booking_status] for success / cancelled / error states
+• Shortcode [clasbowi_booking_status] for success / cancelled / error states
 
 Developer tab
 • How webhooks update booking status (paid, expired)
@@ -193,7 +193,7 @@ We cover:
 10. Go live checklist (live keys, live webhook, SMTP for email)
 
 Webhook URL:
-https://[YOUR-SITE]/wp-json/stripe-bookings/v1/stripe-webhook
+https://[YOUR-SITE]/wp-json/clasbowi/v1/stripe-webhook
 
 Events: checkout.session.completed, checkout.session.expired, checkout.session.async_payment_failed
 

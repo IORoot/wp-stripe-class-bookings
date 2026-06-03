@@ -2,24 +2,24 @@
 /**
  * Elementor widget: Class Booking with Stripe form.
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
-namespace IORoot_Yoga_Bookings\Widgets;
+namespace IOROOT_STRIPE_BOOKINGS\Widgets;
 
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Typography;
 use Elementor\Widget_Base;
-use IORoot_Yoga_Bookings\CPT;
-use IORoot_Yoga_Bookings\Shortcode;
+use IOROOT_STRIPE_BOOKINGS\CPT;
+use IOROOT_STRIPE_BOOKINGS\Shortcode;
 
 defined( 'ABSPATH' ) || exit;
 
 class Widget_Stripe_Booking extends Widget_Base {
 
 	public function get_name() {
-		return 'ioroot-stripe-booking';
+		return \IOROOT_STRIPE_BOOKINGS\Constants::ELEMENTOR_WIDGET;
 	}
 
 	public function get_title() {
@@ -39,11 +39,11 @@ class Widget_Stripe_Booking extends Widget_Base {
 	}
 
 	public function get_style_depends() {
-		return [ 'ioroot-yb' ];
+		return [ \IOROOT_STRIPE_BOOKINGS\Constants::SCRIPT_FRONTEND ];
 	}
 
 	public function get_script_depends() {
-		return [ 'ioroot-yb' ];
+		return [ \IOROOT_STRIPE_BOOKINGS\Constants::SCRIPT_FRONTEND ];
 	}
 
 	protected function register_controls() {
@@ -64,7 +64,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 					'manual'        => esc_html__( 'Manual: pick a Class', 'class-bookings-with-stripe' ),
 					'current_field' => esc_html__( 'Current post field: stripe-booking-id', 'class-bookings-with-stripe' ),
 				],
-				'description' => esc_html__( 'Use "Current post field" inside loop/off-canvas templates where the source post has an ACF field named stripe-booking-id (internally stripe_booking_id).', 'class-bookings-with-stripe' ),
+				'description' => esc_html__( 'Use "Current post field" inside loop/off-canvas templates where the source post has an ACF field named stripe-booking-id (internally clasbowi_class_stripe_id).', 'class-bookings-with-stripe' ),
 			]
 		);
 
@@ -86,7 +86,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 			[
 				'label'       => esc_html__( 'Field key on current post', 'class-bookings-with-stripe' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => 'stripe_booking_id',
+				'default'     => 'clasbowi_class_stripe_id',
 				'description' => esc_html__( 'ACF/meta field that stores the Class ID (for example: 1209).', 'class-bookings-with-stripe' ),
 				'condition'   => [
 					'source' => 'current_field',
@@ -387,13 +387,18 @@ class Widget_Stripe_Booking extends Widget_Base {
 		$class_id = 0;
 
 		if ( 'current_field' === $source ) {
-			$field_key = sanitize_key( (string) ( $settings['current_field_key'] ?? 'stripe_booking_id' ) );
+			$field_key = sanitize_key( (string) ( $settings['current_field_key'] ?? 'clasbowi_class_stripe_id' ) );
 			$post_id   = get_the_ID();
 			if ( $post_id && $field_key ) {
 				$value = function_exists( 'get_field' ) ? get_field( $field_key, $post_id ) : get_post_meta( $post_id, $field_key, true );
-				if ( ( null === $value || '' === $value ) && 'stripe_booking_id' === $field_key ) {
-					// Accept legacy key while transitioning from yoga naming.
-					$value = function_exists( 'get_field' ) ? get_field( 'yoga_class_stripe_id', $post_id ) : get_post_meta( $post_id, 'yoga_class_stripe_id', true );
+				if ( null === $value || '' === $value ) {
+					foreach ( [ 'yoga_class_stripe_id', 'clasbowi_booking_id', 'yoga_booking_id' ] as $legacy_key ) {
+						$legacy_value = function_exists( 'get_field' ) ? get_field( $legacy_key, $post_id ) : get_post_meta( $post_id, $legacy_key, true );
+						if ( null !== $legacy_value && '' !== $legacy_value ) {
+							$value = $legacy_value;
+							break;
+						}
+					}
 				}
 				if ( is_scalar( $value ) ) {
 					$class_id = absint( ltrim( (string) $value, '#' ) );
@@ -405,7 +410,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 
 		if ( ! $class_id ) {
 			if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
-				echo '<div class="yb-form yb-form--error">' . esc_html__( 'No Class ID found. Pick a class manually or ensure the current post has stripe_booking_id (or legacy yoga_class_stripe_id) set.', 'class-bookings-with-stripe' ) . '</div>';
+				echo '<div class="yb-form yb-form--error">' . esc_html__( 'No Class ID found. Pick a class manually or ensure the current post has clasbowi_class_stripe_id (or legacy yoga_class_stripe_id) set.', 'class-bookings-with-stripe' ) . '</div>';
 			}
 			return;
 		}

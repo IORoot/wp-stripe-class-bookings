@@ -2,10 +2,10 @@
 /**
  * Mailchimp API integration for optional list opt-ins.
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
-namespace IORoot_Yoga_Bookings;
+namespace IOROOT_STRIPE_BOOKINGS;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -15,14 +15,14 @@ abstract class Mailchimp {
 		if ( ! (bool) Helpers::get_option( 'enable_mailchimp_optin', false ) ) {
 			return;
 		}
-		if ( 1 !== (int) get_post_meta( $booking_id, '_yb_mailchimp_opt_in', true ) ) {
+		if ( 1 !== (int) get_post_meta( $booking_id, '_clasbowi_mailchimp_opt_in', true ) ) {
 			return;
 		}
-		if ( get_post_meta( $booking_id, '_yb_mailchimp_synced_at', true ) ) {
+		if ( get_post_meta( $booking_id, '_clasbowi_mailchimp_synced_at', true ) ) {
 			return;
 		}
 
-		$email = sanitize_email( (string) get_post_meta( $booking_id, '_yb_customer_email', true ) );
+		$email = sanitize_email( (string) get_post_meta( $booking_id, '_clasbowi_customer_email', true ) );
 		if ( ! $email || ! is_email( $email ) ) {
 			return;
 		}
@@ -40,7 +40,7 @@ abstract class Mailchimp {
 			return;
 		}
 
-		$name = trim( (string) get_post_meta( $booking_id, '_yb_customer_name', true ) );
+		$name = trim( (string) get_post_meta( $booking_id, '_clasbowi_customer_name', true ) );
 		$name_parts = preg_split( '/\s+/', $name ) ?: [];
 		$first_name = $name_parts[0] ?? '';
 		$last_name  = count( $name_parts ) > 1 ? implode( ' ', array_slice( $name_parts, 1 ) ) : '';
@@ -55,7 +55,7 @@ abstract class Mailchimp {
 				'LNAME' => $last_name,
 			],
 		];
-		$payload = apply_filters( 'ioroot_yb_mailchimp_payload', $payload, $booking_id );
+		$payload = apply_filters( 'clasbowi_mailchimp_payload', $payload, $booking_id );
 
 		$url = sprintf( 'https://%s.api.mailchimp.com/3.0/lists/%s/members/%s', rawurlencode( $dc ), rawurlencode( $audience_id ), $email_hash );
 		$res = wp_remote_request(
@@ -82,6 +82,6 @@ abstract class Mailchimp {
 			return;
 		}
 
-		update_post_meta( $booking_id, '_yb_mailchimp_synced_at', gmdate( 'Y-m-d H:i:s' ) );
+		update_post_meta( $booking_id, '_clasbowi_mailchimp_synced_at', gmdate( 'Y-m-d H:i:s' ) );
 	}
 }

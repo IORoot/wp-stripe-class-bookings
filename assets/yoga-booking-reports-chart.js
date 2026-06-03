@@ -1,14 +1,14 @@
 /**
  * Class Bookings with Stripe — Reports yearly line chart (Chart.js + zoom).
  *
- * Expects window.IOROOT_YB_REPORTS_CHART from wp_localize_script.
+ * Expects window.clasbowiReportsChart from wp_localize_script.
  */
 (function () {
 	'use strict';
 
-	var cfg = window.IOROOT_YB_REPORTS_CHART;
+	var cfg = window.clasbowiReportsChart;
 
-	var yearSelect = document.getElementById( 'ioroot-yb-reports-year' );
+	var yearSelect = document.getElementById( 'clasbowi-reports-year' );
 	if ( yearSelect && yearSelect.form ) {
 		yearSelect.addEventListener( 'change', function () {
 			yearSelect.form.submit();
@@ -20,7 +20,7 @@
 			return;
 		}
 
-		var canvas = document.getElementById( 'ioroot-yb-reports-year-chart' );
+		var canvas = document.getElementById( 'clasbowi-reports-year-chart' );
 		if ( ! canvas ) {
 			return;
 		}
@@ -140,7 +140,7 @@
 			},
 		} );
 
-		var resetBtn = document.getElementById( 'ioroot-yb-reports-chart-reset' );
+		var resetBtn = document.getElementById( 'clasbowi-reports-chart-reset' );
 		if ( resetBtn ) {
 			resetBtn.addEventListener( 'click', function () {
 				if ( typeof chart.resetZoom === 'function' ) {

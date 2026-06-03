@@ -33,7 +33,7 @@ The plugin is built around **Advanced Custom Fields (ACF)**. Each class is a **C
 * **Reports** — Yearly booking charts, upcoming attendance, and guest lists by class.
 * **Form extras** — Optional waiver checkbox, Mailchimp opt-in, and custom ACF fields on the booking form.
 * **Emails** — Customisable customer and admin templates with merge tags, sent via WordPress `wp_mail()`.
-* **Result pages** — On activation, the plugin creates **Booking Confirmed**, **Booking Cancelled**, and **Booking Error** pages using `[stripe_booking_status]`.
+* **Result pages** — On activation, the plugin creates **Booking Confirmed**, **Booking Cancelled**, and **Booking Error** pages using `[clasbowi_booking_status]`.
 
 ### How Stripe Checkout integration works
 
@@ -41,13 +41,13 @@ Stripe Checkout is Stripe’s hosted, PCI-compliant payment flow. This plugin do
 
 **1. Customer submits the form**
 
-The front-end form (shortcode `[stripe_booking class_id="123"]` or the **Class Booking with Stripe** Elementor widget) collects:
+The front-end form (shortcode `[clasbowi_booking class_id="123"]` or the **Class Booking with Stripe** Elementor widget) collects:
 
 * Class date (from a capacity-aware dropdown of upcoming dates)
 * Number of seats (default 1, up to seats remaining for the chosen date)
 * Name and email (and optional waiver, Mailchimp opt-in, and custom fields)
 
-Submitting calls the WordPress REST API: `POST /wp-json/stripe-bookings/v1/checkout`.
+Submitting calls the WordPress REST API: `POST /wp-json/clasbowi/v1/checkout`.
 
 **2. Soft-hold and session creation**
 
@@ -73,7 +73,7 @@ On Stripe’s page the customer completes payment (card, wallets, and other meth
 
 Configure a webhook endpoint in Stripe Dashboard → Developers → Webhooks:
 
-`https://yoursite.com/wp-json/stripe-bookings/v1/stripe-webhook`
+`https://yoursite.com/wp-json/clasbowi/v1/stripe-webhook`
 
 Listen for:
 
@@ -85,7 +85,7 @@ The plugin verifies the **webhook signing secret** from settings before processi
 
 **5. Return URLs and status polling**
 
-After payment, Stripe redirects to your **Booking Confirmed** page. The `[stripe_booking_status]` shortcode polls `GET /wp-json/stripe-bookings/v1/booking-status?session=cs_...` and shows confirmation details. If the webhook is delayed, the plugin can **reconcile** by fetching the session from Stripe directly.
+After payment, Stripe redirects to your **Booking Confirmed** page. The `[clasbowi_booking_status]` shortcode polls `GET /wp-json/clasbowi/v1/booking-status?session=cs_...` and shows confirmation details. If the webhook is delayed, the plugin can **reconcile** by fetching the session from Stripe directly.
 
 If the customer abandons Checkout or the session expires, they land on **Booking Cancelled** or the hold is cleared via webhook/cron.
 
@@ -95,9 +95,9 @@ Seats taken for a (class, date) = **paid** bookings + **pending** bookings whose
 
 ### Front-end embedding
 
-* **Shortcode:** `[stripe_booking class_id="123"]` — also accepts `class_slug`, `stripe_booking_id`, or legacy `yoga_booking` alias.
-* **Status shortcode:** `[stripe_booking_status type="success"]` (or `cancelled`, `error`).
-* **Elementor:** **Class Booking with Stripe** widget — pick a class by ID or read `stripe_booking_id` from the current post in loops/templates.
+* **Shortcode:** `[clasbowi_booking class_id="123"]` — also accepts `class_slug`, `clasbowi_booking_id`, or legacy `clasbowi_booking` alias.
+* **Status shortcode:** `[clasbowi_booking_status type="success"]` (or `cancelled`, `error`).
+* **Elementor:** **Class Booking with Stripe** widget — pick a class by ID or read `clasbowi_booking_id` from the current post in loops/templates.
 
 ### Requirements and bundled dependencies
 
@@ -139,11 +139,11 @@ Step-by-step guides on YouTube (IORoot):
 3. Go to **Classes → Settings**.
 4. Enter your Stripe **publishable** and **secret** keys (test or live mode).
 5. In Stripe Dashboard → **Developers → Webhooks**, add an endpoint:
-   `https://yoursite.com/wp-json/stripe-bookings/v1/stripe-webhook`
+   `https://yoursite.com/wp-json/clasbowi/v1/stripe-webhook`
    Enable events: `checkout.session.completed`, `checkout.session.expired`, `checkout.session.async_payment_failed`.
 6. Paste the **webhook signing secret** into plugin settings.
 7. Create classes under **Classes → Add New**.
-8. Place `[stripe_booking class_id="123"]` on a page, or add the **Class Booking with Stripe** Elementor widget.
+8. Place `[clasbowi_booking class_id="123"]` on a page, or add the **Class Booking with Stripe** Elementor widget.
 9. Confirm the auto-created result pages (**Booking Confirmed**, **Booking Cancelled**, **Booking Error**) or assign your own in settings.
 
 ---
@@ -208,7 +208,7 @@ Use the Stripe CLI to forward events, or a tunnel (ngrok, etc.) so Stripe can re
 
 = Are there legacy shortcode names? =
 
-Yes. `[yoga_booking]` and `[yoga_booking_status]` remain as aliases for older sites.
+Yes. `[clasbowi_booking]` and `[clasbowi_booking_status]` remain as aliases for older sites.
 
 ---
 
@@ -223,7 +223,7 @@ Yes. `[yoga_booking]` and `[yoga_booking_status]` remain as aliases for older si
 * REST API: checkout creation, signed Stripe webhook handler, booking status polling, and availability refresh.
 * 30-minute soft-holds with capacity counting and cron-based hold expiry.
 * Front-end booking form with date dropdown, seat quantity (1 up to remaining capacity), name, email, and optional form extras.
-* Shortcodes: `[stripe_booking]`, `[stripe_booking_status]`, plus `yoga_*` aliases.
+* Shortcodes: `[clasbowi_booking]`, `[clasbowi_booking_status]`, plus `yoga_*` aliases.
 * Elementor **Class Booking with Stripe** widget with manual class ID or current-post field support.
 * Auto-created result pages on activation: Booking Confirmed, Booking Cancelled, Booking Error.
 * Customisable customer and admin email templates with merge tags via `wp_mail()`.

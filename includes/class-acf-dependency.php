@@ -5,10 +5,10 @@
  * If ACF (Free or Pro) is active, we use it.
  * Otherwise, we bootstrap the bundled ACF Free copy and hide its admin UI.
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
-namespace IORoot_Yoga_Bookings;
+namespace IOROOT_STRIPE_BOOKINGS;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -33,7 +33,7 @@ final class ACF_Dependency {
 			return;
 		}
 
-		$bootstrap = defined( 'IOROOT_YB_DIR' ) ? IOROOT_YB_DIR . self::BUNDLED_ACF_BOOTSTRAP : null;
+		$bootstrap = defined( 'CLASBOWI_DIR' ) ? CLASBOWI_DIR . self::BUNDLED_ACF_BOOTSTRAP : null;
 		if ( ! $bootstrap || ! file_exists( $bootstrap ) ) {
 			return;
 		}

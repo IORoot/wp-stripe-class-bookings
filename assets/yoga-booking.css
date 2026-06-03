@@ -327,7 +327,7 @@
 }
 
 /* Elementor (and some themes) inject background on .yb-form after this file — keep the shell clear */
-.elementor-widget-ioroot-stripe-booking .yb-form.yb-form--layout-modern {
+.elementor-widget-clasbowi-booking .yb-form.yb-form--layout-modern {
 	background: transparent !important;
 }
 

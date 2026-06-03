@@ -1,44 +1,58 @@
 <?php
 /**
- * Shortcodes: [stripe_booking] and [stripe_booking_status].
+ * Shortcodes: [clasbowi_booking] and [clasbowi_booking_status].
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
-namespace IORoot_Yoga_Bookings;
+namespace IOROOT_STRIPE_BOOKINGS;
 
 defined( 'ABSPATH' ) || exit;
 
 abstract class Shortcode {
 
 	public static function init(): void {
-		add_shortcode( 'stripe_booking', [ self::class, 'render_booking' ] );
-		add_shortcode( 'stripe_booking_status', [ self::class, 'render_status' ] );
-		// Backward compatibility aliases.
-		add_shortcode( 'yoga_booking', [ self::class, 'render_booking' ] );
-		add_shortcode( 'yoga_booking_status', [ self::class, 'render_status' ] );
+		add_shortcode( Constants::SHORTCODE_BOOKING, [ self::class, 'render_booking' ] );
+		add_shortcode( Constants::SHORTCODE_STATUS, [ self::class, 'render_status' ] );
+
+		foreach ( Constants::LEGACY_SHORTCODES_BOOKING as $legacy_tag ) {
+			add_shortcode( $legacy_tag, [ self::class, 'render_booking' ] );
+		}
+		foreach ( Constants::LEGACY_SHORTCODES_STATUS as $legacy_tag ) {
+			add_shortcode( $legacy_tag, [ self::class, 'render_status' ] );
+		}
 	}
 
 	/**
 	 * @param array<string, string> $atts
 	 */
 	public static function render_booking( $atts = [] ): string {
-		$atts = shortcode_atts( [
-			'class_id'           => '0',
-			'class_slug'         => '',
-			'stripe_booking_id'  => '',
-			'class_stripe_id'    => '',
-			'heading'            => '1',
-		], (array) $atts, 'stripe_booking' );
-		$atts = apply_filters( 'ioroot_sb_shortcode_booking_atts', $atts );
+		$raw_atts = (array) $atts;
+		$atts     = shortcode_atts(
+			[
+				'class_id'                 => '0',
+				'class_slug'               => '',
+				'clasbowi_class_stripe_id' => '',
+				'class_stripe_id'          => '',
+				'heading'                  => '1',
+			],
+			$raw_atts,
+			Constants::SHORTCODE_BOOKING
+		);
+		$atts = apply_filters( 'clasbowi_shortcode_booking_atts', $atts );
 
 		$class_id = (int) $atts['class_id'];
-		if ( ! $class_id && '' !== (string) $atts['stripe_booking_id'] ) {
-			$class_id = absint( ltrim( (string) $atts['stripe_booking_id'], '#' ) );
+		if ( ! $class_id && '' !== (string) $atts['clasbowi_class_stripe_id'] ) {
+			$class_id = absint( ltrim( (string) $atts['clasbowi_class_stripe_id'], '#' ) );
 		}
 		if ( ! $class_id && '' !== (string) $atts['class_stripe_id'] ) {
-			// Legacy alias.
 			$class_id = absint( ltrim( (string) $atts['class_stripe_id'], '#' ) );
+		}
+		foreach ( [ 'yoga_class_stripe_id', 'yoga_booking_id', 'stripe_booking_id' ] as $legacy_key ) {
+			if ( ! $class_id && ! empty( $raw_atts[ $legacy_key ] ) ) {
+				$class_id = absint( ltrim( (string) $raw_atts[ $legacy_key ], '#' ) );
+				break;
+			}
 		}
 		if ( ! $class_id && $atts['class_slug'] ) {
 			$post = get_page_by_path( sanitize_title( $atts['class_slug'] ), OBJECT, CPT::CLASS_PT );
@@ -51,10 +65,10 @@ abstract class Shortcode {
 		if ( ! $class_data ) {
 			return '<div class="yb-form yb-form--error">' . esc_html__( 'No class selected.', 'class-bookings-with-stripe' ) . '</div>';
 		}
-		$class_data = apply_filters( 'ioroot_sb_booking_class_data', $class_data, $atts );
+		$class_data = apply_filters( 'clasbowi_booking_class_data', $class_data, $atts );
 
-		wp_enqueue_style( 'ioroot-yb' );
-		wp_enqueue_script( 'ioroot-yb' );
+		wp_enqueue_style( 'clasbowi' );
+		wp_enqueue_script( 'clasbowi' );
 
 		$dates_count     = ! empty( $class_data['is_one_off_event'] )
 			? 1
@@ -63,7 +77,7 @@ abstract class Shortcode {
 		$show_heading    = '1' === (string) $atts['heading'];
 		$max_seats_today = $dates ? max( 0, (int) $dates[0]['remaining'] ) : 0;
 		$template_args   = apply_filters(
-			'ioroot_sb_booking_template_args',
+			'clasbowi_booking_template_args',
 			[
 				'class_data'      => $class_data,
 				'dates'           => $dates,
@@ -83,12 +97,12 @@ abstract class Shortcode {
 
 		ob_start();
 		if ( is_readable( $template_path ) ) {
-			do_action( 'ioroot_sb_before_render_booking_template', $template_args, $template_path );
+			do_action( 'clasbowi_before_render_booking_template', $template_args, $template_path );
 			include $template_path;
-			do_action( 'ioroot_sb_after_render_booking_template', $template_args, $template_path );
+			do_action( 'clasbowi_after_render_booking_template', $template_args, $template_path );
 		}
 		$html = (string) ob_get_clean();
-		return (string) apply_filters( 'ioroot_sb_booking_html', $html, $template_args, $template_path );
+		return (string) apply_filters( 'clasbowi_booking_html', $html, $template_args, $template_path );
 	}
 
 	/**
@@ -97,8 +111,8 @@ abstract class Shortcode {
 	public static function render_status( $atts = [] ): string {
 		$atts = shortcode_atts( [
 			'type' => 'success',
-		], (array) $atts, 'stripe_booking_status' );
-		$atts = apply_filters( 'ioroot_sb_shortcode_status_atts', $atts );
+		], (array) $atts, 'clasbowi_booking_status' );
+		$atts = apply_filters( 'clasbowi_shortcode_status_atts', $atts );
 
 		$type = in_array( $atts['type'], [ 'success', 'cancelled', 'error' ], true ) ? $atts['type'] : 'success';
 
@@ -110,9 +124,9 @@ abstract class Shortcode {
 		$origin     = '' !== $origin_raw ? Helpers::sanitise_internal_url( $origin_raw, home_url( '/' ) ) : home_url( '/' );
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
-		wp_enqueue_style( 'ioroot-yb' );
+		wp_enqueue_style( 'clasbowi' );
 		if ( 'success' === $type ) {
-			wp_enqueue_script( 'ioroot-yb' );
+			wp_enqueue_script( 'clasbowi' );
 		}
 
 		$booking = null;
@@ -138,7 +152,7 @@ abstract class Shortcode {
 		}
 
 		$template_args = apply_filters(
-			'ioroot_sb_status_template_args',
+			'clasbowi_status_template_args',
 			[
 				'type'       => $type,
 				'session_id' => $session_id,
@@ -162,12 +176,12 @@ abstract class Shortcode {
 
 		ob_start();
 		if ( is_readable( $template_path ) ) {
-			do_action( 'ioroot_sb_before_render_status_template', $template_args, $template_path );
+			do_action( 'clasbowi_before_render_status_template', $template_args, $template_path );
 			include $template_path;
-			do_action( 'ioroot_sb_after_render_status_template', $template_args, $template_path );
+			do_action( 'clasbowi_after_render_status_template', $template_args, $template_path );
 		}
 		$html = (string) ob_get_clean();
-		return (string) apply_filters( 'ioroot_sb_status_html', $html, $template_args, $template_path );
+		return (string) apply_filters( 'clasbowi_status_html', $html, $template_args, $template_path );
 	}
 
 	/**
@@ -182,7 +196,7 @@ abstract class Shortcode {
 			false,
 			false
 		);
-		$path     = $theme ?: IOROOT_YB_DIR . 'templates/' . $relative;
-		return (string) apply_filters( 'ioroot_sb_template_path', $path, $relative, $context );
+		$path     = $theme ?: CLASBOWI_DIR . 'templates/' . $relative;
+		return (string) apply_filters( 'clasbowi_template_path', $path, $relative, $context );
 	}
 }

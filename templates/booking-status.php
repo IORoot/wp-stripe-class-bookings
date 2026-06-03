@@ -1,6 +1,6 @@
 <?php
 /**
- * Output for [stripe_booking_status type="success|cancelled|error"].
+ * Output for [clasbowi_booking_status type="success|cancelled|error"].
  *
  * @var string                                                    $type
  * @var string                                                    $session_id
@@ -9,14 +9,14 @@
  * @var string                                                    $origin
  * @var array<string, mixed>|null                                 $booking
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
 defined( 'ABSPATH' ) || exit;
 
 // phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View template; variables are local to this include.
 
-use IORoot_Yoga_Bookings\Helpers;
+use IOROOT_STRIPE_BOOKINGS\Helpers;
 
 $reason_messages = [
 	'capacity_full'   => __( "Sorry — that class just filled up while you were booking. Please try a different date.", 'class-bookings-with-stripe' ),
@@ -27,16 +27,16 @@ $reason_messages = [
 	'validation'      => __( 'Some details were missing or invalid. Please check the form and try again.', 'class-bookings-with-stripe' ),
 	'internal'        => __( 'Something went wrong on our end. Please try again — your card has not been charged.', 'class-bookings-with-stripe' ),
 ];
-$reason_messages = apply_filters( 'ioroot_sb_status_reason_messages', $reason_messages, $type, $reason, $booking );
+$reason_messages = apply_filters( 'clasbowi_status_reason_messages', $reason_messages, $type, $reason, $booking );
 
-do_action( 'ioroot_sb_status_template_start', $type, $booking );
+do_action( 'clasbowi_status_template_start', $type, $booking );
 ?>
 
 <?php if ( 'success' === $type ) : ?>
 
 	<div class="yb-status yb-status--layout-modern yb-status--<?php echo esc_attr( $booking['status'] ?? 'pending' ); ?>" data-yb-session="<?php echo esc_attr( $session_id ); ?>">
 		<?php if ( $booking && 'paid' === $booking['status'] ) : ?>
-			<?php do_action( 'ioroot_sb_status_before_success_paid', $booking ); ?>
+			<?php do_action( 'clasbowi_status_before_success_paid', $booking ); ?>
 			<h2 class="yb-status__title"><?php esc_html_e( 'Booking confirmed', 'class-bookings-with-stripe' ); ?></h2>
 			<p class="yb-status__lede">
 				<?php
@@ -68,16 +68,16 @@ do_action( 'ioroot_sb_status_template_start', $type, $booking );
 				<?php endif; ?>
 			</dl>
 			<p class="yb-status__hint"><?php esc_html_e( "We've sent a confirmation email — check your inbox.", 'class-bookings-with-stripe' ); ?></p>
-			<?php do_action( 'ioroot_sb_status_after_success_paid', $booking ); ?>
+			<?php do_action( 'clasbowi_status_after_success_paid', $booking ); ?>
 		<?php elseif ( $session_id ) : ?>
-			<?php do_action( 'ioroot_sb_status_before_success_pending', $session_id, $booking ); ?>
+			<?php do_action( 'clasbowi_status_before_success_pending', $session_id, $booking ); ?>
 			<h2 class="yb-status__title"><?php esc_html_e( 'Confirming your booking…', 'class-bookings-with-stripe' ); ?></h2>
 			<p class="yb-status__lede"><?php esc_html_e( "Stripe is letting us know about your payment. This usually takes only a few seconds.", 'class-bookings-with-stripe' ); ?></p>
 			<div class="yb-status__pending" aria-live="polite">
 				<span class="yb-form__spinner" aria-hidden="true"></span>
 				<span class="yb-status__pending-text"><?php esc_html_e( 'Waiting for Stripe…', 'class-bookings-with-stripe' ); ?></span>
 			</div>
-			<?php do_action( 'ioroot_sb_status_after_success_pending', $session_id, $booking ); ?>
+			<?php do_action( 'clasbowi_status_after_success_pending', $session_id, $booking ); ?>
 		<?php else : ?>
 			<h2 class="yb-status__title"><?php esc_html_e( 'Thanks for your booking', 'class-bookings-with-stripe' ); ?></h2>
 			<p class="yb-status__lede"><?php esc_html_e( "We've sent your confirmation by email.", 'class-bookings-with-stripe' ); ?></p>
@@ -87,19 +87,19 @@ do_action( 'ioroot_sb_status_template_start', $type, $booking );
 <?php elseif ( 'cancelled' === $type ) : ?>
 
 	<div class="yb-status yb-status--layout-modern yb-status--cancelled">
-		<?php do_action( 'ioroot_sb_status_before_cancelled', $origin ); ?>
+		<?php do_action( 'clasbowi_status_before_cancelled', $origin ); ?>
 		<h2 class="yb-status__title"><?php esc_html_e( 'Booking cancelled', 'class-bookings-with-stripe' ); ?></h2>
 		<p class="yb-status__lede"><?php esc_html_e( "No problem — you haven't been charged. Whenever you're ready, you can pick up where you left off.", 'class-bookings-with-stripe' ); ?></p>
 		<p class="yb-status__actions">
 			<a class="yb-status__button" href="<?php echo esc_url( $origin ); ?>"><?php esc_html_e( 'Try again', 'class-bookings-with-stripe' ); ?></a>
 		</p>
-		<?php do_action( 'ioroot_sb_status_after_cancelled', $origin ); ?>
+		<?php do_action( 'clasbowi_status_after_cancelled', $origin ); ?>
 	</div>
 
 <?php else : // error ?>
 
 	<div class="yb-status yb-status--layout-modern yb-status--error">
-		<?php do_action( 'ioroot_sb_status_before_error', $reason, $msg, $origin ); ?>
+		<?php do_action( 'clasbowi_status_before_error', $reason, $msg, $origin ); ?>
 		<h2 class="yb-status__title"><?php esc_html_e( "We couldn't take your booking", 'class-bookings-with-stripe' ); ?></h2>
 		<p class="yb-status__lede">
 			<?php
@@ -114,8 +114,8 @@ do_action( 'ioroot_sb_status_template_start', $type, $booking );
 			<a class="yb-status__button" href="<?php echo esc_url( $origin ); ?>"><?php esc_html_e( 'Try again', 'class-bookings-with-stripe' ); ?></a>
 		</p>
 		<p class="yb-status__hint"><?php esc_html_e( "Your card has not been charged. If the problem keeps happening, please email us and we'll book you in by hand.", 'class-bookings-with-stripe' ); ?></p>
-		<?php do_action( 'ioroot_sb_status_after_error', $reason, $msg, $origin ); ?>
+		<?php do_action( 'clasbowi_status_after_error', $reason, $msg, $origin ); ?>
 	</div>
 
 <?php endif; ?>
-<?php do_action( 'ioroot_sb_status_template_end', $type, $booking ); ?>
+<?php do_action( 'clasbowi_status_template_end', $type, $booking ); ?>

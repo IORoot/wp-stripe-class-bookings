@@ -2,25 +2,24 @@
 /**
  * Register ACF field groups and the options page.
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
-namespace IORoot_Yoga_Bookings;
+namespace IOROOT_STRIPE_BOOKINGS;
 
 defined( 'ABSPATH' ) || exit;
 
 abstract class ACF_Fields {
 
-	private const SETTINGS_MENU_SLUG = 'stripe-bookings-settings';
-	private const SETTINGS_POST_ID   = 'ioroot_yb_options';
+	private const SETTINGS_MENU_SLUG = 'clasbowi-settings';
+	private const SETTINGS_POST_ID   = 'clasbowi_options';
 
 	public static function init(): void {
 		add_action( 'acf/init', [ self::class, 'register_options_page' ] );
 		add_action( 'acf/include_fields', [ self::class, 'register_field_groups' ] );
-		add_action( 'admin_footer', [ self::class, 'move_class_image_metabox_above_publish' ] );
-		add_filter( 'acf/load_field/key=field_yb_b_summary', [ self::class, 'filter_booking_summary_field_format' ], 5 );
-		add_filter( 'acf/load_field/key=field_yb_b_summary', [ self::class, 'populate_booking_summary_field' ], 10 );
-		add_action( 'acf/render_field/key=field_yb_cancelled_dates_fallback', [ self::class, 'render_cancelled_dates_quick_add' ] );
+		add_filter( 'acf/load_field/key=field_clasbowi_b_summary', [ self::class, 'filter_booking_summary_field_format' ], 5 );
+		add_filter( 'acf/load_field/key=field_clasbowi_b_summary', [ self::class, 'populate_booking_summary_field' ], 10 );
+		add_action( 'acf/render_field/key=field_clasbowi_cancelled_dates_fallback', [ self::class, 'render_cancelled_dates_quick_add' ] );
 
 		$settings_screen_hook = CPT::CLASS_PT . '_page_' . self::SETTINGS_MENU_SLUG;
 		add_action( 'load-' . $settings_screen_hook, [ self::class, 'on_load_booking_settings_screen' ] );
@@ -62,14 +61,15 @@ abstract class ACF_Fields {
 		);
 
 		if ( $hook ) {
-			add_action( 'load-' . $hook, [ self::class, 'prepare_native_settings_page' ] );
+			add_action( 'load-' . $hook, [ self::class, 'on_load_native_settings_screen' ] );
 		}
 	}
 
-	public static function prepare_native_settings_page(): void {
+	public static function on_load_native_settings_screen(): void {
 		if ( function_exists( 'acf_form_head' ) ) {
 			acf_form_head();
 		}
+		self::enqueue_booking_settings_admin_assets();
 	}
 
 	public static function render_native_settings_page(): void {
@@ -91,8 +91,8 @@ abstract class ACF_Fields {
 		acf_form(
 			[
 				'post_id'               => self::SETTINGS_POST_ID,
-				'field_groups'          => [ 'group_yb_settings' ],
-				'form_attributes'       => [ 'class' => 'acf-form ioroot-yb-settings-form' ],
+				'field_groups'          => [ 'group_clasbowi_settings' ],
+				'form_attributes'       => [ 'class' => 'acf-form clasbowi-settings-form' ],
 				'html_submit_button'    => '<input type="submit" class="button button-primary button-large" value="%s" />',
 				'html_submit_spinner'   => '<span class="spinner"></span>',
 				'updated_message'       => __( 'Settings saved.', 'class-bookings-with-stripe' ),
@@ -113,19 +113,11 @@ abstract class ACF_Fields {
 	 * Runs on load-{screen} so we never depend on get_current_screen() inside acf/input/admin_head.
 	 */
 	public static function on_load_booking_settings_screen(): void {
-		add_filter( 'admin_body_class', [ self::class, 'filter_booking_settings_body_class' ] );
-
-		wp_enqueue_style( 'dashicons' );
-		wp_enqueue_style(
-			'ioroot-yb-admin-settings',
-			IOROOT_YB_URL . 'assets/yoga-booking-admin-settings.css',
-			[],
-			IOROOT_YB_VERSION
-		);
+		self::enqueue_booking_settings_admin_assets();
 
 		if ( function_exists( 'acf_add_options_page' ) ) {
 			add_meta_box(
-				'ioroot-yb-settings-intro',
+				'clasbowi-settings-intro',
 				'',
 				[ self::class, 'render_settings_intro_metabox' ],
 				'acf_options_page',
@@ -136,10 +128,32 @@ abstract class ACF_Fields {
 	}
 
 	/**
+	 * Enqueue Settings screen styles and scripts (ACF options + native fallback).
+	 */
+	public static function enqueue_booking_settings_admin_assets(): void {
+		add_filter( 'admin_body_class', [ self::class, 'filter_booking_settings_body_class' ] );
+
+		wp_enqueue_style( 'dashicons' );
+		wp_enqueue_style(
+			'clasbowi-admin-settings',
+			CLASBOWI_URL . 'assets/yoga-booking-admin-settings.css',
+			[],
+			CLASBOWI_VERSION
+		);
+		wp_enqueue_script(
+			'clasbowi-admin-settings',
+			CLASBOWI_URL . 'assets/yoga-booking-admin-settings.js',
+			[],
+			CLASBOWI_VERSION,
+			true
+		);
+	}
+
+	/**
 	 * @param string $classes Space-prefixed admin body classes.
 	 */
 	public static function filter_booking_settings_body_class( string $classes ): string {
-		return $classes . ' ioroot-yb-booking-settings';
+		return $classes . ' clasbowi-booking-settings';
 	}
 
 	/**
@@ -158,10 +172,24 @@ abstract class ACF_Fields {
 
 		wp_enqueue_style( 'dashicons' );
 		wp_enqueue_style(
-			'ioroot-yb-admin-settings',
-			IOROOT_YB_URL . 'assets/yoga-booking-admin-settings.css',
+			'clasbowi-admin-settings',
+			CLASBOWI_URL . 'assets/yoga-booking-admin-settings.css',
 			[],
-			IOROOT_YB_VERSION
+			CLASBOWI_VERSION
+		);
+		wp_enqueue_script(
+			'clasbowi-cancelled-dates',
+			CLASBOWI_URL . 'assets/yoga-booking-cancelled-dates.js',
+			[],
+			CLASBOWI_VERSION,
+			true
+		);
+		wp_enqueue_script(
+			'clasbowi-class-metabox',
+			CLASBOWI_URL . 'assets/yoga-booking-class-metabox.js',
+			[ 'jquery' ],
+			CLASBOWI_VERSION,
+			true
 		);
 	}
 
@@ -169,11 +197,11 @@ abstract class ACF_Fields {
 	 * @param string $classes Space-prefixed admin body classes.
 	 */
 	public static function filter_stripe_class_edit_body_class( string $classes ): string {
-		return $classes . ' ioroot-yb-class-edit';
+		return $classes . ' clasbowi-class-edit';
 	}
 
 	/**
-	 * Booking (yoga_booking) edit screen: same admin chrome + booking summary card styles.
+	 * Booking (clasbowi_booking) edit screen: same admin chrome + booking summary card styles.
 	 */
 	public static function maybe_enqueue_booking_edit_admin(): void {
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
@@ -188,10 +216,10 @@ abstract class ACF_Fields {
 
 		wp_enqueue_style( 'dashicons' );
 		wp_enqueue_style(
-			'ioroot-yb-admin-settings',
-			IOROOT_YB_URL . 'assets/yoga-booking-admin-settings.css',
+			'clasbowi-admin-settings',
+			CLASBOWI_URL . 'assets/yoga-booking-admin-settings.css',
 			[],
-			IOROOT_YB_VERSION
+			CLASBOWI_VERSION
 		);
 	}
 
@@ -199,7 +227,7 @@ abstract class ACF_Fields {
 	 * @param string $classes Space-prefixed admin body classes.
 	 */
 	public static function filter_booking_edit_body_class( string $classes ): string {
-		return $classes . ' ioroot-yb-booking-edit';
+		return $classes . ' clasbowi-booking-edit';
 	}
 
 	/**
@@ -214,14 +242,14 @@ abstract class ACF_Fields {
 			false,
 			false
 		);
-		$path = $theme ? (string) $theme : IOROOT_YB_DIR . 'templates/' . $relative;
+		$path = $theme ? (string) $theme : CLASBOWI_DIR . 'templates/' . $relative;
 
 		/**
 		 * Filter the path to the Settings intro template.
 		 *
 		 * @param string $path Absolute filesystem path.
 		 */
-		return (string) apply_filters( 'ioroot_yb_settings_intro_template_path', $path );
+		return (string) apply_filters( 'clasbowi_settings_intro_template_path', $path );
 	}
 
 	/**
@@ -244,7 +272,7 @@ abstract class ACF_Fields {
 		}
 
 		if ( 'native' === $context ) {
-			echo '<div id="ioroot-yb-settings-intro-native" class="postbox ioroot-yb-settings-intro-postbox">';
+			echo '<div id="clasbowi-settings-intro-native" class="postbox clasbowi-settings-intro-postbox">';
 			echo '<div class="inside">';
 		}
 
@@ -289,72 +317,13 @@ abstract class ACF_Fields {
 			return;
 		}
 
-		echo '<div class="ioroot-yb-cancelled-dates-helper" style="margin-top:10px;">';
+		echo '<div class="clasbowi-cancelled-dates-helper">';
 		echo '<strong>' . esc_html__( 'Quick add upcoming dates:', 'class-bookings-with-stripe' ) . '</strong> ';
 		foreach ( $dates as $date ) {
-			echo '<a href="#" class="button button-secondary button-small ioroot-yb-add-cancelled-date" data-field-key="' . esc_attr( $field_key ) . '" data-date="' . esc_attr( $date ) . '" style="margin:6px 6px 0 0;">' . esc_html( Helpers::format_date( (string) $date ) ) . '</a>';
+			echo '<a href="#" class="button button-secondary button-small clasbowi-add-cancelled-date" data-field-key="' . esc_attr( $field_key ) . '" data-date="' . esc_attr( $date ) . '">' . esc_html( Helpers::format_date( (string) $date ) ) . '</a>';
 		}
-		echo '<p class="description" style="margin-top:8px;">' . esc_html__( 'Click a date to append it to the cancelled dates textarea (one per line).', 'class-bookings-with-stripe' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Click a date to append it to the cancelled dates textarea (one per line).', 'class-bookings-with-stripe' ) . '</p>';
 		echo '</div>';
-
-		static $printed_script = false;
-		if ( $printed_script ) {
-			return;
-		}
-		$printed_script = true;
-
-		echo "<script>
-		(function () {
-			if (window.__iorootYbCancelledDateHelperBound) { return; }
-			window.__iorootYbCancelledDateHelperBound = true;
-
-			document.addEventListener('click', function (event) {
-				var trigger = event.target.closest('.ioroot-yb-add-cancelled-date');
-				if (!trigger) { return; }
-				event.preventDefault();
-
-				var fieldKey = trigger.getAttribute('data-field-key');
-				var date = trigger.getAttribute('data-date');
-				if (!fieldKey || !date) { return; }
-
-				var input = document.querySelector('.acf-field[data-key=\"' + fieldKey + '\"] textarea');
-				if (!input) { return; }
-
-				var lines = (input.value || '').split(/\\r?\\n/).map(function (line) { return line.trim(); }).filter(Boolean);
-				if (lines.indexOf(date) !== -1) { return; }
-				lines.push(date);
-				input.value = lines.join('\\n');
-				input.dispatchEvent(new Event('change', { bubbles: true }));
-			});
-		})();
-		</script>";
-	}
-
-	/**
-	 * Place the sidebar "Listing image" ACF box above the Publish metabox.
-	 */
-	public static function move_class_image_metabox_above_publish(): void {
-		if ( ! function_exists( 'get_current_screen' ) ) {
-			return;
-		}
-		$screen = get_current_screen();
-		if ( ! $screen || CPT::CLASS_PT !== $screen->post_type || 'post' !== $screen->base ) {
-			return;
-		}
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline script for metabox order only.
-		?>
-		<script>
-		( function ( $ ) {
-			$( function () {
-				var $img = $( '#acf-group_yb_class_sidebar_image' );
-				var $pub = $( '#submitdiv' );
-				if ( $img.length && $pub.length ) {
-					$img.insertBefore( $pub );
-				}
-			} );
-		} )( jQuery );
-		</script>
-		<?php
 	}
 
 	public static function register_field_groups(): void {
@@ -363,7 +332,7 @@ abstract class ACF_Fields {
 		}
 
 		$cancelled_dates_field = [
-			'key'          => 'field_yb_cancelled_dates_fallback',
+			'key'          => 'field_clasbowi_cancelled_dates_fallback',
 			'label'        => __( 'Cancelled dates', 'class-bookings-with-stripe' ),
 			'name'         => 'cancelled_dates_fallback',
 			'type'         => 'textarea',
@@ -373,7 +342,7 @@ abstract class ACF_Fields {
 			'conditional_logic' => [
 				[
 					[
-						'field'    => 'field_yb_use_external_link',
+						'field'    => 'field_clasbowi_use_external_link',
 						'operator' => '!=',
 						'value'    => '1',
 					],
@@ -384,7 +353,7 @@ abstract class ACF_Fields {
 		$internal_booking_condition = [
 			[
 				[
-					'field'    => 'field_yb_use_external_link',
+					'field'    => 'field_clasbowi_use_external_link',
 					'operator' => '!=',
 					'value'    => '1',
 				],
@@ -394,12 +363,12 @@ abstract class ACF_Fields {
 		$recurring_booking_condition = [
 			[
 				[
-					'field'    => 'field_yb_use_external_link',
+					'field'    => 'field_clasbowi_use_external_link',
 					'operator' => '!=',
 					'value'    => '1',
 				],
 				[
-					'field'    => 'field_yb_schedule_type',
+					'field'    => 'field_clasbowi_schedule_type',
 					'operator' => '==',
 					'value'    => 'recurring',
 				],
@@ -409,12 +378,12 @@ abstract class ACF_Fields {
 		$one_off_booking_condition = [
 			[
 				[
-					'field'    => 'field_yb_use_external_link',
+					'field'    => 'field_clasbowi_use_external_link',
 					'operator' => '!=',
 					'value'    => '1',
 				],
 				[
-					'field'    => 'field_yb_schedule_type',
+					'field'    => 'field_clasbowi_schedule_type',
 					'operator' => '==',
 					'value'    => 'one_off',
 				],
@@ -424,11 +393,11 @@ abstract class ACF_Fields {
 		// --- Yoga class fields ---
 		acf_add_local_field_group(
 			[
-				'key'      => 'group_yb_class',
+				'key'      => 'group_clasbowi_class',
 				'title'    => __( 'Class details', 'class-bookings-with-stripe' ),
 				'fields'   => [
 					[
-						'key'           => 'field_yb_class_active',
+						'key'           => 'field_clasbowi_class_active',
 						'label'         => __( 'Class is active (bookable)', 'class-bookings-with-stripe' ),
 						'name'          => 'class_active',
 						'type'          => 'true_false',
@@ -440,7 +409,7 @@ abstract class ACF_Fields {
 						],
 					],
 					[
-						'key'           => 'field_yb_use_external_link',
+						'key'           => 'field_clasbowi_use_external_link',
 						'label'         => __( 'Booking mode: use external link instead of form', 'class-bookings-with-stripe' ),
 						'name'          => 'use_external_link',
 						'type'          => 'true_false',
@@ -452,7 +421,7 @@ abstract class ACF_Fields {
 						],
 					],
 					[
-						'key'               => 'field_yb_external_link_url',
+						'key'               => 'field_clasbowi_external_link_url',
 						'label'             => __( 'External booking URL', 'class-bookings-with-stripe' ),
 						'name'              => 'external_link_url',
 						'type'              => 'url',
@@ -461,7 +430,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => [
 							[
 								[
-									'field'    => 'field_yb_use_external_link',
+									'field'    => 'field_clasbowi_use_external_link',
 									'operator' => '==',
 									'value'    => '1',
 								],
@@ -469,7 +438,7 @@ abstract class ACF_Fields {
 						],
 					],
 					[
-						'key'           => 'field_yb_schedule_type',
+						'key'           => 'field_clasbowi_schedule_type',
 						'label'         => __( 'Schedule type', 'class-bookings-with-stripe' ),
 						'name'          => 'schedule_type',
 						'type'          => 'button_group',
@@ -484,7 +453,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => $internal_booking_condition,
 					],
 					[
-						'key'           => 'field_yb_day',
+						'key'           => 'field_clasbowi_day',
 						'label'         => __( 'Day of week', 'class-bookings-with-stripe' ),
 						'name'          => 'day_of_week',
 						'type'          => 'select',
@@ -507,7 +476,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => $recurring_booking_condition,
 					],
 					[
-						'key'               => 'field_yb_start_date',
+						'key'               => 'field_clasbowi_start_date',
 						'label'             => __( 'Start date', 'class-bookings-with-stripe' ),
 						'name'              => 'start_date',
 						'type'              => 'date_picker',
@@ -522,7 +491,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => $one_off_booking_condition,
 					],
 					[
-						'key'               => 'field_yb_end_date',
+						'key'               => 'field_clasbowi_end_date',
 						'label'             => __( 'End date', 'class-bookings-with-stripe' ),
 						'name'              => 'end_date',
 						'type'              => 'date_picker',
@@ -537,7 +506,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => $one_off_booking_condition,
 					],
 					[
-						'key'           => 'field_yb_start_time',
+						'key'           => 'field_clasbowi_start_time',
 						'label'         => __( 'Start time', 'class-bookings-with-stripe' ),
 						'name'          => 'start_time',
 						'type'          => 'time_picker',
@@ -551,7 +520,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => $internal_booking_condition,
 					],
 					[
-						'key'           => 'field_yb_duration',
+						'key'           => 'field_clasbowi_duration',
 						'label'         => __( 'Duration (minutes)', 'class-bookings-with-stripe' ),
 						'name'          => 'duration_minutes',
 						'type'          => 'number',
@@ -565,7 +534,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => $internal_booking_condition,
 					],
 					[
-						'key'           => 'field_yb_price',
+						'key'           => 'field_clasbowi_price',
 						'label'         => __( 'Price (£)', 'class-bookings-with-stripe' ),
 						'name'          => 'price_gbp',
 						'type'          => 'number',
@@ -579,7 +548,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => $internal_booking_condition,
 					],
 					[
-						'key'           => 'field_yb_capacity',
+						'key'           => 'field_clasbowi_capacity',
 						'label'         => __( 'Capacity (max attendees)', 'class-bookings-with-stripe' ),
 						'name'          => 'capacity',
 						'type'          => 'number',
@@ -592,7 +561,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => $internal_booking_condition,
 					],
 					[
-						'key'           => 'field_yb_show_seats_remaining',
+						'key'           => 'field_clasbowi_show_seats_remaining',
 						'label'         => __( 'Show seats remaining in date picker', 'class-bookings-with-stripe' ),
 						'name'          => 'show_seats_remaining',
 						'type'          => 'true_false',
@@ -605,7 +574,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => $internal_booking_condition,
 					],
 					[
-						'key'           => 'field_yb_class_upcoming_dates_count',
+						'key'           => 'field_clasbowi_class_upcoming_dates_count',
 						'label'         => __( 'Dates shown in booking dropdown', 'class-bookings-with-stripe' ),
 						'name'          => 'upcoming_dates_count',
 						'type'          => 'number',
@@ -619,7 +588,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => $recurring_booking_condition,
 					],
 					[
-						'key'           => 'field_yb_location',
+						'key'           => 'field_clasbowi_location',
 						'label'         => __( 'Location description', 'class-bookings-with-stripe' ),
 						'name'          => 'location',
 						'type'          => 'text',
@@ -628,7 +597,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => $internal_booking_condition,
 					],
 					[
-						'key'           => 'field_yb_description',
+						'key'           => 'field_clasbowi_description',
 						'label'         => __( 'Description', 'class-bookings-with-stripe' ),
 						'name'          => 'description',
 						'type'          => 'wysiwyg',
@@ -657,11 +626,11 @@ abstract class ACF_Fields {
 		// --- Class listing image (sidebar, own metabox) ---
 		acf_add_local_field_group(
 			[
-				'key'             => 'group_yb_class_sidebar_image',
+				'key'             => 'group_clasbowi_class_sidebar_image',
 				'title'           => __( 'Listing image', 'class-bookings-with-stripe' ),
 				'fields'          => [
 					[
-						'key'           => 'field_yb_class_image',
+						'key'           => 'field_clasbowi_class_image',
 						'label'         => __( 'Image', 'class-bookings-with-stripe' ),
 						'name'          => 'class_image',
 						'type'          => 'image',
@@ -690,13 +659,13 @@ abstract class ACF_Fields {
 		// --- Booking detail (read-only-ish) ---
 		acf_add_local_field_group(
 			[
-				'key'      => 'group_yb_booking',
+				'key'      => 'group_clasbowi_booking',
 				'title'    => __( 'Booking details', 'class-bookings-with-stripe' ),
 				'fields'   => [
 					[
-						'key'       => 'field_yb_b_summary',
+						'key'       => 'field_clasbowi_b_summary',
 						'label'     => __( 'Summary', 'class-bookings-with-stripe' ),
-						'name'      => '_yb_summary',
+						'name'      => '_clasbowi_summary',
 						'type'      => 'message',
 						'message'   => '',
 						'new_lines' => '',
@@ -718,16 +687,16 @@ abstract class ACF_Fields {
 		// --- Settings options page ---
 		acf_add_local_field_group(
 			[
-				'key'      => 'group_yb_settings',
+				'key'      => 'group_clasbowi_settings',
 				'title'    => __( 'Settings', 'class-bookings-with-stripe' ),
 				'fields'   => [
 					[
-						'key'   => 'field_yb_tab_stripe',
+						'key'   => 'field_clasbowi_tab_stripe',
 						'label' => __( 'Stripe', 'class-bookings-with-stripe' ),
 						'type'  => 'tab',
 					],
 					[
-						'key'           => 'field_yb_stripe_mode',
+						'key'           => 'field_clasbowi_stripe_mode',
 						'label'         => __( 'Mode', 'class-bookings-with-stripe' ),
 						'name'          => 'stripe_mode',
 						'type'          => 'select',
@@ -739,7 +708,7 @@ abstract class ACF_Fields {
 						'allow_null'    => 0,
 					],
 					[
-						'key'           => 'field_yb_stripe_item_title_template',
+						'key'           => 'field_clasbowi_stripe_item_title_template',
 						'label'         => __( 'Stripe item title template', 'class-bookings-with-stripe' ),
 						'name'          => 'stripe_item_title_template',
 						'type'          => 'text',
@@ -747,7 +716,7 @@ abstract class ACF_Fields {
 						'instructions'  => __( 'Supports placeholders: {class_name}, {class_date}, {class_time}, {location}, {seats}, {customer_name}, {booking_id}.', 'class-bookings-with-stripe' ),
 					],
 					[
-						'key'     => 'field_yb_pub_test',
+						'key'     => 'field_clasbowi_pub_test',
 						'label'   => __( 'Publishable key (test)', 'class-bookings-with-stripe' ),
 						'name'    => 'stripe_pub_key_test',
 						'type'    => 'text',
@@ -756,7 +725,7 @@ abstract class ACF_Fields {
 						],
 					],
 					[
-						'key'     => 'field_yb_secret_test',
+						'key'     => 'field_clasbowi_secret_test',
 						'label'   => __( 'Secret key (test)', 'class-bookings-with-stripe' ),
 						'name'    => 'stripe_secret_key_test',
 						'type'    => 'password',
@@ -765,7 +734,7 @@ abstract class ACF_Fields {
 						],
 					],
 					[
-						'key'     => 'field_yb_pub_live',
+						'key'     => 'field_clasbowi_pub_live',
 						'label'   => __( 'Publishable key (live)', 'class-bookings-with-stripe' ),
 						'name'    => 'stripe_pub_key_live',
 						'type'    => 'text',
@@ -774,7 +743,7 @@ abstract class ACF_Fields {
 						],
 					],
 					[
-						'key'     => 'field_yb_secret_live',
+						'key'     => 'field_clasbowi_secret_live',
 						'label'   => __( 'Secret key (live)', 'class-bookings-with-stripe' ),
 						'name'    => 'stripe_secret_key_live',
 						'type'    => 'password',
@@ -783,58 +752,58 @@ abstract class ACF_Fields {
 						],
 					],
 					[
-						'key'          => 'field_yb_webhook_secret',
+						'key'          => 'field_clasbowi_webhook_secret',
 						'label'        => __( 'Webhook signing secret', 'class-bookings-with-stripe' ),
 						'name'         => 'stripe_webhook_secret',
 						'type'         => 'password',
 						'instructions' => sprintf(
 							/* translators: %s: REST webhook URL */
 							__( 'Paste the signing secret from Stripe after you add the webhook endpoint. Endpoint URL: %s (see Help → Stripe webhooks for full steps).', 'class-bookings-with-stripe' ),
-							rest_url( IOROOT_YB_REST_NS . '/stripe-webhook' )
+							rest_url( CLASBOWI_REST_NS . '/stripe-webhook' )
 						),
 					],
 					[
-						'key'          => 'field_yb_webhook_url',
+						'key'          => 'field_clasbowi_webhook_url',
 						'label'        => __( 'Webhook endpoint URL', 'class-bookings-with-stripe' ),
-						'name'         => '_yb_webhook_url_display',
+						'name'         => '_clasbowi_webhook_url_display',
 						'type'         => 'message',
 						'message'      => self::webhook_url_message(),
 					],
 					[
-						'key'   => 'field_yb_tab_emails',
+						'key'   => 'field_clasbowi_tab_emails',
 						'label' => __( 'Emails', 'class-bookings-with-stripe' ),
 						'type'  => 'tab',
 					],
 					[
-						'key'           => 'field_yb_admin_email',
+						'key'           => 'field_clasbowi_admin_email',
 						'label'         => __( 'Admin notification email', 'class-bookings-with-stripe' ),
 						'name'          => 'admin_email',
 						'type'          => 'email',
 						'instructions'  => __( 'Where booking notifications are sent. Defaults to the WordPress admin email.', 'class-bookings-with-stripe' ),
 					],
 					[
-						'key'     => 'field_yb_email_wp_mail_note',
+						'key'     => 'field_clasbowi_email_wp_mail_note',
 						'label'   => __( 'How emails are sent', 'class-bookings-with-stripe' ),
-						'name'    => '_yb_email_wp_mail_note',
+						'name'    => '_clasbowi_email_wp_mail_note',
 						'type'    => 'message',
 						'message' => '<p class="acf-message">' . esc_html__( 'Booking messages are always sent with WordPress wp_mail(). Configure From address and SMTP through your mail plugin or wp_mail filters; this plugin does not set its own From headers.', 'class-bookings-with-stripe' ) . '</p>',
 					],
 					[
-						'key'          => 'field_yb_merge_tags',
+						'key'          => 'field_clasbowi_merge_tags',
 						'label'        => __( 'Available merge tags', 'class-bookings-with-stripe' ),
-						'name'         => '_yb_merge_tags',
+						'name'         => '_clasbowi_merge_tags',
 						'type'         => 'message',
 						'message'      => self::merge_tags_message(),
 					],
 					[
-						'key'           => 'field_yb_cust_subject',
+						'key'           => 'field_clasbowi_cust_subject',
 						'label'         => __( 'Customer email subject', 'class-bookings-with-stripe' ),
 						'name'          => 'customer_email_subject',
 						'type'          => 'text',
 						'default_value' => 'Your booking is confirmed: {class_name} on {class_date}',
 					],
 					[
-						'key'           => 'field_yb_cust_body',
+						'key'           => 'field_clasbowi_cust_body',
 						'label'         => __( 'Customer email body', 'class-bookings-with-stripe' ),
 						'name'          => 'customer_email_body',
 						'type'          => 'wysiwyg',
@@ -844,14 +813,14 @@ abstract class ACF_Fields {
 						'default_value' => self::default_customer_email(),
 					],
 					[
-						'key'           => 'field_yb_admin_subject',
+						'key'           => 'field_clasbowi_admin_subject',
 						'label'         => __( 'Admin email subject', 'class-bookings-with-stripe' ),
 						'name'          => 'admin_email_subject',
 						'type'          => 'text',
 						'default_value' => 'New booking: {customer_name} for {class_name} on {class_date}',
 					],
 					[
-						'key'           => 'field_yb_admin_body',
+						'key'           => 'field_clasbowi_admin_body',
 						'label'         => __( 'Admin email body', 'class-bookings-with-stripe' ),
 						'name'          => 'admin_email_body',
 						'type'          => 'wysiwyg',
@@ -861,14 +830,14 @@ abstract class ACF_Fields {
 						'default_value' => self::default_admin_email(),
 					],
 					[
-						'key'   => 'field_yb_tab_pages',
+						'key'   => 'field_clasbowi_tab_pages',
 						'label' => __( 'Form extras', 'class-bookings-with-stripe' ),
 						'type'  => 'tab',
 					],
 					[
-						'key'     => 'field_yb_form_extras_note',
+						'key'     => 'field_clasbowi_form_extras_note',
 						'label'   => __( 'Using ACF fields in booking forms', 'class-bookings-with-stripe' ),
-						'name'    => '_yb_form_extras_note',
+						'name'    => '_clasbowi_form_extras_note',
 						'type'    => 'message',
 						'message' => sprintf(
 							'%s<br><br><strong>%s</strong><br><code>%s</code>',
@@ -878,7 +847,7 @@ abstract class ACF_Fields {
 						),
 					],
 					[
-						'key'           => 'field_yb_enable_waiver',
+						'key'           => 'field_clasbowi_enable_waiver',
 						'label'         => __( 'Require waiver acceptance', 'class-bookings-with-stripe' ),
 						'name'          => 'enable_waiver',
 						'type'          => 'true_false',
@@ -887,7 +856,7 @@ abstract class ACF_Fields {
 						'instructions'  => __( 'Adds a required checkbox to the booking form. Customers must accept before payment.', 'class-bookings-with-stripe' ),
 					],
 					[
-						'key'               => 'field_yb_waiver_label',
+						'key'               => 'field_clasbowi_waiver_label',
 						'label'             => __( 'Waiver checkbox label', 'class-bookings-with-stripe' ),
 						'name'              => 'waiver_label',
 						'type'              => 'wysiwyg',
@@ -899,7 +868,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => [
 							[
 								[
-									'field'    => 'field_yb_enable_waiver',
+									'field'    => 'field_clasbowi_enable_waiver',
 									'operator' => '==',
 									'value'    => '1',
 								],
@@ -907,7 +876,7 @@ abstract class ACF_Fields {
 						],
 					],
 					[
-						'key'               => 'field_yb_waiver_page_url',
+						'key'               => 'field_clasbowi_waiver_page_url',
 						'label'             => __( 'Waiver page URL', 'class-bookings-with-stripe' ),
 						'name'              => 'waiver_page_url',
 						'type'              => 'url',
@@ -916,7 +885,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => [
 							[
 								[
-									'field'    => 'field_yb_enable_waiver',
+									'field'    => 'field_clasbowi_enable_waiver',
 									'operator' => '==',
 									'value'    => '1',
 								],
@@ -924,7 +893,7 @@ abstract class ACF_Fields {
 						],
 					],
 					[
-						'key'           => 'field_yb_enable_mailchimp_optin',
+						'key'           => 'field_clasbowi_enable_mailchimp_optin',
 						'label'         => __( 'Show Mailchimp opt-in checkbox', 'class-bookings-with-stripe' ),
 						'name'          => 'enable_mailchimp_optin',
 						'type'          => 'true_false',
@@ -933,7 +902,7 @@ abstract class ACF_Fields {
 						'instructions'  => __( 'Adds an optional mailing-list consent checkbox on the booking form.', 'class-bookings-with-stripe' ),
 					],
 					[
-						'key'               => 'field_yb_mailchimp_optin_label',
+						'key'               => 'field_clasbowi_mailchimp_optin_label',
 						'label'             => __( 'Mailchimp opt-in label', 'class-bookings-with-stripe' ),
 						'name'              => 'mailchimp_optin_label',
 						'type'              => 'textarea',
@@ -943,7 +912,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => [
 							[
 								[
-									'field'    => 'field_yb_enable_mailchimp_optin',
+									'field'    => 'field_clasbowi_enable_mailchimp_optin',
 									'operator' => '==',
 									'value'    => '1',
 								],
@@ -951,7 +920,7 @@ abstract class ACF_Fields {
 						],
 					],
 					[
-						'key'               => 'field_yb_mailchimp_api_key',
+						'key'               => 'field_clasbowi_mailchimp_api_key',
 						'label'             => __( 'Mailchimp API key', 'class-bookings-with-stripe' ),
 						'name'              => 'mailchimp_api_key',
 						'type'              => 'password',
@@ -959,7 +928,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => [
 							[
 								[
-									'field'    => 'field_yb_enable_mailchimp_optin',
+									'field'    => 'field_clasbowi_enable_mailchimp_optin',
 									'operator' => '==',
 									'value'    => '1',
 								],
@@ -967,7 +936,7 @@ abstract class ACF_Fields {
 						],
 					],
 					[
-						'key'               => 'field_yb_mailchimp_audience_id',
+						'key'               => 'field_clasbowi_mailchimp_audience_id',
 						'label'             => __( 'Mailchimp Audience ID', 'class-bookings-with-stripe' ),
 						'name'              => 'mailchimp_audience_id',
 						'type'              => 'text',
@@ -975,7 +944,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => [
 							[
 								[
-									'field'    => 'field_yb_enable_mailchimp_optin',
+									'field'    => 'field_clasbowi_enable_mailchimp_optin',
 									'operator' => '==',
 									'value'    => '1',
 								],
@@ -983,7 +952,7 @@ abstract class ACF_Fields {
 						],
 					],
 					[
-						'key'               => 'field_yb_mailchimp_double_optin',
+						'key'               => 'field_clasbowi_mailchimp_double_optin',
 						'label'             => __( 'Mailchimp double opt-in', 'class-bookings-with-stripe' ),
 						'name'              => 'mailchimp_double_optin',
 						'type'              => 'true_false',
@@ -993,7 +962,7 @@ abstract class ACF_Fields {
 						'conditional_logic' => [
 							[
 								[
-									'field'    => 'field_yb_enable_mailchimp_optin',
+									'field'    => 'field_clasbowi_enable_mailchimp_optin',
 									'operator' => '==',
 									'value'    => '1',
 								],
@@ -1001,12 +970,12 @@ abstract class ACF_Fields {
 						],
 					],
 					[
-						'key'   => 'field_yb_tab_pages_2',
+						'key'   => 'field_clasbowi_tab_pages_2',
 						'label' => __( 'Result pages', 'class-bookings-with-stripe' ),
 						'type'  => 'tab',
 					],
 					[
-						'key'           => 'field_yb_success_page',
+						'key'           => 'field_clasbowi_success_page',
 						'label'         => __( 'Booking Confirmed page', 'class-bookings-with-stripe' ),
 						'name'          => 'success_page',
 						'type'          => 'post_object',
@@ -1016,7 +985,7 @@ abstract class ACF_Fields {
 						'instructions'  => __( 'Customer is redirected here after a successful Stripe payment. Auto-created on activation.', 'class-bookings-with-stripe' ),
 					],
 					[
-						'key'           => 'field_yb_cancel_page',
+						'key'           => 'field_clasbowi_cancel_page',
 						'label'         => __( 'Booking Cancelled page', 'class-bookings-with-stripe' ),
 						'name'          => 'cancel_page',
 						'type'          => 'post_object',
@@ -1025,7 +994,7 @@ abstract class ACF_Fields {
 						'allow_null'    => 1,
 					],
 					[
-						'key'           => 'field_yb_error_page',
+						'key'           => 'field_clasbowi_error_page',
 						'label'         => __( 'Booking Error page', 'class-bookings-with-stripe' ),
 						'name'          => 'error_page',
 						'type'          => 'post_object',
@@ -1034,68 +1003,68 @@ abstract class ACF_Fields {
 						'allow_null'    => 1,
 					],
 					[
-						'key'   => 'field_yb_tab_developer',
+						'key'   => 'field_clasbowi_tab_developer',
 						'label' => __( 'Developer', 'class-bookings-with-stripe' ),
 						'type'  => 'tab',
 					],
 					[
-						'key'     => 'field_yb_dev_webhooks',
+						'key'     => 'field_clasbowi_dev_webhooks',
 						'label'   => __( 'Webhooks and payment state', 'class-bookings-with-stripe' ),
-						'name'    => '_yb_dev_webhooks',
+						'name'    => '_clasbowi_dev_webhooks',
 						'type'    => 'message',
 						'message' => self::developer_webhooks_message(),
 					],
 					[
-						'key'     => 'field_yb_dev_templates',
+						'key'     => 'field_clasbowi_dev_templates',
 						'label'   => __( 'Template overrides', 'class-bookings-with-stripe' ),
-						'name'    => '_yb_dev_templates',
+						'name'    => '_clasbowi_dev_templates',
 						'type'    => 'message',
 						'message' => self::developer_templates_message(),
 					],
 					[
-						'key'     => 'field_yb_dev_hooks',
+						'key'     => 'field_clasbowi_dev_hooks',
 						'label'   => __( 'Hooks and extension points', 'class-bookings-with-stripe' ),
-						'name'    => '_yb_dev_hooks',
+						'name'    => '_clasbowi_dev_hooks',
 						'type'    => 'message',
 						'message' => self::developer_hooks_message(),
 					],
 					[
-						'key'   => 'field_yb_tab_help',
+						'key'   => 'field_clasbowi_tab_help',
 						'label' => __( 'Help', 'class-bookings-with-stripe' ),
 						'type'  => 'tab',
 					],
 					[
-						'key'     => 'field_yb_help_intro',
+						'key'     => 'field_clasbowi_help_intro',
 						'label'   => __( 'Overview', 'class-bookings-with-stripe' ),
-						'name'    => '_yb_help_intro',
+						'name'    => '_clasbowi_help_intro',
 						'type'    => 'message',
 						'message' => self::help_intro_message(),
 					],
 					[
-						'key'     => 'field_yb_help_stripe_keys',
+						'key'     => 'field_clasbowi_help_stripe_keys',
 						'label'   => __( 'Stripe API keys', 'class-bookings-with-stripe' ),
-						'name'    => '_yb_help_stripe_keys',
+						'name'    => '_clasbowi_help_stripe_keys',
 						'type'    => 'message',
 						'message' => self::help_stripe_keys_message(),
 					],
 					[
-						'key'     => 'field_yb_help_webhooks',
+						'key'     => 'field_clasbowi_help_webhooks',
 						'label'   => __( 'Stripe webhooks', 'class-bookings-with-stripe' ),
-						'name'    => '_yb_help_webhooks',
+						'name'    => '_clasbowi_help_webhooks',
 						'type'    => 'message',
 						'message' => self::help_webhooks_detail_message(),
 					],
 					[
-						'key'     => 'field_yb_help_email_smtp',
+						'key'     => 'field_clasbowi_help_email_smtp',
 						'label'   => __( 'Email & WP Mail SMTP', 'class-bookings-with-stripe' ),
-						'name'    => '_yb_help_email_smtp',
+						'name'    => '_clasbowi_help_email_smtp',
 						'type'    => 'message',
 						'message' => self::help_email_smtp_message(),
 					],
 					[
-						'key'     => 'field_yb_help_next_steps',
+						'key'     => 'field_clasbowi_help_next_steps',
 						'label'   => __( 'Classes & publishing', 'class-bookings-with-stripe' ),
-						'name'    => '_yb_help_next_steps',
+						'name'    => '_clasbowi_help_next_steps',
 						'type'    => 'message',
 						'message' => self::help_next_steps_message(),
 					],
@@ -1114,7 +1083,7 @@ abstract class ACF_Fields {
 	}
 
 	private static function webhook_url_message(): string {
-		$url = rest_url( IOROOT_YB_REST_NS . '/stripe-webhook' );
+		$url = rest_url( CLASBOWI_REST_NS . '/stripe-webhook' );
 		return sprintf(
 			'<code style="user-select:all;">%s</code><br><small>%s</small>',
 			esc_html( $url ),
@@ -1322,24 +1291,24 @@ abstract class ACF_Fields {
 
 	private static function developer_webhooks_message(): string {
 		$home        = home_url( '/' );
-		$rest_base   = rest_url( IOROOT_YB_REST_NS );
-		$webhook_url = rest_url( IOROOT_YB_REST_NS . '/stripe-webhook' );
-		$checkout    = rest_url( IOROOT_YB_REST_NS . '/checkout' );
+		$rest_base   = rest_url( CLASBOWI_REST_NS );
+		$webhook_url = rest_url( CLASBOWI_REST_NS . '/stripe-webhook' );
+		$checkout    = rest_url( CLASBOWI_REST_NS . '/checkout' );
 
 		$ex_stripe_cli = 'stripe listen --forward-to ' . $webhook_url;
 
 		ob_start();
 		?>
-<div class="ioroot-yb-doc">
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Payment flow', 'class-bookings-with-stripe' ); ?></h3>
-	<ol class="ioroot-yb-doc__ol">
+<div class="clasbowi-doc">
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Payment flow', 'class-bookings-with-stripe' ); ?></h3>
+	<ol class="clasbowi-doc__ol">
 		<li><?php esc_html_e( 'The booking form POSTs to the REST checkout route with customer and class details.', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'The plugin creates a pending booking (soft hold) and a Stripe Checkout Session, then returns a redirect URL.', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'After payment, Stripe sends webhook events to your site; the plugin marks the booking paid and sends emails.', 'class-bookings-with-stripe' ); ?></li>
 	</ol>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'REST routes (namespace stripe-bookings/v1)', 'class-bookings-with-stripe' ); ?></h3>
-	<table class="ioroot-yb-doc__table">
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'REST routes (namespace clasbowi/v1)', 'class-bookings-with-stripe' ); ?></h3>
+	<table class="clasbowi-doc__table">
 		<thead><tr><th><?php esc_html_e( 'Method', 'class-bookings-with-stripe' ); ?></th><th><?php esc_html_e( 'Path', 'class-bookings-with-stripe' ); ?></th><th><?php esc_html_e( 'Role', 'class-bookings-with-stripe' ); ?></th></tr></thead>
 		<tbody>
 			<tr><td>POST</td><td><code>/checkout</code></td><td><?php esc_html_e( 'Create session (browser / frontend).', 'class-bookings-with-stripe' ); ?></td></tr>
@@ -1347,29 +1316,29 @@ abstract class ACF_Fields {
 			<tr><td>GET</td><td><code>/booking-status</code></td><td><?php esc_html_e( 'Poll booking state after redirect (optional).', 'class-bookings-with-stripe' ); ?></td></tr>
 		</tbody>
 	</table>
-	<p class="ioroot-yb-doc__note"><?php esc_html_e( 'Full base URL (copy-friendly):', 'class-bookings-with-stripe' ); ?></p>
-	<pre class="ioroot-yb-doc__pre"><code><?php echo esc_html( untrailingslashit( $rest_base ) ); ?></code></pre>
+	<p class="clasbowi-doc__note"><?php esc_html_e( 'Full base URL (copy-friendly):', 'class-bookings-with-stripe' ); ?></p>
+	<pre class="clasbowi-doc__pre"><code><?php echo esc_html( untrailingslashit( $rest_base ) ); ?></code></pre>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Webhook endpoint', 'class-bookings-with-stripe' ); ?></h3>
-	<pre class="ioroot-yb-doc__pre"><code><?php echo esc_html( $webhook_url ); ?></code></pre>
-	<p class="ioroot-yb-doc__p"><strong><?php esc_html_e( 'Required event types:', 'class-bookings-with-stripe' ); ?></strong>
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Webhook endpoint', 'class-bookings-with-stripe' ); ?></h3>
+	<pre class="clasbowi-doc__pre"><code><?php echo esc_html( $webhook_url ); ?></code></pre>
+	<p class="clasbowi-doc__p"><strong><?php esc_html_e( 'Required event types:', 'class-bookings-with-stripe' ); ?></strong>
 		<code>checkout.session.completed</code>,
 		<code>checkout.session.expired</code>,
 		<code>checkout.session.async_payment_failed</code>
 	</p>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Local testing with Stripe CLI', 'class-bookings-with-stripe' ); ?></h3>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Forward Stripe webhook traffic to your local or tunnelled WordPress URL:', 'class-bookings-with-stripe' ); ?></p>
-	<pre class="ioroot-yb-doc__pre"><code><?php echo esc_html( $ex_stripe_cli ); ?></code></pre>
-	<p class="ioroot-yb-doc__muted"><?php esc_html_e( 'Use the signing secret the CLI prints (starts with whsec_) in this plugin’s Webhook signing secret field while testing, or create a separate test endpoint in the Dashboard.', 'class-bookings-with-stripe' ); ?></p>
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Local testing with Stripe CLI', 'class-bookings-with-stripe' ); ?></h3>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'Forward Stripe webhook traffic to your local or tunnelled WordPress URL:', 'class-bookings-with-stripe' ); ?></p>
+	<pre class="clasbowi-doc__pre"><code><?php echo esc_html( $ex_stripe_cli ); ?></code></pre>
+	<p class="clasbowi-doc__muted"><?php esc_html_e( 'Use the signing secret the CLI prints (starts with whsec_) in this plugin’s Webhook signing secret field while testing, or create a separate test endpoint in the Dashboard.', 'class-bookings-with-stripe' ); ?></p>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Example: probing checkout (expect validation errors without a full body)', 'class-bookings-with-stripe' ); ?></h3>
-	<pre class="ioroot-yb-doc__pre"><code><?php echo esc_html( 'curl -i -X POST ' . $checkout . " \\\n  -H 'Content-Type: application/json' \\\n  -d '{}'" ); ?></code></pre>
-	<p class="ioroot-yb-doc__muted"><?php esc_html_e( 'A real request is issued by the plugin’s JavaScript with class ID, date, seats, nonce, etc. Use this only to verify the route responds on your host.', 'class-bookings-with-stripe' ); ?></p>
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Example: probing checkout (expect validation errors without a full body)', 'class-bookings-with-stripe' ); ?></h3>
+	<pre class="clasbowi-doc__pre"><code><?php echo esc_html( 'curl -i -X POST ' . $checkout . " \\\n  -H 'Content-Type: application/json' \\\n  -d '{}'" ); ?></code></pre>
+	<p class="clasbowi-doc__muted"><?php esc_html_e( 'A real request is issued by the plugin’s JavaScript with class ID, date, seats, nonce, etc. Use this only to verify the route responds on your host.', 'class-bookings-with-stripe' ); ?></p>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Site URL dependency', 'class-bookings-with-stripe' ); ?></h3>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Stripe return URLs and webhook targets are built from your WordPress site URL. Ensure Settings → General has the correct address for the environment you are testing.', 'class-bookings-with-stripe' ); ?></p>
-	<pre class="ioroot-yb-doc__pre"><code><?php echo esc_html( $home ); ?></code></pre>
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Site URL dependency', 'class-bookings-with-stripe' ); ?></h3>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'Stripe return URLs and webhook targets are built from your WordPress site URL. Ensure Settings → General has the correct address for the environment you are testing.', 'class-bookings-with-stripe' ); ?></p>
+	<pre class="clasbowi-doc__pre"><code><?php echo esc_html( $home ); ?></code></pre>
 </div>
 		<?php
 		return (string) ob_get_clean();
@@ -1377,7 +1346,7 @@ abstract class ACF_Fields {
 
 	private static function developer_templates_message(): string {
 		$filter_example = <<<'PHP'
-add_filter( 'ioroot_sb_template_path', function ( $path, $relative, $context ) {
+add_filter( 'clasbowi_template_path', function ( $path, $relative, $context ) {
 	if ( 'booking' === $context && 'booking-form.php' === $relative ) {
 		return get_stylesheet_directory() . '/stripe-bookings/booking-form.php';
 	}
@@ -1387,20 +1356,20 @@ PHP;
 
 		ob_start();
 		?>
-<div class="ioroot-yb-doc">
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Theme template overrides', 'class-bookings-with-stripe' ); ?></h3>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Place copies under your active theme (or child theme). WordPress resolves these paths automatically before the plugin default.', 'class-bookings-with-stripe' ); ?></p>
-	<ul class="ioroot-yb-doc__ul">
+<div class="clasbowi-doc">
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Theme template overrides', 'class-bookings-with-stripe' ); ?></h3>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'Place copies under your active theme (or child theme). WordPress resolves these paths automatically before the plugin default.', 'class-bookings-with-stripe' ); ?></p>
+	<ul class="clasbowi-doc__ul">
 		<li><code>class-bookings-with-stripe/booking-form.php</code> — <?php esc_html_e( 'Booking form & Stripe button markup.', 'class-bookings-with-stripe' ); ?></li>
 		<li><code>class-bookings-with-stripe/booking-status.php</code> — <?php esc_html_e( 'Success / cancel / error screens.', 'class-bookings-with-stripe' ); ?></li>
 		<li><code>class-bookings-with-stripe/email-customer.php</code> — <?php esc_html_e( 'Customer email HTML wrapper.', 'class-bookings-with-stripe' ); ?></li>
 		<li><code>class-bookings-with-stripe/email-admin.php</code> — <?php esc_html_e( 'Admin email HTML wrapper.', 'class-bookings-with-stripe' ); ?></li>
 	</ul>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Alias folder name (same files):', 'class-bookings-with-stripe' ); ?> <code>class-bookings-with-stripe/</code></p>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'Alias folder name (same files):', 'class-bookings-with-stripe' ); ?> <code>class-bookings-with-stripe/</code></p>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Filter: ioroot_sb_template_path', 'class-bookings-with-stripe' ); ?></h3>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Arguments: $path (absolute), $relative (filename), $context (e.g. booking, status). Return a different absolute path to load your file.', 'class-bookings-with-stripe' ); ?></p>
-	<pre class="ioroot-yb-doc__pre"><code><?php echo esc_html( $filter_example ); ?></code></pre>
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Filter: clasbowi_template_path', 'class-bookings-with-stripe' ); ?></h3>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'Arguments: $path (absolute), $relative (filename), $context (e.g. booking, status). Return a different absolute path to load your file.', 'class-bookings-with-stripe' ); ?></p>
+	<pre class="clasbowi-doc__pre"><code><?php echo esc_html( $filter_example ); ?></code></pre>
 </div>
 		<?php
 		return (string) ob_get_clean();
@@ -1408,55 +1377,55 @@ PHP;
 
 	private static function developer_hooks_message(): string {
 		$ex_filter_html = <<<'PHP'
-add_filter( 'ioroot_sb_booking_html', function ( $html, $template_args, $template_path ) {
+add_filter( 'clasbowi_booking_html', function ( $html, $template_args, $template_path ) {
 	// Inspect: $template_args['class_data'], ['dates'], ['atts'].
 	return $html;
 }, 10, 3 );
 PHP;
 		$ex_filter_labels = <<<'PHP'
-add_filter( 'ioroot_sb_booking_labels', function ( $labels, $class_data, $dates ) {
+add_filter( 'clasbowi_booking_labels', function ( $labels, $class_data, $dates ) {
 	$labels['book_button'] = __( 'Pay securely', 'your-textdomain' );
 	return $labels;
 }, 10, 3 );
 PHP;
 		$ex_action = <<<'PHP'
-add_action( 'ioroot_sb_booking_form_bottom', function ( $class_data, $dates ) {
+add_action( 'clasbowi_booking_form_bottom', function ( $class_data, $dates ) {
 	echo '<input type="hidden" name="campaign" value="spring" />';
 }, 10, 2 );
 PHP;
 
 		ob_start();
 		?>
-<div class="ioroot-yb-doc">
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Filters (modify data or output)', 'class-bookings-with-stripe' ); ?></h3>
-	<table class="ioroot-yb-doc__table">
+<div class="clasbowi-doc">
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Filters (modify data or output)', 'class-bookings-with-stripe' ); ?></h3>
+	<table class="clasbowi-doc__table">
 		<thead><tr><th><?php esc_html_e( 'Hook', 'class-bookings-with-stripe' ); ?></th><th><?php esc_html_e( 'Typical use', 'class-bookings-with-stripe' ); ?></th></tr></thead>
 		<tbody>
-			<tr><td><code>ioroot_sb_booking_template_args</code></td><td><?php esc_html_e( 'Adjust $class_data, $dates, or shortcode $atts before the template loads.', 'class-bookings-with-stripe' ); ?></td></tr>
-			<tr><td><code>ioroot_sb_status_template_args</code></td><td><?php esc_html_e( 'Same for booking status / result pages.', 'class-bookings-with-stripe' ); ?></td></tr>
-			<tr><td><code>ioroot_sb_booking_html</code></td><td><?php esc_html_e( 'Replace or wrap final booking form HTML.', 'class-bookings-with-stripe' ); ?></td></tr>
-			<tr><td><code>ioroot_sb_status_html</code></td><td><?php esc_html_e( 'Replace or wrap status page HTML.', 'class-bookings-with-stripe' ); ?></td></tr>
-			<tr><td><code>ioroot_sb_booking_labels</code></td><td><?php esc_html_e( 'Change button copy, hints, field labels (3rd param: $dates).', 'class-bookings-with-stripe' ); ?></td></tr>
-			<tr><td><code>ioroot_sb_booking_title</code></td><td><?php esc_html_e( 'Filter heading text; receives title string + $class_data.', 'class-bookings-with-stripe' ); ?></td></tr>
+			<tr><td><code>clasbowi_booking_template_args</code></td><td><?php esc_html_e( 'Adjust $class_data, $dates, or shortcode $atts before the template loads.', 'class-bookings-with-stripe' ); ?></td></tr>
+			<tr><td><code>clasbowi_status_template_args</code></td><td><?php esc_html_e( 'Same for booking status / result pages.', 'class-bookings-with-stripe' ); ?></td></tr>
+			<tr><td><code>clasbowi_booking_html</code></td><td><?php esc_html_e( 'Replace or wrap final booking form HTML.', 'class-bookings-with-stripe' ); ?></td></tr>
+			<tr><td><code>clasbowi_status_html</code></td><td><?php esc_html_e( 'Replace or wrap status page HTML.', 'class-bookings-with-stripe' ); ?></td></tr>
+			<tr><td><code>clasbowi_booking_labels</code></td><td><?php esc_html_e( 'Change button copy, hints, field labels (3rd param: $dates).', 'class-bookings-with-stripe' ); ?></td></tr>
+			<tr><td><code>clasbowi_booking_title</code></td><td><?php esc_html_e( 'Filter heading text; receives title string + $class_data.', 'class-bookings-with-stripe' ); ?></td></tr>
 		</tbody>
 	</table>
 
-	<h4 class="ioroot-yb-doc__h4"><?php esc_html_e( 'Example: wrap booking HTML', 'class-bookings-with-stripe' ); ?></h4>
-	<pre class="ioroot-yb-doc__pre"><code><?php echo esc_html( $ex_filter_html ); ?></code></pre>
+	<h4 class="clasbowi-doc__h4"><?php esc_html_e( 'Example: wrap booking HTML', 'class-bookings-with-stripe' ); ?></h4>
+	<pre class="clasbowi-doc__pre"><code><?php echo esc_html( $ex_filter_html ); ?></code></pre>
 
-	<h4 class="ioroot-yb-doc__h4"><?php esc_html_e( 'Example: rename the pay button', 'class-bookings-with-stripe' ); ?></h4>
-	<pre class="ioroot-yb-doc__pre"><code><?php echo esc_html( $ex_filter_labels ); ?></code></pre>
+	<h4 class="clasbowi-doc__h4"><?php esc_html_e( 'Example: rename the pay button', 'class-bookings-with-stripe' ); ?></h4>
+	<pre class="clasbowi-doc__pre"><code><?php echo esc_html( $ex_filter_labels ); ?></code></pre>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Actions (inject markup or side effects)', 'class-bookings-with-stripe' ); ?></h3>
-	<p class="ioroot-yb-doc__p"><code>ioroot_sb_booking_before_form</code>, <code>ioroot_sb_booking_form_top</code>, <code>ioroot_sb_booking_form_bottom</code>, <code>ioroot_sb_booking_after_form</code> — <?php esc_html_e( 'each receives ($class_data, $dates).', 'class-bookings-with-stripe' ); ?></p>
-	<h4 class="ioroot-yb-doc__h4"><?php esc_html_e( 'Example: extra hidden field before submit', 'class-bookings-with-stripe' ); ?></h4>
-	<pre class="ioroot-yb-doc__pre"><code><?php echo esc_html( $ex_action ); ?></code></pre>
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Actions (inject markup or side effects)', 'class-bookings-with-stripe' ); ?></h3>
+	<p class="clasbowi-doc__p"><code>clasbowi_booking_before_form</code>, <code>clasbowi_booking_form_top</code>, <code>clasbowi_booking_form_bottom</code>, <code>clasbowi_booking_after_form</code> — <?php esc_html_e( 'each receives ($class_data, $dates).', 'class-bookings-with-stripe' ); ?></p>
+	<h4 class="clasbowi-doc__h4"><?php esc_html_e( 'Example: extra hidden field before submit', 'class-bookings-with-stripe' ); ?></h4>
+	<pre class="clasbowi-doc__pre"><code><?php echo esc_html( $ex_action ); ?></code></pre>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'ACF fields on the booking form', 'class-bookings-with-stripe' ); ?></h3>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Create a Field Group in ACF and set the location rule to “Class Bookings with Stripe → Booking form class ID”, then pick the Class post ID. Supported types include text, email, number, textarea, select, radio, true/false.', 'class-bookings-with-stripe' ); ?></p>
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'ACF fields on the booking form', 'class-bookings-with-stripe' ); ?></h3>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'Create a Field Group in ACF and set the location rule to “Class Bookings with Stripe → Booking form class ID”, then pick the Class post ID. Supported types include text, email, number, textarea, select, radio, true/false.', 'class-bookings-with-stripe' ); ?></p>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Email merge tags in templates', 'class-bookings-with-stripe' ); ?></h3>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'See the Emails tab for the full list. For ACF extras on the form:', 'class-bookings-with-stripe' ); ?> <code>{acf:field_xxxxx}</code>, <code>{field_xxxxx}</code>, <?php esc_html_e( 'or', 'class-bookings-with-stripe' ); ?> <code>{extra_fields}</code> <?php esc_html_e( 'for a summary block.', 'class-bookings-with-stripe' ); ?></p>
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Email merge tags in templates', 'class-bookings-with-stripe' ); ?></h3>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'See the Emails tab for the full list. For ACF extras on the form:', 'class-bookings-with-stripe' ); ?> <code>{acf:field_xxxxx}</code>, <code>{field_xxxxx}</code>, <?php esc_html_e( 'or', 'class-bookings-with-stripe' ); ?> <code>{extra_fields}</code> <?php esc_html_e( 'for a summary block.', 'class-bookings-with-stripe' ); ?></p>
 </div>
 		<?php
 		return (string) ob_get_clean();
@@ -1464,7 +1433,7 @@ PHP;
 
 	private static function help_intro_message(): string {
 		return self::help_plugin_meta_message()
-			. '<div class="ioroot-yb-doc"><p class="ioroot-yb-doc__lead">'
+			. '<div class="clasbowi-doc"><p class="clasbowi-doc__lead">'
 			. esc_html__( 'Use the Help sections below for Stripe keys, webhooks, reliable email delivery, then publish your classes. The Developer tab documents REST routes, hooks, and theme overrides for custom builds.', 'class-bookings-with-stripe' )
 			. '</p></div>';
 	}
@@ -1475,9 +1444,9 @@ PHP;
 
 		ob_start();
 		?>
-<div class="ioroot-yb-doc">
-	<p class="ioroot-yb-doc__lead"><?php esc_html_e( 'Stripe has separate keys for test and live mode. This plugin’s “Mode” setting (Stripe tab) decides which pair is used for Checkout and API calls.', 'class-bookings-with-stripe' ); ?></p>
-	<ol class="ioroot-yb-doc__ol ioroot-yb-doc__ol--spaced">
+<div class="clasbowi-doc">
+	<p class="clasbowi-doc__lead"><?php esc_html_e( 'Stripe has separate keys for test and live mode. This plugin’s “Mode” setting (Stripe tab) decides which pair is used for Checkout and API calls.', 'class-bookings-with-stripe' ); ?></p>
+	<ol class="clasbowi-doc__ol clasbowi-doc__ol--spaced">
 		<li>
 			<strong><?php esc_html_e( 'Open the Stripe Dashboard', 'class-bookings-with-stripe' ); ?></strong>
 			— <?php esc_html_e( 'Log in at stripe.com and ensure you are in the correct account.', 'class-bookings-with-stripe' ); ?>
@@ -1506,29 +1475,29 @@ PHP;
 			— <?php esc_html_e( 'Click Update / Save on this options page. Switch to Live mode only when you are ready for real charges and you have pasted live keys.', 'class-bookings-with-stripe' ); ?>
 		</li>
 	</ol>
-	<p class="ioroot-yb-doc__note"><?php esc_html_e( 'If Checkout fails with an authentication error, double-check that the mode matches the keys (test keys only with Mode = Test).', 'class-bookings-with-stripe' ); ?></p>
+	<p class="clasbowi-doc__note"><?php esc_html_e( 'If Checkout fails with an authentication error, double-check that the mode matches the keys (test keys only with Mode = Test).', 'class-bookings-with-stripe' ); ?></p>
 </div>
 		<?php
 		return (string) ob_get_clean();
 	}
 
 	private static function help_webhooks_detail_message(): string {
-		$webhook_url = rest_url( IOROOT_YB_REST_NS . '/stripe-webhook' );
+		$webhook_url = rest_url( CLASBOWI_REST_NS . '/stripe-webhook' );
 
 		ob_start();
 		?>
-<div class="ioroot-yb-doc">
-	<p class="ioroot-yb-doc__lead"><?php esc_html_e( 'Webhooks let Stripe notify WordPress when payment succeeds, sessions expire, or async payment fails. Without a working webhook and signing secret, bookings may stay “pending” after payment.', 'class-bookings-with-stripe' ); ?></p>
+<div class="clasbowi-doc">
+	<p class="clasbowi-doc__lead"><?php esc_html_e( 'Webhooks let Stripe notify WordPress when payment succeeds, sessions expire, or async payment fails. Without a working webhook and signing secret, bookings may stay “pending” after payment.', 'class-bookings-with-stripe' ); ?></p>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Your endpoint URL (exact)', 'class-bookings-with-stripe' ); ?></h3>
-	<pre class="ioroot-yb-doc__pre"><code><?php echo esc_html( $webhook_url ); ?></code></pre>
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Your endpoint URL (exact)', 'class-bookings-with-stripe' ); ?></h3>
+	<pre class="clasbowi-doc__pre"><code><?php echo esc_html( $webhook_url ); ?></code></pre>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Troubleshooting', 'class-bookings-with-stripe' ); ?></h3>
-	<ul class="ioroot-yb-doc__ul">
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Troubleshooting', 'class-bookings-with-stripe' ); ?></h3>
+	<ul class="clasbowi-doc__ul">
 		<li>
 			<strong><?php esc_html_e( 'Apache HTML 404 on /wp-json/…', 'class-bookings-with-stripe' ); ?></strong>
 			<?php esc_html_e( 'If curl or Stripe gets an HTML “Not Found” page from Apache (not JSON from WordPress), the request never reached WordPress. Common causes:', 'class-bookings-with-stripe' ); ?>
-			<ul class="ioroot-yb-doc__ul">
+			<ul class="clasbowi-doc__ul">
 				<li><?php esc_html_e( 'Permalinks are set to Plain, or rewrite rules were never saved — go to Settings → Permalinks, choose something other than Plain (e.g. Post name), and click Save Changes once. That refreshes rules so /wp-json/… is routed to WordPress.', 'class-bookings-with-stripe' ); ?></li>
 				<li><?php esc_html_e( 'Missing or ignored .htaccess rewrites in Docker — ensure the web server allows overrides (AllowOverride) for the document root so WordPress can write rewrite rules.', 'class-bookings-with-stripe' ); ?></li>
 			</ul>
@@ -1544,14 +1513,14 @@ PHP;
 		</li>
 	</ul>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Steps in Stripe Dashboard', 'class-bookings-with-stripe' ); ?></h3>
-	<ol class="ioroot-yb-doc__ol ioroot-yb-doc__ol--spaced">
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Steps in Stripe Dashboard', 'class-bookings-with-stripe' ); ?></h3>
+	<ol class="clasbowi-doc__ol clasbowi-doc__ol--spaced">
 		<li><?php esc_html_e( 'Open Developers → Webhooks.', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'Click “Add endpoint” (or “+ Add” depending on UI).', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'Endpoint URL: paste the URL above (must be publicly reachable over HTTPS in production).', 'class-bookings-with-stripe' ); ?></li>
 		<li>
 			<?php esc_html_e( 'Under “Events to send”, choose these event types (or an equivalent custom selection that includes them):', 'class-bookings-with-stripe' ); ?>
-			<ul class="ioroot-yb-doc__ul">
+			<ul class="clasbowi-doc__ul">
 				<li><code>checkout.session.completed</code></li>
 				<li><code>checkout.session.expired</code></li>
 				<li><code>checkout.session.async_payment_failed</code></li>
@@ -1561,13 +1530,13 @@ PHP;
 		<li><?php esc_html_e( 'In WordPress → this page → Stripe tab → “Webhook signing secret”, paste that value and save.', 'class-bookings-with-stripe' ); ?></li>
 	</ol>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Test vs live webhooks', 'class-bookings-with-stripe' ); ?></h3>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Stripe keeps separate webhook configurations for test and live. Create endpoints in both if you use both modes, each with its own signing secret, and paste the matching secret when you switch Mode in this plugin.', 'class-bookings-with-stripe' ); ?></p>
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Test vs live webhooks', 'class-bookings-with-stripe' ); ?></h3>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'Stripe keeps separate webhook configurations for test and live. Create endpoints in both if you use both modes, each with its own signing secret, and paste the matching secret when you switch Mode in this plugin.', 'class-bookings-with-stripe' ); ?></p>
 
 	<?php echo wp_kses_post( self::help_webhooks_localhost_message() ); ?>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Verify delivery', 'class-bookings-with-stripe' ); ?></h3>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'In Stripe → Webhooks → your endpoint → “Attempts” / logs, you should see 2xx responses after a test payment. If you see 403 or signature errors, the signing secret in WordPress does not match that endpoint.', 'class-bookings-with-stripe' ); ?></p>
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Verify delivery', 'class-bookings-with-stripe' ); ?></h3>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'In Stripe → Webhooks → your endpoint → “Attempts” / logs, you should see 2xx responses after a test payment. If you see 403 or signature errors, the signing secret in WordPress does not match that endpoint.', 'class-bookings-with-stripe' ); ?></p>
 </div>
 		<?php
 		return (string) ob_get_clean();
@@ -1577,29 +1546,29 @@ PHP;
 	 * Help tab: localhost / tunnel guidance for Stripe webhooks (HTML fragment).
 	 */
 	private static function help_webhooks_localhost_message(): string {
-		$webhook_full         = rest_url( IOROOT_YB_REST_NS . '/stripe-webhook' );
+		$webhook_full         = rest_url( CLASBOWI_REST_NS . '/stripe-webhook' );
 		$webhook_path_parsed  = wp_parse_url( $webhook_full, PHP_URL_PATH );
 		$webhook_path_example = is_string( $webhook_path_parsed ) && '' !== $webhook_path_parsed
 			? $webhook_path_parsed
-			: '/wp-json/' . IOROOT_YB_REST_NS . '/stripe-webhook';
+			: '/wp-json/' . CLASBOWI_REST_NS . '/stripe-webhook';
 
 		ob_start();
 		?>
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Localhost', 'class-bookings-with-stripe' ); ?></h3>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'For local development, Stripe’s servers cannot reach http://localhost or http://127.0.0.1 on your machine. You need a publicly reachable HTTPS URL that forwards traffic to the WordPress site that loads this plugin.', 'class-bookings-with-stripe' ); ?></p>
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Localhost', 'class-bookings-with-stripe' ); ?></h3>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'For local development, Stripe’s servers cannot reach http://localhost or http://127.0.0.1 on your machine. You need a publicly reachable HTTPS URL that forwards traffic to the WordPress site that loads this plugin.', 'class-bookings-with-stripe' ); ?></p>
 
-	<h4 class="ioroot-yb-doc__h4"><?php esc_html_e( 'Tunnels (recommended)', 'class-bookings-with-stripe' ); ?></h4>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'A tunnel gives you a temporary public hostname with HTTPS. Point your Stripe webhook endpoint at the tunnel URL plus the same REST path WordPress uses (see “Your endpoint URL” above).', 'class-bookings-with-stripe' ); ?></p>
-	<ul class="ioroot-yb-doc__ul">
+	<h4 class="clasbowi-doc__h4"><?php esc_html_e( 'Tunnels (recommended)', 'class-bookings-with-stripe' ); ?></h4>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'A tunnel gives you a temporary public hostname with HTTPS. Point your Stripe webhook endpoint at the tunnel URL plus the same REST path WordPress uses (see “Your endpoint URL” above).', 'class-bookings-with-stripe' ); ?></p>
+	<ul class="clasbowi-doc__ul">
 		<li>
 			<strong>ngrok</strong> —
 			<?php esc_html_e( 'Install ngrok, then forward the port where you can open WordPress in a browser (Docker example below uses 8101).', 'class-bookings-with-stripe' ); ?>
-			<pre class="ioroot-yb-doc__pre"><code>ngrok http 8101</code></pre>
+			<pre class="clasbowi-doc__pre"><code>ngrok http 8101</code></pre>
 			<?php
 			printf(
-				'<p class="ioroot-yb-doc__muted">%s</p>',
+				'<p class="clasbowi-doc__muted">%s</p>',
 				sprintf(
-					/* translators: %s: REST webhook path (e.g. /wp-json/stripe-bookings/v1/stripe-webhook) */
+					/* translators: %s: REST webhook path (e.g. /wp-json/clasbowi/v1/stripe-webhook) */
 					esc_html__( 'ngrok prints an https://….ngrok-free.app (or similar) URL. In Stripe, set the endpoint to that origin plus your webhook path, e.g. https://abc123.ngrok-free.app%s', 'class-bookings-with-stripe' ),
 					esc_html( $webhook_path_example )
 				)
@@ -1609,49 +1578,49 @@ PHP;
 		<li>
 			<strong>Cloudflare Tunnel (cloudflared)</strong> —
 			<?php esc_html_e( 'Useful for longer-lived dev URLs and teams.', 'class-bookings-with-stripe' ); ?>
-			<pre class="ioroot-yb-doc__pre"><code>cloudflared tunnel --url http://localhost:8101</code></pre>
+			<pre class="clasbowi-doc__pre"><code>cloudflared tunnel --url http://localhost:8101</code></pre>
 		</li>
 		<li>
 			<strong>localtunnel</strong> —
-			<pre class="ioroot-yb-doc__pre"><code>npx localtunnel --port 8101</code></pre>
+			<pre class="clasbowi-doc__pre"><code>npx localtunnel --port 8101</code></pre>
 		</li>
 		<li>
 			<strong>nip.io / sslip.io</strong> —
 			<?php esc_html_e( 'These map a hostname to an IP address (e.g. 127.0.0.1.nip.io). They help WordPress see a stable hostname, but Stripe’s dashboard still expects a proper HTTPS endpoint. Use them together with a reverse proxy or TLS terminator, or prefer ngrok / Cloudflare Tunnel for webhooks.', 'class-bookings-with-stripe' ); ?>
 		</li>
 	</ul>
-	<p class="ioroot-yb-doc__note"><?php esc_html_e( 'Also see the Developer tab → “Local testing with Stripe CLI”: stripe listen forwards webhooks without exposing WordPress, which is ideal for verifying handler code.', 'class-bookings-with-stripe' ); ?></p>
+	<p class="clasbowi-doc__note"><?php esc_html_e( 'Also see the Developer tab → “Local testing with Stripe CLI”: stripe listen forwards webhooks without exposing WordPress, which is ideal for verifying handler code.', 'class-bookings-with-stripe' ); ?></p>
 
-	<h4 class="ioroot-yb-doc__h4"><?php esc_html_e( 'Port forwarding and “which port?”', 'class-bookings-with-stripe' ); ?></h4>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Your tunnel must target the host port that actually reaches WordPress—not necessarily port 80 inside a container.', 'class-bookings-with-stripe' ); ?></p>
-	<ul class="ioroot-yb-doc__ul">
+	<h4 class="clasbowi-doc__h4"><?php esc_html_e( 'Port forwarding and “which port?”', 'class-bookings-with-stripe' ); ?></h4>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'Your tunnel must target the host port that actually reaches WordPress—not necessarily port 80 inside a container.', 'class-bookings-with-stripe' ); ?></p>
+	<ul class="clasbowi-doc__ul">
 		<li><?php esc_html_e( 'Native PHP / local server: if the site runs at http://localhost:8080, run ngrok (or similar) against 8080.', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'Docker Desktop: if compose maps 8101 on your Mac to port 80 in the container (e.g. "8101:80"), tunnel to 8101 on the host.', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'Home/office router: only needed if you intentionally expose a machine to the internet without a tunnel. Stripe will hit your public IP: ensure the router forwards the chosen external port to your dev PC’s LAN IP and that a web server answers there.', 'class-bookings-with-stripe' ); ?></li>
 	</ul>
-	<pre class="ioroot-yb-doc__pre"><code># Example docker-compose port publish (host:container)
+	<pre class="clasbowi-doc__pre"><code># Example docker-compose port publish (host:container)
 ports:
   - "8101:80"</code></pre>
 
-	<h4 class="ioroot-yb-doc__h4"><?php esc_html_e( 'Docker: publish and reach the right interface', 'class-bookings-with-stripe' ); ?></h4>
-	<ul class="ioroot-yb-doc__ul">
+	<h4 class="clasbowi-doc__h4"><?php esc_html_e( 'Docker: publish and reach the right interface', 'class-bookings-with-stripe' ); ?></h4>
+	<ul class="clasbowi-doc__ul">
 		<li><?php esc_html_e( 'Publish ports explicitly. Without a ports: mapping, nothing on the host can reach the container’s web server.', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'Bind to all interfaces when you need access from another device or a tunnel helper: use 0.0.0.0 in the mapping (Docker defaults this for host ports in many setups).', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'If a second process (tunnel, reverse proxy) runs in another container and must reach WordPress on the host, Docker Desktop often provides host.docker.internal as the host gateway.', 'class-bookings-with-stripe' ); ?></li>
 	</ul>
-	<pre class="ioroot-yb-doc__pre"><code>docker compose ps
+	<pre class="clasbowi-doc__pre"><code>docker compose ps
 curl -I http://127.0.0.1:8101/wp-json/</code></pre>
 
-	<h4 class="ioroot-yb-doc__h4"><?php esc_html_e( 'Firewalls (host and container)', 'class-bookings-with-stripe' ); ?></h4>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'Tunnels usually work outbound-only (your machine initiates to ngrok), so home routers are fine—but corporate networks may block tunnel domains or non-standard TLS.', 'class-bookings-with-stripe' ); ?></p>
-	<ul class="ioroot-yb-doc__ul">
+	<h4 class="clasbowi-doc__h4"><?php esc_html_e( 'Firewalls (host and container)', 'class-bookings-with-stripe' ); ?></h4>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'Tunnels usually work outbound-only (your machine initiates to ngrok), so home routers are fine—but corporate networks may block tunnel domains or non-standard TLS.', 'class-bookings-with-stripe' ); ?></p>
+	<ul class="clasbowi-doc__ul">
 		<li><?php esc_html_e( 'macOS: System Settings → Network → Firewall — allow incoming for your local web server or Docker if you expose ports directly.', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'Windows: Windows Security → Firewall & network protection — allow the app (e.g. Docker Desktop) or the inbound port.', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'Linux (ufw): allow the published host port, e.g.', 'class-bookings-with-stripe' ); ?> <code>sudo ufw allow 8101/tcp</code> <?php esc_html_e( 'then reload rules.', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'Cloud VPS: add a security group / firewall rule allowing HTTPS (443) from the internet to the instance running WordPress (or to the tunnel endpoint if the tunnel runs on the server).', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'Container-only firewalls (iptables/nftables inside a custom image) are rare on dev images but can block traffic; test with curl from the host into the published port first.', 'class-bookings-with-stripe' ); ?></li>
 	</ul>
-	<p class="ioroot-yb-doc__muted"><?php esc_html_e( 'After the tunnel is up, confirm WordPress “Site Address (URL)” in Settings → General matches what customers use (often the tunnel URL while testing), so rest_url() and Stripe return URLs stay consistent.', 'class-bookings-with-stripe' ); ?></p>
+	<p class="clasbowi-doc__muted"><?php esc_html_e( 'After the tunnel is up, confirm WordPress “Site Address (URL)” in Settings → General matches what customers use (often the tunnel URL while testing), so rest_url() and Stripe return URLs stay consistent.', 'class-bookings-with-stripe' ); ?></p>
 		<?php
 		return (string) ob_get_clean();
 	}
@@ -1659,19 +1628,19 @@ curl -I http://127.0.0.1:8101/wp-json/</code></pre>
 	private static function help_email_smtp_message(): string {
 		ob_start();
 		?>
-<div class="ioroot-yb-doc">
-	<p class="ioroot-yb-doc__lead"><?php esc_html_e( 'This plugin sends booking emails through WordPress’s standard wp_mail() function (see Emails tab). On many hosts, PHP mail is unreliable: messages bounce, land in spam, or never leave the server.', 'class-bookings-with-stripe' ); ?></p>
+<div class="clasbowi-doc">
+	<p class="clasbowi-doc__lead"><?php esc_html_e( 'This plugin sends booking emails through WordPress’s standard wp_mail() function (see Emails tab). On many hosts, PHP mail is unreliable: messages bounce, land in spam, or never leave the server.', 'class-bookings-with-stripe' ); ?></p>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Why use WP Mail SMTP (or similar)?', 'class-bookings-with-stripe' ); ?></h3>
-	<ul class="ioroot-yb-doc__ul">
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Why use WP Mail SMTP (or similar)?', 'class-bookings-with-stripe' ); ?></h3>
+	<ul class="clasbowi-doc__ul">
 		<li><?php esc_html_e( 'Deliverability: send through a real SMTP provider (Google Workspace, SendGrid, Mailgun, Amazon SES, Postmark, etc.) with proper SPF/DKIM.', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'Reliability: avoids the host’s default mail() limits and silent failures.', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'Debugging: popular plugins log errors and offer “send test email” so you can confirm configuration before customers book.', 'class-bookings-with-stripe' ); ?></li>
 	</ul>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'A widely used free option is “WP Mail SMTP” (WPForms). Other SMTP plugins work too if they hook wp_mail the same way.', 'class-bookings-with-stripe' ); ?></p>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'A widely used free option is “WP Mail SMTP” (WPForms). Other SMTP plugins work too if they hook wp_mail the same way.', 'class-bookings-with-stripe' ); ?></p>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Recommended setup outline', 'class-bookings-with-stripe' ); ?></h3>
-	<ol class="ioroot-yb-doc__ol ioroot-yb-doc__ol--spaced">
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Recommended setup outline', 'class-bookings-with-stripe' ); ?></h3>
+	<ol class="clasbowi-doc__ol clasbowi-doc__ol--spaced">
 		<li><?php esc_html_e( 'Install and activate WP Mail SMTP (or your preferred SMTP plugin).', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'Complete the wizard: choose your mailer (e.g. SendGrid API, Other SMTP, Google).', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'Set the From Email to an address your provider authorizes (often your domain).', 'class-bookings-with-stripe' ); ?></li>
@@ -1686,32 +1655,32 @@ curl -I http://127.0.0.1:8101/wp-json/</code></pre>
 	private static function help_next_steps_message(): string {
 		ob_start();
 		?>
-<div class="ioroot-yb-doc">
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Quick checklist', 'class-bookings-with-stripe' ); ?></h3>
-	<ol class="ioroot-yb-doc__ol">
+<div class="clasbowi-doc">
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Quick checklist', 'class-bookings-with-stripe' ); ?></h3>
+	<ol class="clasbowi-doc__ol">
 		<li><?php esc_html_e( 'Create Classes (menu on the left) with schedule, price, and capacity.', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'Assign result pages under Result pages if the defaults are not suitable.', 'class-bookings-with-stripe' ); ?></li>
 		<li><?php esc_html_e( 'Place the Elementor “Class Booking with Stripe” widget or shortcode on a page.', 'class-bookings-with-stripe' ); ?></li>
 	</ol>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Shortcode', 'class-bookings-with-stripe' ); ?></h3>
-	<pre class="ioroot-yb-doc__pre"><code>[stripe_booking class_id="123"]</code></pre>
-	<p class="ioroot-yb-doc__muted"><?php esc_html_e( 'Replace 123 with the numeric ID shown in the Classes list or in the class edit screen.', 'class-bookings-with-stripe' ); ?></p>
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Shortcode', 'class-bookings-with-stripe' ); ?></h3>
+	<pre class="clasbowi-doc__pre"><code>[clasbowi_booking class_id="123"]</code></pre>
+	<p class="clasbowi-doc__muted"><?php esc_html_e( 'Replace 123 with the numeric ID shown in the Classes list or in the class edit screen.', 'class-bookings-with-stripe' ); ?></p>
 
-	<h3 class="ioroot-yb-doc__h"><?php esc_html_e( 'Elementor: current post field', 'class-bookings-with-stripe' ); ?></h3>
-	<p class="ioroot-yb-doc__p"><?php esc_html_e( 'For loops or class cards, add an ACF (or meta) field on your content post with the internal name', 'class-bookings-with-stripe' ); ?> <code>stripe_booking_id</code> <?php esc_html_e( '(Class ID). Point the widget at “Current post field”.', 'class-bookings-with-stripe' ); ?></p>
-	<p class="ioroot-yb-doc__muted"><?php esc_html_e( 'Legacy field name yoga_class_stripe_id is still read if present.', 'class-bookings-with-stripe' ); ?></p>
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Elementor: current post field', 'class-bookings-with-stripe' ); ?></h3>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'For loops or class cards, add an ACF (or meta) field on your content post with the internal name', 'class-bookings-with-stripe' ); ?> <code>clasbowi_class_stripe_id</code> <?php esc_html_e( '(Class ID). Point the widget at “Current post field”.', 'class-bookings-with-stripe' ); ?></p>
+	<p class="clasbowi-doc__muted"><?php esc_html_e( 'Legacy field name clasbowi_class_stripe_id is still read if present.', 'class-bookings-with-stripe' ); ?></p>
 </div>
 		<?php
 		return (string) ob_get_clean();
 	}
 
 	private static function help_plugin_meta_message(): string {
-		$version = defined( 'IOROOT_YB_VERSION' ) ? (string) IOROOT_YB_VERSION : 'unknown';
+		$version = defined( 'CLASBOWI_VERSION' ) ? (string) CLASBOWI_VERSION : 'unknown';
 		$developer = 'IORoot.com';
 		$website = 'https://ioroot.com';
 		return sprintf(
-			'<div class="ioroot-yb-doc ioroot-yb-doc--compact"><p class="ioroot-yb-doc__meta"><strong>%s</strong> %s &nbsp;·&nbsp; <strong>%s</strong> %s &nbsp;·&nbsp; <strong>%s</strong> <a href="%s" target="_blank" rel="noopener noreferrer">%s</a></p></div>',
+			'<div class="clasbowi-doc clasbowi-doc--compact"><p class="clasbowi-doc__meta"><strong>%s</strong> %s &nbsp;·&nbsp; <strong>%s</strong> %s &nbsp;·&nbsp; <strong>%s</strong> <a href="%s" target="_blank" rel="noopener noreferrer">%s</a></p></div>',
 			esc_html__( 'Version:', 'class-bookings-with-stripe' ),
 			esc_html( $version ),
 			esc_html__( 'Developer:', 'class-bookings-with-stripe' ),

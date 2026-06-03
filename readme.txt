@@ -40,9 +40,9 @@ The plugin uses the bundled **stripe-php** SDK. It does not embed card fields on
 
 = Shortcodes =
 
-* `[stripe_booking class_id="123"]`
-* `[stripe_booking_status type="success"]` (or `cancelled`, `error`)
-* Legacy aliases: `[yoga_booking]`, `[yoga_booking_status]`
+* `[clasbowi_booking class_id="123"]`
+* `[clasbowi_booking_status type="success"]` (or `cancelled`, `error`)
+* Legacy aliases: `[stripe_booking]`, `[yoga_booking]`, `[stripe_booking_status]`, `[yoga_booking_status]`
 
 = Requirements =
 
@@ -71,10 +71,10 @@ Step-by-step guides on YouTube (IORoot):
 2. Activate **Class Bookings with Stripe**.
 3. Open **Class Bookings with Stripe → Settings** in the admin menu.
 4. Enter Stripe publishable and secret keys (test or live).
-5. In Stripe Dashboard → **Developers → Webhooks**, add an endpoint: `https://yoursite.com/wp-json/stripe-bookings/v1/stripe-webhook` with events `checkout.session.completed`, `checkout.session.expired`, and `checkout.session.async_payment_failed`.
+5. In Stripe Dashboard → **Developers → Webhooks**, add an endpoint: `https://yoursite.com/wp-json/clasbowi/v1/stripe-webhook` with events `checkout.session.completed`, `checkout.session.expired`, and `checkout.session.async_payment_failed`.
 6. Paste the webhook signing secret into plugin settings.
 7. Add classes under **Class Bookings with Stripe → Classes**.
-8. Place `[stripe_booking class_id="123"]` on a page or add the **Class Booking with Stripe** Elementor widget.
+8. Place `[clasbowi_booking class_id="123"]` on a page or add the **Class Booking with Stripe** Elementor widget.
 
 == Frequently Asked Questions ==
 

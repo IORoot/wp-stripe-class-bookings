@@ -2,10 +2,10 @@
 /**
  * Email rendering: merge-tag substitution, wp_mail dispatch.
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
-namespace IORoot_Yoga_Bookings;
+namespace IOROOT_STRIPE_BOOKINGS;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -138,12 +138,19 @@ abstract class Emails {
 		if ( ! $looks_like_html ) {
 			$body = wpautop( $body );
 		}
-		$style = '<style>body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;color:#222;line-height:1.5;} .yb-mail{max-width:560px;margin:0 auto;padding:24px;background:#fff;border-radius:14px;} dt{color:#666;} dd{margin:0 0 6px;font-weight:600;}</style>';
-		return '<!doctype html><html><head><meta charset="utf-8">' . $style . '</head><body><div class="yb-mail">' . $body . '</div></body></html>';
+		$css_path = CLASBOWI_DIR . 'assets/yoga-booking-email.css';
+		$css      = is_readable( $css_path )
+			? wp_strip_all_tags( (string) file_get_contents( $css_path ) ) // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			: '';
+		$head     = '<!doctype html><html><head><meta charset="utf-8">';
+		if ( '' !== $css ) {
+			$head .= '<style>' . $css . '</style>';
+		}
+		return $head . '</head><body><div class="yb-mail">' . $body . '</div></body></html>';
 	}
 
 	private static function load_template_file( string $relative ): string {
-		$path = IOROOT_YB_DIR . 'templates/' . ltrim( $relative, '/' );
+		$path = CLASBOWI_DIR . 'templates/' . ltrim( $relative, '/' );
 		if ( ! is_readable( $path ) ) {
 			return '';
 		}

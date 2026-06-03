@@ -2,7 +2,7 @@
 /**
  * Default customer email body (plain text).
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
 defined( 'ABSPATH' ) || exit;

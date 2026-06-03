@@ -2,10 +2,10 @@
 /**
  * Main plugin singleton. Wires all components together.
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
-namespace IORoot_Yoga_Bookings;
+namespace IOROOT_STRIPE_BOOKINGS;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -39,30 +39,30 @@ final class Plugin {
 
 	public function register_assets(): void {
 		wp_register_style(
-			'ioroot-yb',
-			IOROOT_YB_URL . 'assets/yoga-booking.css',
+			'clasbowi',
+			CLASBOWI_URL . 'assets/yoga-booking.css',
 			[],
-			IOROOT_YB_VERSION
+			CLASBOWI_VERSION
 		);
 		wp_register_script(
-			'ioroot-yb',
-			IOROOT_YB_URL . 'assets/yoga-booking.js',
+			'clasbowi',
+			CLASBOWI_URL . 'assets/yoga-booking.js',
 			[],
-			IOROOT_YB_VERSION,
+			CLASBOWI_VERSION,
 			true
 		);
 		wp_localize_script(
-			'ioroot-yb',
-			'IOROOT_YB',
+			'clasbowi',
+			'CLASBOWI',
 			[
-				'rest_url' => esc_url_raw( rest_url( IOROOT_YB_REST_NS . '/' ) ),
+				'rest_url' => esc_url_raw( rest_url( CLASBOWI_REST_NS . '/' ) ),
 				'nonce'    => wp_create_nonce( 'wp_rest' ),
 			]
 		);
 
 		// Enqueue globally so forms injected later (e.g. Elementor off-canvas AJAX content)
 		// still have booking handlers attached.
-		wp_enqueue_style( 'ioroot-yb' );
-		wp_enqueue_script( 'ioroot-yb' );
+		wp_enqueue_style( 'clasbowi' );
+		wp_enqueue_script( 'clasbowi' );
 	}
 }

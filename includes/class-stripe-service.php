@@ -2,10 +2,10 @@
 /**
  * Thin wrapper around the official stripe-php SDK.
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
-namespace IORoot_Yoga_Bookings;
+namespace IOROOT_STRIPE_BOOKINGS;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -72,7 +72,7 @@ abstract class Stripe_Service {
 			'mode'         => 'payment',
 			'success_url'  => $success_url,
 			'cancel_url'   => $cancel_url,
-			'expires_at'   => time() + IOROOT_YB_HOLD_SECONDS,
+			'expires_at'   => time() + CLASBOWI_HOLD_SECONDS,
 			'line_items'   => [
 				[
 					'quantity'   => $seats,

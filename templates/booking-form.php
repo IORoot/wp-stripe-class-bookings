@@ -1,13 +1,13 @@
 <?php
 /**
- * Booking form output for [stripe_booking] and the Elementor widget.
+ * Booking form output for [clasbowi_booking] and the Elementor widget.
  *
  * @var array<string, mixed>                                                $class_data
  * @var array<int, array{date: string, label: string, remaining: int, cancelled?: bool, selectable?: bool}> $dates
  * @var bool                                                                $show_heading
  * @var int                                                                 $max_seats_today
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -19,12 +19,12 @@ $has_dates = $is_active && ! empty( $dates );
 $use_external_link = ! empty( $class_data['use_external_link'] );
 $external_link_url = esc_url( (string) ( $class_data['external_link_url'] ?? '' ) );
 $origin    = esc_url( wp_get_referer() ?: home_url( add_query_arg( null, null ) ) );
-$show_waiver = (bool) \IORoot_Yoga_Bookings\Helpers::get_option( 'enable_waiver', false );
+$show_waiver = (bool) \IOROOT_STRIPE_BOOKINGS\Helpers::get_option( 'enable_waiver', false );
 $waiver_page_url = $show_waiver
-	? esc_url( (string) \IORoot_Yoga_Bookings\Helpers::get_option( 'waiver_page_url', '' ) )
+	? esc_url( (string) \IOROOT_STRIPE_BOOKINGS\Helpers::get_option( 'waiver_page_url', '' ) )
 	: '';
-$show_mailchimp_optin = (bool) \IORoot_Yoga_Bookings\Helpers::get_option( 'enable_mailchimp_optin', false );
-$extra_fields = \IORoot_Yoga_Bookings\Extra_Fields::get_fields_for_class( (int) $class_data['id'] );
+$show_mailchimp_optin = (bool) \IOROOT_STRIPE_BOOKINGS\Helpers::get_option( 'enable_mailchimp_optin', false );
+$extra_fields = \IOROOT_STRIPE_BOOKINGS\Extra_Fields::get_fields_for_class( (int) $class_data['id'] );
 $show_seats_remaining = ! array_key_exists( 'show_seats_remaining', $class_data ) || ! empty( $class_data['show_seats_remaining'] );
 $is_one_off_fixed_date  = ! empty( $class_data['is_one_off_event'] );
 $primary_date           = null;
@@ -43,7 +43,7 @@ if ( $is_one_off_fixed_date && ! empty( $dates ) ) {
 	}
 }
 $labels = apply_filters(
-	'ioroot_sb_booking_labels',
+	'clasbowi_booking_labels',
 	[
 		'name'                  => __( 'Your name', 'class-bookings-with-stripe' ),
 		'email'                 => __( 'Email address', 'class-bookings-with-stripe' ),
@@ -58,23 +58,23 @@ $labels = apply_filters(
 		'inactive_hint'         => __( 'Booking is currently unavailable for this class.', 'class-bookings-with-stripe' ),
 		'no_dates_hint'         => __( 'No upcoming dates available — please check back soon or contact us.', 'class-bookings-with-stripe' ),
 		'redirect_hint'         => __( 'You will be redirected to Stripe to complete your payment securely.', 'class-bookings-with-stripe' ),
-		'waiver_label'          => (string) \IORoot_Yoga_Bookings\Helpers::get_option( 'waiver_label', __( 'I confirm I have read and accept the class waiver and participate at my own risk.', 'class-bookings-with-stripe' ) ),
+		'waiver_label'          => (string) \IOROOT_STRIPE_BOOKINGS\Helpers::get_option( 'waiver_label', __( 'I confirm I have read and accept the class waiver and participate at my own risk.', 'class-bookings-with-stripe' ) ),
 		'waiver_page_link_text' => __( 'View full waiver', 'class-bookings-with-stripe' ),
-		'mailchimp_optin_label' => (string) \IORoot_Yoga_Bookings\Helpers::get_option( 'mailchimp_optin_label', __( 'Yes, I would like to join the mailing list for class updates and news.', 'class-bookings-with-stripe' ) ),
+		'mailchimp_optin_label' => (string) \IOROOT_STRIPE_BOOKINGS\Helpers::get_option( 'mailchimp_optin_label', __( 'Yes, I would like to join the mailing list for class updates and news.', 'class-bookings-with-stripe' ) ),
 	],
 	$class_data,
 	$dates
 );
 
-do_action( 'ioroot_sb_booking_template_start', $class_data, $dates );
+do_action( 'clasbowi_booking_template_start', $class_data, $dates );
 ?>
 <div class="yb-form yb-form--layout-modern" data-yb-class-id="<?php echo esc_attr( (string) $class_data['id'] ); ?>" data-yb-origin="<?php echo esc_attr( $origin ); ?>">
 	<div class="yb-form__surface">
 		<?php if ( $show_heading ) : ?>
-			<?php do_action( 'ioroot_sb_booking_before_heading', $class_data ); ?>
+			<?php do_action( 'clasbowi_booking_before_heading', $class_data ); ?>
 			<header class="yb-form__hero">
 				<div class="yb-form__hero-main">
-					<h3 class="yb-form__title"><?php echo esc_html( apply_filters( 'ioroot_sb_booking_title', (string) $class_data['name'], $class_data ) ); ?></h3>
+					<h3 class="yb-form__title"><?php echo esc_html( apply_filters( 'clasbowi_booking_title', (string) $class_data['name'], $class_data ) ); ?></h3>
 					<?php
 					$show_price_badge = ! $use_external_link && $is_active && ! empty( $class_data['price'] );
 					$meta_bits          = [];
@@ -82,54 +82,54 @@ do_action( 'ioroot_sb_booking_template_start', $class_data, $dates );
 						$meta_parts = [
 							$class_data['location'] ?? '',
 							! empty( $class_data['is_one_off_event'] )
-								? \IORoot_Yoga_Bookings\Helpers::format_date_range( (string) ( $class_data['start_date'] ?? '' ), (string) ( $class_data['end_date'] ?? '' ) )
+								? \IOROOT_STRIPE_BOOKINGS\Helpers::format_date_range( (string) ( $class_data['start_date'] ?? '' ), (string) ( $class_data['end_date'] ?? '' ) )
 								: ( $class_data['day_of_week'] ? ucfirst( $class_data['day_of_week'] ) . 's' : '' ),
-							$class_data['start_time'] ? \IORoot_Yoga_Bookings\Helpers::format_time( $class_data['start_time'] ) : '',
+							$class_data['start_time'] ? \IOROOT_STRIPE_BOOKINGS\Helpers::format_time( $class_data['start_time'] ) : '',
 							! empty( $class_data['duration'] ) ? sprintf( '%d min', $class_data['duration'] ) : '',
 						];
 						if ( ! $show_price_badge ) {
-							$meta_parts[] = \IORoot_Yoga_Bookings\Helpers::format_price( $class_data['price'] );
+							$meta_parts[] = \IOROOT_STRIPE_BOOKINGS\Helpers::format_price( $class_data['price'] );
 						}
 						$meta_bits = array_filter( $meta_parts );
 					}
 					?>
 					<?php if ( ! empty( $meta_bits ) ) : ?>
 						<p class="yb-form__meta">
-							<?php echo esc_html( apply_filters( 'ioroot_sb_booking_meta_text', implode( ' · ', $meta_bits ), $meta_bits, $class_data ) ); ?>
+							<?php echo esc_html( apply_filters( 'clasbowi_booking_meta_text', implode( ' · ', $meta_bits ), $meta_bits, $class_data ) ); ?>
 						</p>
 					<?php endif; ?>
 				</div>
 				<?php if ( $show_price_badge ) : ?>
 					<div class="yb-form__price-badge">
 						<span class="yb-form__price-badge-label"><?php esc_html_e( 'From', 'class-bookings-with-stripe' ); ?></span>
-						<span class="yb-form__price-badge-value"><?php echo esc_html( \IORoot_Yoga_Bookings\Helpers::format_price( (float) $class_data['price'] ) ); ?></span>
+						<span class="yb-form__price-badge-value"><?php echo esc_html( \IOROOT_STRIPE_BOOKINGS\Helpers::format_price( (float) $class_data['price'] ) ); ?></span>
 					</div>
 				<?php endif; ?>
 				<?php if ( ! empty( $class_data['description'] ) ) : ?>
-					<div class="yb-form__description"><?php echo wp_kses_post( apply_filters( 'ioroot_sb_booking_description', (string) $class_data['description'], $class_data ) ); ?></div>
+					<div class="yb-form__description"><?php echo wp_kses_post( apply_filters( 'clasbowi_booking_description', (string) $class_data['description'], $class_data ) ); ?></div>
 				<?php endif; ?>
 			</header>
-			<?php do_action( 'ioroot_sb_booking_after_heading', $class_data ); ?>
+			<?php do_action( 'clasbowi_booking_after_heading', $class_data ); ?>
 		<?php endif; ?>
 
 		<div class="yb-form__body">
 	<?php if ( ! $is_active ) : ?>
 		<p class="yb-form__notice yb-form__notice--warn"><?php echo esc_html( $labels['inactive_hint'] ); ?></p>
 	<?php elseif ( $use_external_link && $external_link_url ) : ?>
-		<?php do_action( 'ioroot_sb_booking_before_external_link', $class_data, $external_link_url ); ?>
+		<?php do_action( 'clasbowi_booking_before_external_link', $class_data, $external_link_url ); ?>
 		<a class="yb-form__button yb-form__button--link" href="<?php echo esc_url( $external_link_url ); ?>" target="_blank" rel="noopener noreferrer">
 			<?php echo esc_html( $labels['external_button'] ); ?>
 		</a>
 		<p class="yb-form__hint"><?php echo esc_html( $labels['external_hint'] ); ?></p>
-		<?php do_action( 'ioroot_sb_booking_after_external_link', $class_data, $external_link_url ); ?>
+		<?php do_action( 'clasbowi_booking_after_external_link', $class_data, $external_link_url ); ?>
 	<?php elseif ( $use_external_link ) : ?>
 		<p class="yb-form__notice yb-form__notice--warn"><?php echo esc_html( $labels['invalid_external_hint'] ); ?></p>
 	<?php elseif ( ! $has_dates ) : ?>
 		<p class="yb-form__notice yb-form__notice--warn"><?php echo esc_html( $labels['no_dates_hint'] ); ?></p>
 	<?php else : ?>
-		<?php do_action( 'ioroot_sb_booking_before_form', $class_data, $dates ); ?>
+		<?php do_action( 'clasbowi_booking_before_form', $class_data, $dates ); ?>
 		<form class="yb-form__form" novalidate data-yb-show-seats-remaining="<?php echo $show_seats_remaining ? '1' : '0'; ?>"<?php echo $is_one_off_fixed_date ? ' data-yb-one-off-date="1"' : ''; ?>>
-			<?php do_action( 'ioroot_sb_booking_form_top', $class_data, $dates ); ?>
+			<?php do_action( 'clasbowi_booking_form_top', $class_data, $dates ); ?>
 			<div class="yb-form__card">
 			<div class="yb-form__grid yb-form__grid--2">
 			<div class="yb-form__row">
@@ -220,20 +220,20 @@ do_action( 'ioroot_sb_booking_template_start', $class_data, $dates );
 			<div class="yb-form__row yb-form__row--total">
 				<span class="yb-form__total-label"><?php echo esc_html( $labels['total'] ); ?></span>
 				<span class="yb-form__total" data-yb-unit-price="<?php echo esc_attr( (string) $class_data['price'] ); ?>">
-					<?php echo esc_html( \IORoot_Yoga_Bookings\Helpers::format_price( (float) $class_data['price'] ) ); ?>
+					<?php echo esc_html( \IOROOT_STRIPE_BOOKINGS\Helpers::format_price( (float) $class_data['price'] ) ); ?>
 				</span>
 			</div>
 			<?php if ( ! empty( $extra_fields ) ) : ?>
-				<?php do_action( 'ioroot_sb_booking_before_extra_fields', $class_data, $extra_fields ); ?>
-				<?php \IORoot_Yoga_Bookings\Extra_Fields::render_fields( $extra_fields ); ?>
-				<?php do_action( 'ioroot_sb_booking_after_extra_fields', $class_data, $extra_fields ); ?>
+				<?php do_action( 'clasbowi_booking_before_extra_fields', $class_data, $extra_fields ); ?>
+				<?php \IOROOT_STRIPE_BOOKINGS\Extra_Fields::render_fields( $extra_fields ); ?>
+				<?php do_action( 'clasbowi_booking_after_extra_fields', $class_data, $extra_fields ); ?>
 			<?php endif; ?>
 			<?php if ( $show_waiver ) : ?>
 				<?php
 				$waiver_input_id = 'yb-waiver-' . (int) $class_data['id'];
 				$waiver_desc_id  = 'yb-waiver-desc-' . (int) $class_data['id'];
-				$waiver_html     = \IORoot_Yoga_Bookings\Helpers::waiver_label_kses(
-					(string) apply_filters( 'ioroot_sb_waiver_label_html', $labels['waiver_label'], $class_data )
+				$waiver_html     = \IOROOT_STRIPE_BOOKINGS\Helpers::waiver_label_kses(
+					(string) apply_filters( 'clasbowi_waiver_label_html', $labels['waiver_label'], $class_data )
 				);
 				?>
 				<div class="yb-form__row yb-form__row--check yb-form__row--waiver">
@@ -255,7 +255,7 @@ do_action( 'ioroot_sb_booking_template_start', $class_data, $dates );
 					<?php if ( $waiver_page_url ) : ?>
 						<p class="yb-form__waiver-page-link">
 							<a class="yb-form__link" href="<?php echo esc_url( $waiver_page_url ); ?>" target="_blank" rel="noopener noreferrer">
-								<?php echo esc_html( apply_filters( 'ioroot_sb_waiver_page_link_text', $labels['waiver_page_link_text'], $class_data ) ); ?>
+								<?php echo esc_html( apply_filters( 'clasbowi_waiver_page_link_text', $labels['waiver_page_link_text'], $class_data ) ); ?>
 							</a>
 						</p>
 					<?php endif; ?>
@@ -282,12 +282,12 @@ do_action( 'ioroot_sb_booking_template_start', $class_data, $dates );
 
 			<p class="yb-form__error" role="alert" hidden></p>
 			<p class="yb-form__hint"><?php echo esc_html( $labels['redirect_hint'] ); ?></p>
-			<?php do_action( 'ioroot_sb_booking_form_bottom', $class_data, $dates ); ?>
+			<?php do_action( 'clasbowi_booking_form_bottom', $class_data, $dates ); ?>
 			</div>
 		</form>
-		<?php do_action( 'ioroot_sb_booking_after_form', $class_data, $dates ); ?>
+		<?php do_action( 'clasbowi_booking_after_form', $class_data, $dates ); ?>
 	<?php endif; ?>
 		</div>
 	</div>
 </div>
-<?php do_action( 'ioroot_sb_booking_template_end', $class_data, $dates ); ?>
+<?php do_action( 'clasbowi_booking_template_end', $class_data, $dates ); ?>

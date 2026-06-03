@@ -2,10 +2,10 @@
 /**
  * Dynamic extra booking-form fields backed by ACF field groups.
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
-namespace IORoot_Yoga_Bookings;
+namespace IOROOT_STRIPE_BOOKINGS;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -22,18 +22,18 @@ abstract class Extra_Fields {
 
 	public static function register_acf_hooks(): void {
 		add_filter( 'acf/location/rule_types', [ self::class, 'register_location_rule_type' ] );
-		add_filter( 'acf/location/rule_values/yb_form_class_id', [ self::class, 'location_rule_values' ], 10, 2 );
-		add_filter( 'acf/location/rule_values/type=yb_form_class_id', [ self::class, 'location_rule_values' ], 10, 2 );
-		add_filter( 'acf/location/rule_match/yb_form_class_id', [ self::class, 'location_rule_match' ], 10, 4 );
-		add_filter( 'acf/location/rule_match/type=yb_form_class_id', [ self::class, 'location_rule_match' ], 10, 4 );
-		add_filter( 'acf/location/match_rule/type=yb_form_class_id', [ self::class, 'location_rule_match' ], 10, 4 );
+		add_filter( 'acf/location/rule_values/clasbowi_form_class_id', [ self::class, 'location_rule_values' ], 10, 2 );
+		add_filter( 'acf/location/rule_values/type=clasbowi_form_class_id', [ self::class, 'location_rule_values' ], 10, 2 );
+		add_filter( 'acf/location/rule_match/clasbowi_form_class_id', [ self::class, 'location_rule_match' ], 10, 4 );
+		add_filter( 'acf/location/rule_match/type=clasbowi_form_class_id', [ self::class, 'location_rule_match' ], 10, 4 );
+		add_filter( 'acf/location/match_rule/type=clasbowi_form_class_id', [ self::class, 'location_rule_match' ], 10, 4 );
 	}
 
 	public static function register_location_rule_type( array $types ): array {
 		$label = __( 'Booking form class ID', 'class-bookings-with-stripe' );
-		$types['Class Bookings with Stripe']['yb_form_class_id'] = $label;
+		$types['Class Bookings with Stripe']['clasbowi_form_class_id'] = $label;
 		// Legacy ACF location group label (existing field groups may reference this).
-		$types['Stripe Class Bookings']['yb_form_class_id'] = $label;
+		$types['Stripe Class Bookings']['clasbowi_form_class_id'] = $label;
 		return $types;
 	}
 
@@ -57,7 +57,7 @@ abstract class Extra_Fields {
 
 	public static function location_rule_match( bool $match, array $rule, array $screen, array $field_group ): bool {
 		unset( $match, $field_group );
-		$class_id = (int) ( $screen['yb_form_class_id'] ?? 0 );
+		$class_id = (int) ( $screen['clasbowi_form_class_id'] ?? 0 );
 		$rule_val = (int) ( $rule['value'] ?? 0 );
 		$result   = ( $class_id > 0 && $rule_val > 0 && $class_id === $rule_val );
 		if ( '!=' === ( $rule['operator'] ?? '==' ) ) {
@@ -76,7 +76,7 @@ abstract class Extra_Fields {
 
 		$groups = acf_get_field_groups(
 			[
-				'yb_form_class_id' => $class_id,
+				'clasbowi_form_class_id' => $class_id,
 			]
 		);
 		if ( empty( $groups ) ) {
@@ -205,7 +205,7 @@ abstract class Extra_Fields {
 				$missing = ( 'true_false' === $type ) ? ( 1 !== (int) $val ) : ( '' === (string) $val );
 				if ( $missing ) {
 					return new \WP_Error(
-						'yb_required',
+						'clasbowi_required',
 						sprintf(
 							/* translators: %s: field label */
 							__( 'Please complete: %s.', 'class-bookings-with-stripe' ),
@@ -220,7 +220,7 @@ abstract class Extra_Fields {
 				$val = sanitize_email( (string) $val );
 				if ( ! is_email( (string) $val ) ) {
 					return new \WP_Error(
-						'yb_validation',
+						'clasbowi_validation',
 						sprintf(
 							/* translators: %s: extra field label */
 							__( '%s must be a valid email.', 'class-bookings-with-stripe' ),
@@ -233,7 +233,7 @@ abstract class Extra_Fields {
 				$val = is_numeric( $val ) ? (string) $val : '';
 				if ( '' === $val ) {
 					return new \WP_Error(
-						'yb_validation',
+						'clasbowi_validation',
 						sprintf(
 							/* translators: %s: extra field label */
 							__( '%s must be a number.', 'class-bookings-with-stripe' ),

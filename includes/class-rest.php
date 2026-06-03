@@ -2,10 +2,10 @@
 /**
  * REST endpoints: create checkout, Stripe webhook, booking status poll.
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
-namespace IORoot_Yoga_Bookings;
+namespace IOROOT_STRIPE_BOOKINGS;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -16,7 +16,7 @@ abstract class REST {
 	}
 
 	public static function register(): void {
-		register_rest_route( IOROOT_YB_REST_NS, '/checkout', [
+		register_rest_route( CLASBOWI_REST_NS, '/checkout', [
 			'methods'             => 'POST',
 			'callback'            => [ self::class, 'create_checkout' ],
 			'permission_callback' => '__return_true',
@@ -33,13 +33,13 @@ abstract class REST {
 			],
 		] );
 
-		register_rest_route( IOROOT_YB_REST_NS, '/stripe-webhook', [
+		register_rest_route( CLASBOWI_REST_NS, '/stripe-webhook', [
 			'methods'             => 'POST',
 			'callback'            => [ self::class, 'handle_webhook' ],
 			'permission_callback' => '__return_true',
 		] );
 
-		register_rest_route( IOROOT_YB_REST_NS, '/booking-status', [
+		register_rest_route( CLASBOWI_REST_NS, '/booking-status', [
 			'methods'             => 'GET',
 			'callback'            => [ self::class, 'booking_status' ],
 			'permission_callback' => '__return_true',
@@ -48,7 +48,7 @@ abstract class REST {
 			],
 		] );
 
-		register_rest_route( IOROOT_YB_REST_NS, '/availability', [
+		register_rest_route( CLASBOWI_REST_NS, '/availability', [
 			'methods'             => 'GET',
 			'callback'            => [ self::class, 'availability' ],
 			'permission_callback' => '__return_true',
@@ -246,8 +246,8 @@ abstract class REST {
 		}
 
 		// Pull customer details from Stripe (Checkout collects them on hosted page).
-		$name = (string) get_post_meta( $booking_id, '_yb_customer_name', true );
-		$email = (string) get_post_meta( $booking_id, '_yb_customer_email', true );
+		$name = (string) get_post_meta( $booking_id, '_clasbowi_customer_name', true );
+		$email = (string) get_post_meta( $booking_id, '_clasbowi_customer_email', true );
 
 		$details = is_object( $session ) ? ( $session->customer_details ?? null ) : null;
 		if ( $details ) {
@@ -259,12 +259,12 @@ abstract class REST {
 			}
 		}
 
-		update_post_meta( $booking_id, '_yb_customer_name', $name );
-		update_post_meta( $booking_id, '_yb_customer_email', $email );
+		update_post_meta( $booking_id, '_clasbowi_customer_name', $name );
+		update_post_meta( $booking_id, '_clasbowi_customer_email', $email );
 
 		$amount_total = is_object( $session ) ? (int) ( $session->amount_total ?? 0 ) : 0;
 		if ( $amount_total > 0 ) {
-			update_post_meta( $booking_id, '_yb_amount_total', $amount_total );
+			update_post_meta( $booking_id, '_clasbowi_amount_total', $amount_total );
 		}
 
 		$payment_intent = '';
@@ -274,7 +274,7 @@ abstract class REST {
 				: ( is_object( $session->payment_intent ?? null ) ? $session->payment_intent->id : '' );
 		}
 		if ( $payment_intent ) {
-			update_post_meta( $booking_id, '_yb_stripe_payment_intent', $payment_intent );
+			update_post_meta( $booking_id, '_clasbowi_stripe_payment_intent', $payment_intent );
 		}
 
 		// Update post title to reflect customer.
@@ -283,8 +283,8 @@ abstract class REST {
 			'post_title' => sprintf(
 				'%s · %s · %s',
 				$name ?: __( 'Customer', 'class-bookings-with-stripe' ),
-				get_the_title( (int) get_post_meta( $booking_id, '_yb_class_id', true ) ),
-				Helpers::format_date( (string) get_post_meta( $booking_id, '_yb_class_date', true ) )
+				get_the_title( (int) get_post_meta( $booking_id, '_clasbowi_class_id', true ) ),
+				Helpers::format_date( (string) get_post_meta( $booking_id, '_clasbowi_class_date', true ) )
 			),
 		] );
 

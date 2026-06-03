@@ -2,10 +2,10 @@
 /**
  * Auto-create + look up Success / Cancelled / Error pages.
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
-namespace IORoot_Yoga_Bookings;
+namespace IOROOT_STRIPE_BOOKINGS;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -16,29 +16,29 @@ abstract class Result_Pages {
 			'slug'      => 'booking-confirmed',
 			'title'     => 'Booking Confirmed',
 			'option'    => 'success_page',
-			'field_key' => 'field_yb_success_page',
-			'meta'      => '_yb_result_page_success',
-			'content'   => '[stripe_booking_status type="success"]',
+			'field_key' => 'field_clasbowi_success_page',
+			'meta'      => '_clasbowi_result_page_success',
+			'content'   => '[clasbowi_booking_status type="success"]',
 		],
 		'cancelled' => [
 			'slug'      => 'booking-cancelled',
 			'title'     => 'Booking Cancelled',
 			'option'    => 'cancel_page',
-			'field_key' => 'field_yb_cancel_page',
-			'meta'      => '_yb_result_page_cancel',
-			'content'   => '[stripe_booking_status type="cancelled"]',
+			'field_key' => 'field_clasbowi_cancel_page',
+			'meta'      => '_clasbowi_result_page_cancel',
+			'content'   => '[clasbowi_booking_status type="cancelled"]',
 		],
 		'error'     => [
 			'slug'      => 'booking-error',
 			'title'     => 'Booking Error',
 			'option'    => 'error_page',
-			'field_key' => 'field_yb_error_page',
-			'meta'      => '_yb_result_page_error',
-			'content'   => '[stripe_booking_status type="error"]',
+			'field_key' => 'field_clasbowi_error_page',
+			'meta'      => '_clasbowi_result_page_error',
+			'content'   => '[clasbowi_booking_status type="error"]',
 		],
 	];
 
-	private const ACF_POST_ID = 'ioroot_yb_options';
+	private const ACF_POST_ID = 'clasbowi_options';
 
 	public static function init(): void {
 		// Allow the admin to point at custom pages via ACF settings; otherwise fall back to auto-created.

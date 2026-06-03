@@ -2,10 +2,10 @@
 /**
  * Registers the Elementor widget.
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
-namespace IORoot_Yoga_Bookings;
+namespace IOROOT_STRIPE_BOOKINGS;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -16,9 +16,9 @@ abstract class Elementor_Integration {
 	}
 
 	public static function register_widget( $widgets_manager ): void {
-		require_once IOROOT_YB_DIR . 'widgets/yoga-booking-widget.php';
-		if ( class_exists( '\IORoot_Yoga_Bookings\Widgets\Widget_Stripe_Booking' ) ) {
-			$widgets_manager->register( new \IORoot_Yoga_Bookings\Widgets\Widget_Stripe_Booking() );
+		require_once CLASBOWI_DIR . 'widgets/yoga-booking-widget.php';
+		if ( class_exists( '\IOROOT_STRIPE_BOOKINGS\Widgets\Widget_Stripe_Booking' ) ) {
+			$widgets_manager->register( new \IOROOT_STRIPE_BOOKINGS\Widgets\Widget_Stripe_Booking() );
 		}
 	}
 }

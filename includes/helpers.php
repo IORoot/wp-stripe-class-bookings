@@ -2,10 +2,10 @@
 /**
  * Helper functions: date math, money formatting, ACF option getters.
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
-namespace IORoot_Yoga_Bookings;
+namespace IOROOT_STRIPE_BOOKINGS;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -167,7 +167,7 @@ abstract class Helpers {
 	 */
 	public static function waiver_label_kses( string $html ): string {
 		$out = wp_kses_post( $html );
-		return apply_filters( 'ioroot_yb_waiver_label_kses', $out, $html );
+		return apply_filters( 'clasbowi_waiver_label_kses', $out, $html );
 	}
 
 	/**
@@ -193,7 +193,7 @@ abstract class Helpers {
 	 */
 	public static function get_option( string $key, $default = '' ) {
 		if ( function_exists( 'get_field' ) ) {
-			$value = get_field( $key, 'ioroot_yb_options' );
+			$value = get_field( $key, 'clasbowi_options' );
 			if ( null !== $value && '' !== $value ) {
 				return $value;
 			}
@@ -242,13 +242,13 @@ abstract class Helpers {
 	}
 
 	/**
-	 * Read class fields off a yoga_class post in a uniform shape.
+	 * Read class fields off a clasbowi_class post in a uniform shape.
 	 *
 	 * @return array<string, mixed>|null
 	 */
 	public static function get_class_data( int $class_id ): ?array {
 		$post = get_post( $class_id );
-		if ( ! $post || 'yoga_class' !== $post->post_type ) {
+		if ( ! $post || 'clasbowi_class' !== $post->post_type ) {
 			return null;
 		}
 

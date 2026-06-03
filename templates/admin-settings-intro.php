@@ -9,52 +9,52 @@
  * This file is included in an admin context; output is not escaped by the
  * plugin — use only trusted markup.
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$ioroot_yb_settings_url = admin_url( 'edit.php?post_type=' . \IORoot_Yoga_Bookings\CPT::CLASS_PT . '&page=stripe-bookings-settings' );
-$ioroot_yb_reports_url  = admin_url( 'edit.php?post_type=' . \IORoot_Yoga_Bookings\CPT::CLASS_PT . '&page=stripe-bookings-reports' );
-$ioroot_yb_new_class_url = admin_url( 'post-new.php?post_type=' . \IORoot_Yoga_Bookings\CPT::CLASS_PT );
+$clasbowi_settings_url = admin_url( 'edit.php?post_type=' . \IOROOT_STRIPE_BOOKINGS\CPT::CLASS_PT . '&page=clasbowi-settings' );
+$clasbowi_reports_url  = admin_url( 'edit.php?post_type=' . \IOROOT_STRIPE_BOOKINGS\CPT::CLASS_PT . '&page=clasbowi-reports' );
+$clasbowi_new_class_url = admin_url( 'post-new.php?post_type=' . \IOROOT_STRIPE_BOOKINGS\CPT::CLASS_PT );
 ?>
-<div class="ioroot-yb-welcome" id="ioroot-yb-welcome-panel" role="region" aria-labelledby="ioroot-yb-welcome-heading">
-	<div class="ioroot-yb-welcome__toolbar">
-		<p class="ioroot-yb-welcome__toolbar-summary">
+<div class="clasbowi-welcome" id="clasbowi-welcome-panel" role="region" aria-labelledby="clasbowi-welcome-heading">
+	<div class="clasbowi-welcome__toolbar">
+		<p class="clasbowi-welcome__toolbar-summary">
 			<?php esc_html_e( 'Class Bookings with Stripe overview is hidden. Expand to see getting started steps and shortcuts.', 'class-bookings-with-stripe' ); ?>
 		</p>
-		<button type="button" class="button ioroot-yb-welcome__panel-toggle" id="ioroot-yb-welcome-toggle" aria-expanded="true" aria-controls="ioroot-yb-welcome-expandable" aria-label="<?php esc_attr_e( 'Hide overview panel', 'class-bookings-with-stripe' ); ?>" data-ioroot-yb-aria-expanded="<?php esc_attr_e( 'Hide overview panel', 'class-bookings-with-stripe' ); ?>" data-ioroot-yb-aria-collapsed="<?php esc_attr_e( 'Show overview panel', 'class-bookings-with-stripe' ); ?>">
-			<span class="ioroot-yb-welcome__panel-toggle-label ioroot-yb-welcome__panel-toggle-label--expanded"><?php esc_html_e( 'Hide panel', 'class-bookings-with-stripe' ); ?></span>
-			<span class="ioroot-yb-welcome__panel-toggle-label ioroot-yb-welcome__panel-toggle-label--collapsed"><?php esc_html_e( 'Show panel', 'class-bookings-with-stripe' ); ?></span>
-			<span class="ioroot-yb-welcome__panel-toggle-chevron dashicons dashicons-arrow-up-alt2" aria-hidden="true"></span>
+		<button type="button" class="button clasbowi-welcome__panel-toggle" id="clasbowi-welcome-toggle" aria-expanded="true" aria-controls="clasbowi-welcome-expandable" aria-label="<?php esc_attr_e( 'Hide overview panel', 'class-bookings-with-stripe' ); ?>" data-clasbowi-aria-expanded="<?php esc_attr_e( 'Hide overview panel', 'class-bookings-with-stripe' ); ?>" data-clasbowi-aria-collapsed="<?php esc_attr_e( 'Show overview panel', 'class-bookings-with-stripe' ); ?>">
+			<span class="clasbowi-welcome__panel-toggle-label clasbowi-welcome__panel-toggle-label--expanded"><?php esc_html_e( 'Hide panel', 'class-bookings-with-stripe' ); ?></span>
+			<span class="clasbowi-welcome__panel-toggle-label clasbowi-welcome__panel-toggle-label--collapsed"><?php esc_html_e( 'Show panel', 'class-bookings-with-stripe' ); ?></span>
+			<span class="clasbowi-welcome__panel-toggle-chevron dashicons dashicons-arrow-up-alt2" aria-hidden="true"></span>
 		</button>
 	</div>
-	<div id="ioroot-yb-welcome-expandable" class="ioroot-yb-welcome__expandable" aria-hidden="false">
-	<div class="ioroot-yb-welcome__bg" aria-hidden="true">
-		<span class="ioroot-yb-welcome__blob ioroot-yb-welcome__blob--1"></span>
-		<span class="ioroot-yb-welcome__blob ioroot-yb-welcome__blob--2"></span>
-		<span class="ioroot-yb-welcome__blob ioroot-yb-welcome__blob--3"></span>
-		<span class="ioroot-yb-welcome__grid-dots"></span>
+	<div id="clasbowi-welcome-expandable" class="clasbowi-welcome__expandable" aria-hidden="false">
+	<div class="clasbowi-welcome__bg" aria-hidden="true">
+		<span class="clasbowi-welcome__blob clasbowi-welcome__blob--1"></span>
+		<span class="clasbowi-welcome__blob clasbowi-welcome__blob--2"></span>
+		<span class="clasbowi-welcome__blob clasbowi-welcome__blob--3"></span>
+		<span class="clasbowi-welcome__grid-dots"></span>
 	</div>
 
-	<div class="ioroot-yb-welcome__shell">
-		<div class="ioroot-yb-welcome__layout">
-			<div class="ioroot-yb-welcome__hero">
-				<div class="ioroot-yb-welcome__badges">
-					<span class="ioroot-yb-welcome__pill ioroot-yb-welcome__pill--brand">
-						<span class="ioroot-yb-welcome__pill-dot" aria-hidden="true"></span>
+	<div class="clasbowi-welcome__shell">
+		<div class="clasbowi-welcome__layout">
+			<div class="clasbowi-welcome__hero">
+				<div class="clasbowi-welcome__badges">
+					<span class="clasbowi-welcome__pill clasbowi-welcome__pill--brand">
+						<span class="clasbowi-welcome__pill-dot" aria-hidden="true"></span>
 						<?php esc_html_e( 'IORoot', 'class-bookings-with-stripe' ); ?>
 					</span>
-					<span class="ioroot-yb-welcome__pill">
+					<span class="clasbowi-welcome__pill">
 						<?php esc_html_e( 'Getting started', 'class-bookings-with-stripe' ); ?>
 					</span>
 				</div>
 
-				<div class="ioroot-yb-welcome__title-row">
-					<div class="ioroot-yb-welcome__logo-wrap">
+				<div class="clasbowi-welcome__title-row">
+					<div class="clasbowi-welcome__logo-wrap">
 						<img
-							class="ioroot-yb-welcome__logo"
-							src="<?php echo esc_url( IOROOT_YB_URL . 'assets/logo_plugin.svg' ); ?>"
+							class="clasbowi-welcome__logo"
+							src="<?php echo esc_url( CLASBOWI_URL . 'assets/logo_plugin.svg' ); ?>"
 							width="88"
 							height="74"
 							alt=""
@@ -62,34 +62,34 @@ $ioroot_yb_new_class_url = admin_url( 'post-new.php?post_type=' . \IORoot_Yoga_B
 							loading="lazy"
 						/>
 					</div>
-					<h2 id="ioroot-yb-welcome-heading" class="ioroot-yb-welcome__title">
-						<span class="ioroot-yb-welcome__title-line"><?php esc_html_e( 'Welcome to', 'class-bookings-with-stripe' ); ?></span>
-						<span class="ioroot-yb-welcome__title-accent"><?php esc_html_e( 'Class Bookings with Stripe', 'class-bookings-with-stripe' ); ?></span>
+					<h2 id="clasbowi-welcome-heading" class="clasbowi-welcome__title">
+						<span class="clasbowi-welcome__title-line"><?php esc_html_e( 'Welcome to', 'class-bookings-with-stripe' ); ?></span>
+						<span class="clasbowi-welcome__title-accent"><?php esc_html_e( 'Class Bookings with Stripe', 'class-bookings-with-stripe' ); ?></span>
 					</h2>
 				</div>
 
-				<p class="ioroot-yb-welcome__lede">
+				<p class="clasbowi-welcome__lede">
 					<?php esc_html_e( 'Work through the steps below once. When you are ready for day-to-day tasks, use the shortcuts on the right.', 'class-bookings-with-stripe' ); ?>
 				</p>
 
-				<ol class="ioroot-yb-welcome__timeline">
-					<li class="ioroot-yb-welcome__timeline-item">
-						<span class="ioroot-yb-welcome__timeline-marker" aria-hidden="true">1</span>
-						<div class="ioroot-yb-welcome__timeline-body">
+				<ol class="clasbowi-welcome__timeline">
+					<li class="clasbowi-welcome__timeline-item">
+						<span class="clasbowi-welcome__timeline-marker" aria-hidden="true">1</span>
+						<div class="clasbowi-welcome__timeline-body">
 							<strong><?php esc_html_e( 'Connect Stripe keys and webhook', 'class-bookings-with-stripe' ); ?></strong>
 							<span><?php esc_html_e( 'Open the Stripe tab, add your publishable and secret keys, set test or live mode, and register the webhook signing secret from your Stripe dashboard.', 'class-bookings-with-stripe' ); ?></span>
 						</div>
 					</li>
-					<li class="ioroot-yb-welcome__timeline-item">
-						<span class="ioroot-yb-welcome__timeline-marker" aria-hidden="true">2</span>
-						<div class="ioroot-yb-welcome__timeline-body">
+					<li class="clasbowi-welcome__timeline-item">
+						<span class="clasbowi-welcome__timeline-marker" aria-hidden="true">2</span>
+						<div class="clasbowi-welcome__timeline-body">
 							<strong><?php esc_html_e( 'Add custom fields and embed the booking form', 'class-bookings-with-stripe' ); ?></strong>
 							<span><?php esc_html_e( 'Optional extras live under Form extras (ACF). Then place the Elementor block or shortcode on the page where customers should book.', 'class-bookings-with-stripe' ); ?></span>
 						</div>
 					</li>
-					<li class="ioroot-yb-welcome__timeline-item">
-						<span class="ioroot-yb-welcome__timeline-marker" aria-hidden="true">3</span>
-						<div class="ioroot-yb-welcome__timeline-body">
+					<li class="clasbowi-welcome__timeline-item">
+						<span class="clasbowi-welcome__timeline-marker" aria-hidden="true">3</span>
+						<div class="clasbowi-welcome__timeline-body">
 							<strong><?php esc_html_e( 'Set up emails', 'class-bookings-with-stripe' ); ?></strong>
 							<span><?php esc_html_e( 'Use the Emails tab for subjects and bodies, merge tags, and admin notifications (emails always use WordPress wp_mail()).', 'class-bookings-with-stripe' ); ?></span>
 						</div>
@@ -97,60 +97,60 @@ $ioroot_yb_new_class_url = admin_url( 'post-new.php?post_type=' . \IORoot_Yoga_B
 				</ol>
 			</div>
 
-			<aside class="ioroot-yb-welcome__aside" aria-label="<?php esc_attr_e( 'Quick reference', 'class-bookings-with-stripe' ); ?>">
-				<div class="ioroot-yb-welcome__bento ioroot-yb-welcome__bento--stack">
-					<div class="ioroot-yb-welcome__tile ioroot-yb-welcome__tile--wide ioroot-yb-welcome__tile--cta-row">
-						<div class="ioroot-yb-welcome__tile-icon-wrap ioroot-yb-welcome__tile-icon-wrap--violet">
-							<span class="ioroot-yb-welcome__tile-icon dashicons dashicons-email" aria-hidden="true"></span>
+			<aside class="clasbowi-welcome__aside" aria-label="<?php esc_attr_e( 'Quick reference', 'class-bookings-with-stripe' ); ?>">
+				<div class="clasbowi-welcome__bento clasbowi-welcome__bento--stack">
+					<div class="clasbowi-welcome__tile clasbowi-welcome__tile--wide clasbowi-welcome__tile--cta-row">
+						<div class="clasbowi-welcome__tile-icon-wrap clasbowi-welcome__tile-icon-wrap--violet">
+							<span class="clasbowi-welcome__tile-icon dashicons dashicons-email" aria-hidden="true"></span>
 						</div>
-						<div class="ioroot-yb-welcome__tile-copy">
+						<div class="clasbowi-welcome__tile-copy">
 							<strong><?php esc_html_e( 'Email Templates', 'class-bookings-with-stripe' ); ?></strong>
 							<p><?php esc_html_e( 'Edit customer and admin messages, merge tags, and admin notification address. Mail is sent with WordPress wp_mail().', 'class-bookings-with-stripe' ); ?></p>
 						</div>
-						<div class="ioroot-yb-welcome__tile-aside">
-							<a class="button ioroot-yb-welcome__tile-action ioroot-yb-welcome__tile-action--violet" href="<?php echo esc_url( $ioroot_yb_settings_url . '#yb-tab-field_yb_tab_emails' ); ?>">
+						<div class="clasbowi-welcome__tile-aside">
+							<a class="button clasbowi-welcome__tile-action clasbowi-welcome__tile-action--violet" href="<?php echo esc_url( $clasbowi_settings_url . '#clasbowi-tab-field_clasbowi_tab_emails' ); ?>">
 								<?php esc_html_e( 'Open Emails tab', 'class-bookings-with-stripe' ); ?>
 							</a>
 						</div>
 					</div>
-					<div class="ioroot-yb-welcome__tile ioroot-yb-welcome__tile--wide ioroot-yb-welcome__tile--cta-row">
-						<div class="ioroot-yb-welcome__tile-icon-wrap">
-							<span class="ioroot-yb-welcome__tile-icon dashicons dashicons-chart-area" aria-hidden="true"></span>
+					<div class="clasbowi-welcome__tile clasbowi-welcome__tile--wide clasbowi-welcome__tile--cta-row">
+						<div class="clasbowi-welcome__tile-icon-wrap">
+							<span class="clasbowi-welcome__tile-icon dashicons dashicons-chart-area" aria-hidden="true"></span>
 						</div>
-						<div class="ioroot-yb-welcome__tile-copy">
+						<div class="clasbowi-welcome__tile-copy">
 							<strong><?php esc_html_e( 'Reports', 'class-bookings-with-stripe' ); ?></strong>
 							<p><?php esc_html_e( 'Historic trends, upcoming attendance, and guest lists by class.', 'class-bookings-with-stripe' ); ?></p>
 						</div>
-						<div class="ioroot-yb-welcome__tile-aside">
-							<a class="button ioroot-yb-welcome__tile-action ioroot-yb-welcome__tile-action--teal" href="<?php echo esc_url( $ioroot_yb_reports_url ); ?>">
+						<div class="clasbowi-welcome__tile-aside">
+							<a class="button clasbowi-welcome__tile-action clasbowi-welcome__tile-action--teal" href="<?php echo esc_url( $clasbowi_reports_url ); ?>">
 								<?php esc_html_e( 'Open reports', 'class-bookings-with-stripe' ); ?>
 							</a>
 						</div>
 					</div>
-					<div class="ioroot-yb-welcome__tile ioroot-yb-welcome__tile--wide ioroot-yb-welcome__tile--cta-row">
-						<div class="ioroot-yb-welcome__tile-icon-wrap ioroot-yb-welcome__tile-icon-wrap--amber">
-							<span class="ioroot-yb-welcome__tile-icon dashicons dashicons-calendar-alt" aria-hidden="true"></span>
+					<div class="clasbowi-welcome__tile clasbowi-welcome__tile--wide clasbowi-welcome__tile--cta-row">
+						<div class="clasbowi-welcome__tile-icon-wrap clasbowi-welcome__tile-icon-wrap--amber">
+							<span class="clasbowi-welcome__tile-icon dashicons dashicons-calendar-alt" aria-hidden="true"></span>
 						</div>
-						<div class="ioroot-yb-welcome__tile-copy">
+						<div class="clasbowi-welcome__tile-copy">
 							<strong><?php esc_html_e( 'Weekly Classes / One-off Events / External Links', 'class-bookings-with-stripe' ); ?></strong>
 							<p><?php esc_html_e( 'Add a Class, set schedule or single dates, price, capacity, or an external booking URL.', 'class-bookings-with-stripe' ); ?></p>
 						</div>
-						<div class="ioroot-yb-welcome__tile-aside">
-							<a class="button ioroot-yb-welcome__tile-action ioroot-yb-welcome__tile-action--amber" href="<?php echo esc_url( $ioroot_yb_new_class_url ); ?>">
+						<div class="clasbowi-welcome__tile-aside">
+							<a class="button clasbowi-welcome__tile-action clasbowi-welcome__tile-action--amber" href="<?php echo esc_url( $clasbowi_new_class_url ); ?>">
 								<?php esc_html_e( 'Add new class', 'class-bookings-with-stripe' ); ?>
 							</a>
 						</div>
 					</div>
-					<div class="ioroot-yb-welcome__tile ioroot-yb-welcome__tile--wide ioroot-yb-welcome__tile--cta-row">
-						<div class="ioroot-yb-welcome__tile-icon-wrap ioroot-yb-welcome__tile-icon-wrap--emerald">
-							<span class="ioroot-yb-welcome__tile-icon dashicons dashicons-admin-plugins" aria-hidden="true"></span>
+					<div class="clasbowi-welcome__tile clasbowi-welcome__tile--wide clasbowi-welcome__tile--cta-row">
+						<div class="clasbowi-welcome__tile-icon-wrap clasbowi-welcome__tile-icon-wrap--emerald">
+							<span class="clasbowi-welcome__tile-icon dashicons dashicons-admin-plugins" aria-hidden="true"></span>
 						</div>
-						<div class="ioroot-yb-welcome__tile-copy">
+						<div class="clasbowi-welcome__tile-copy">
 							<strong><?php esc_html_e( 'Extend with ACF', 'class-bookings-with-stripe' ); ?></strong>
 							<p><?php esc_html_e( 'Form Extras: waiver, Mailchimp opt-in, and custom ACF fields on the booking form.', 'class-bookings-with-stripe' ); ?></p>
 						</div>
-						<div class="ioroot-yb-welcome__tile-aside">
-							<a class="button ioroot-yb-welcome__tile-action ioroot-yb-welcome__tile-action--emerald" href="<?php echo esc_url( $ioroot_yb_settings_url . '#yb-tab-field_yb_tab_pages' ); ?>">
+						<div class="clasbowi-welcome__tile-aside">
+							<a class="button clasbowi-welcome__tile-action clasbowi-welcome__tile-action--emerald" href="<?php echo esc_url( $clasbowi_settings_url . '#clasbowi-tab-field_clasbowi_tab_pages' ); ?>">
 								<?php esc_html_e( 'Open Form extras tab', 'class-bookings-with-stripe' ); ?>
 							</a>
 						</div>
@@ -161,60 +161,4 @@ $ioroot_yb_new_class_url = admin_url( 'post-new.php?post_type=' . \IORoot_Yoga_B
 
 	</div>
 	</div>
-	<script>
-	(function () {
-		var LS_KEY = 'ioroot_yb_welcome_intro_collapsed';
-		var root = document.getElementById('ioroot-yb-welcome-panel');
-		var toggle = document.getElementById('ioroot-yb-welcome-toggle');
-		var expandable = document.getElementById('ioroot-yb-welcome-expandable');
-		if (root && toggle && expandable) {
-			function setCollapsed(collapsed) {
-				root.classList.toggle('is-collapsed', collapsed);
-				toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
-				var ax = collapsed ? toggle.getAttribute('data-ioroot-yb-aria-collapsed') : toggle.getAttribute('data-ioroot-yb-aria-expanded');
-				if (ax) {
-					toggle.setAttribute('aria-label', ax);
-				}
-				expandable.setAttribute('aria-hidden', collapsed ? 'true' : 'false');
-				try {
-					localStorage.setItem(LS_KEY, collapsed ? '1' : '0');
-				} catch (e) {}
-			}
-			try {
-				if (localStorage.getItem(LS_KEY) === '1') {
-					setCollapsed(true);
-				}
-			} catch (e) {}
-			toggle.addEventListener('click', function () {
-				setCollapsed(!root.classList.contains('is-collapsed'));
-			});
-		}
-
-		function iorootYbOpenSettingsTabFromHash() {
-			var h = window.location.hash || '';
-			if (h.indexOf('#yb-tab-') !== 0) {
-				return;
-			}
-			var key = h.slice('#yb-tab-'.length);
-			if (!/^field_yb_tab_[a-z0-9_]+$/i.test(key)) {
-				return;
-			}
-			var btn = document.querySelector('.acf-tab-button[data-key="' + key + '"]');
-			if (btn && typeof btn.click === 'function') {
-				btn.click();
-			}
-		}
-		function iorootYbScheduleTabFromHash() {
-			iorootYbOpenSettingsTabFromHash();
-			window.setTimeout(iorootYbOpenSettingsTabFromHash, 0);
-			window.setTimeout(iorootYbOpenSettingsTabFromHash, 250);
-		}
-		if (document.readyState === 'loading') {
-			document.addEventListener('DOMContentLoaded', iorootYbScheduleTabFromHash);
-		} else {
-			iorootYbScheduleTabFromHash();
-		}
-		window.addEventListener('hashchange', iorootYbScheduleTabFromHash);
-	})();
-	</script>
 </div>

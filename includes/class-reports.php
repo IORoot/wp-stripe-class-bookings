@@ -2,10 +2,10 @@
 /**
  * Admin reports for Class Bookings with Stripe.
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
-namespace IORoot_Yoga_Bookings;
+namespace IOROOT_STRIPE_BOOKINGS;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -34,8 +34,8 @@ abstract class Reports {
 	 */
 	public static function filter_body_class( string $classes ): string {
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-		if ( $screen && $screen->id === CPT::CLASS_PT . '_page_stripe-bookings-reports' ) {
-			return $classes . ' ioroot-yb-reports';
+		if ( $screen && $screen->id === CPT::CLASS_PT . '_page_clasbowi-reports' ) {
+			return $classes . ' clasbowi-reports';
 		}
 		return $classes;
 	}
@@ -46,7 +46,7 @@ abstract class Reports {
 			__( 'Reports', 'class-bookings-with-stripe' ),
 			__( 'Reports', 'class-bookings-with-stripe' ),
 			'manage_options',
-			'stripe-bookings-reports',
+			'clasbowi-reports',
 			[ self::class, 'render_page' ]
 		);
 	}
@@ -56,52 +56,52 @@ abstract class Reports {
 			return;
 		}
 		wp_enqueue_style(
-			'ioroot-yb-reports',
-			IOROOT_YB_URL . 'assets/yoga-booking-reports-admin.css',
+			'clasbowi-reports',
+			CLASBOWI_URL . 'assets/yoga-booking-reports-admin.css',
 			[],
-			IOROOT_YB_VERSION
+			CLASBOWI_VERSION
 		);
 
 		$chart_payload = self::yearly_bookings_chart_data( self::reports_year() );
 
 		wp_enqueue_script(
-			'chart-js',
-			IOROOT_YB_URL . 'assets/vendor/chart.umd.min.js',
+			'clasbowi-chart',
+			CLASBOWI_URL . 'assets/vendor/chart.umd.min.js',
 			[],
 			'4.4.6',
 			true
 		);
 		wp_enqueue_script(
-			'chart-js-adapter-date-fns',
-			IOROOT_YB_URL . 'assets/vendor/chartjs-adapter-date-fns.bundle.min.js',
-			[ 'chart-js' ],
+			'clasbowi-chart-adapter-date-fns',
+			CLASBOWI_URL . 'assets/vendor/chartjs-adapter-date-fns.bundle.min.js',
+			[ 'clasbowi-chart' ],
 			'3.0.0',
 			true
 		);
 		wp_enqueue_script(
-			'hammerjs',
-			IOROOT_YB_URL . 'assets/vendor/hammer.min.js',
+			'clasbowi-hammer',
+			CLASBOWI_URL . 'assets/vendor/hammer.min.js',
 			[],
 			'2.0.8',
 			true
 		);
 		wp_enqueue_script(
-			'chartjs-zoom',
-			IOROOT_YB_URL . 'assets/vendor/chartjs-plugin-zoom.min.js',
-			[ 'chart-js', 'hammerjs' ],
+			'clasbowi-chartjs-zoom',
+			CLASBOWI_URL . 'assets/vendor/chartjs-plugin-zoom.min.js',
+			[ 'clasbowi-chart', 'clasbowi-hammer' ],
 			'2.1.0',
 			true
 		);
 		wp_enqueue_script(
-			'ioroot-yb-reports-chart',
-			IOROOT_YB_URL . 'assets/yoga-booking-reports-chart.js',
-			[ 'chart-js', 'chart-js-adapter-date-fns', 'chartjs-zoom' ],
-			IOROOT_YB_VERSION,
+			'clasbowi-reports-chart',
+			CLASBOWI_URL . 'assets/yoga-booking-reports-chart.js',
+			[ 'clasbowi-chart', 'clasbowi-chart-adapter-date-fns', 'clasbowi-chartjs-zoom' ],
+			CLASBOWI_VERSION,
 			true
 		);
 		wp_localize_script(
-			'ioroot-yb-reports-chart',
-			'IOROOT_YB_REPORTS_CHART',
+			'clasbowi-reports-chart',
+			'clasbowiReportsChart',
 			$chart_payload
 		);
 	}
@@ -115,20 +115,20 @@ abstract class Reports {
 		$year_min           = max( 2018, $current_year - 12 );
 		$year_max           = $current_year + 1;
 		?>
-		<div class="wrap ioroot-yb-reports-wrap">
-			<header class="ioroot-yb-reports-hero">
-				<div class="ioroot-yb-reports-hero__bg" aria-hidden="true">
-					<span class="ioroot-yb-reports-hero__blob ioroot-yb-reports-hero__blob--1"></span>
-					<span class="ioroot-yb-reports-hero__blob ioroot-yb-reports-hero__blob--2"></span>
-					<span class="ioroot-yb-reports-hero__blob ioroot-yb-reports-hero__blob--3"></span>
-					<span class="ioroot-yb-reports-hero__dots"></span>
+		<div class="wrap clasbowi-reports-wrap">
+			<header class="clasbowi-reports-hero">
+				<div class="clasbowi-reports-hero__bg" aria-hidden="true">
+					<span class="clasbowi-reports-hero__blob clasbowi-reports-hero__blob--1"></span>
+					<span class="clasbowi-reports-hero__blob clasbowi-reports-hero__blob--2"></span>
+					<span class="clasbowi-reports-hero__blob clasbowi-reports-hero__blob--3"></span>
+					<span class="clasbowi-reports-hero__dots"></span>
 				</div>
-				<div class="ioroot-yb-reports-hero__inner">
-					<div class="ioroot-yb-reports-hero__title-row">
-						<div class="ioroot-yb-reports-hero__logo-wrap">
+				<div class="clasbowi-reports-hero__inner">
+					<div class="clasbowi-reports-hero__title-row">
+						<div class="clasbowi-reports-hero__logo-wrap">
 							<img
-								class="ioroot-yb-reports-hero__logo"
-								src="<?php echo esc_url( IOROOT_YB_URL . 'assets/logo_plugin.svg' ); ?>"
+								class="clasbowi-reports-hero__logo"
+								src="<?php echo esc_url( CLASBOWI_URL . 'assets/logo_plugin.svg' ); ?>"
 								width="80"
 								height="67"
 								alt=""
@@ -136,9 +136,9 @@ abstract class Reports {
 								loading="lazy"
 							/>
 						</div>
-						<div class="ioroot-yb-reports-hero__text">
-							<h1 class="ioroot-yb-reports-hero__title"><?php esc_html_e( 'Class Bookings with Stripe — Reports', 'class-bookings-with-stripe' ); ?></h1>
-							<p class="ioroot-yb-reports-hero__lead">
+						<div class="clasbowi-reports-hero__text">
+							<h1 class="clasbowi-reports-hero__title"><?php esc_html_e( 'Class Bookings with Stripe — Reports', 'class-bookings-with-stripe' ); ?></h1>
+							<p class="clasbowi-reports-hero__lead">
 								<?php esc_html_e( 'Historic trends, upcoming occupancy, and per-class guest lists in one place.', 'class-bookings-with-stripe' ); ?>
 							</p>
 						</div>
@@ -146,11 +146,11 @@ abstract class Reports {
 				</div>
 			</header>
 
-			<section class="ioroot-yb-reports-panel" aria-labelledby="ioroot-yb-reports-historic-heading">
-				<div class="ioroot-yb-reports-panel__head ioroot-yb-reports-panel__head--split">
-					<div class="ioroot-yb-reports-panel__head-main">
-						<h2 id="ioroot-yb-reports-historic-heading" class="ioroot-yb-reports-panel__title"><?php esc_html_e( 'Bookings by class (year view)', 'class-bookings-with-stripe' ); ?></h2>
-						<p class="ioroot-yb-reports-panel__desc">
+			<section class="clasbowi-reports-panel" aria-labelledby="clasbowi-reports-historic-heading">
+				<div class="clasbowi-reports-panel__head clasbowi-reports-panel__head--split">
+					<div class="clasbowi-reports-panel__head-main">
+						<h2 id="clasbowi-reports-historic-heading" class="clasbowi-reports-panel__title"><?php esc_html_e( 'Bookings by class (year view)', 'class-bookings-with-stripe' ); ?></h2>
+						<p class="clasbowi-reports-panel__desc">
 							<?php
 							printf(
 								/* translators: %s: calendar year (e.g. 2026) */
@@ -160,11 +160,11 @@ abstract class Reports {
 							?>
 						</p>
 					</div>
-					<form class="ioroot-yb-reports-year-form" method="get" action="<?php echo esc_url( admin_url( 'edit.php' ) ); ?>">
+					<form class="clasbowi-reports-year-form" method="get" action="<?php echo esc_url( admin_url( 'edit.php' ) ); ?>">
 						<input type="hidden" name="post_type" value="<?php echo esc_attr( CPT::CLASS_PT ); ?>" />
-						<input type="hidden" name="page" value="stripe-bookings-reports" />
-						<label class="ioroot-yb-reports-year-form__label" for="ioroot-yb-reports-year"><?php esc_html_e( 'Year', 'class-bookings-with-stripe' ); ?></label>
-						<select class="ioroot-yb-reports-year-form__select" id="ioroot-yb-reports-year" name="yb_year">
+						<input type="hidden" name="page" value="clasbowi-reports" />
+						<label class="clasbowi-reports-year-form__label" for="clasbowi-reports-year"><?php esc_html_e( 'Year', 'class-bookings-with-stripe' ); ?></label>
+						<select class="clasbowi-reports-year-form__select" id="clasbowi-reports-year" name="clasbowi_year">
 							<?php for ( $y = $year_min; $y <= $year_max; $y++ ) : ?>
 								<option value="<?php echo esc_attr( (string) $y ); ?>"<?php selected( $year, $y ); ?>><?php echo esc_html( (string) $y ); ?></option>
 							<?php endfor; ?>
@@ -173,7 +173,7 @@ abstract class Reports {
 				</div>
 
 				<?php if ( empty( $chart['hasData'] ) ) : ?>
-					<div class="ioroot-yb-reports-empty">
+					<div class="clasbowi-reports-empty">
 						<p>
 							<?php
 							printf(
@@ -185,22 +185,22 @@ abstract class Reports {
 						</p>
 					</div>
 				<?php else : ?>
-					<div class="ioroot-yb-reports-chartjs" role="img" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: year */ __( 'Students booked per day in %d, by class', 'class-bookings-with-stripe' ), $year ) ); ?>">
-						<canvas id="ioroot-yb-reports-year-chart"></canvas>
+					<div class="clasbowi-reports-chartjs" role="img" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: year */ __( 'Students booked per day in %d, by class', 'class-bookings-with-stripe' ), $year ) ); ?>">
+						<canvas id="clasbowi-reports-year-chart"></canvas>
 					</div>
-					<p class="ioroot-yb-reports-actions">
-						<button type="button" class="button button-secondary ioroot-yb-reports-btn" id="ioroot-yb-reports-chart-reset"><?php esc_html_e( 'Reset zoom', 'class-bookings-with-stripe' ); ?></button>
+					<p class="clasbowi-reports-actions">
+						<button type="button" class="button button-secondary clasbowi-reports-btn" id="clasbowi-reports-chart-reset"><?php esc_html_e( 'Reset zoom', 'class-bookings-with-stripe' ); ?></button>
 					</p>
 				<?php endif; ?>
 			</section>
 
-			<section class="ioroot-yb-reports-panel" aria-labelledby="ioroot-yb-reports-upcoming-heading">
-				<div class="ioroot-yb-reports-panel__head">
-					<h2 id="ioroot-yb-reports-upcoming-heading" class="ioroot-yb-reports-panel__title"><?php esc_html_e( 'Booked people for upcoming classes', 'class-bookings-with-stripe' ); ?></h2>
-					<p class="ioroot-yb-reports-panel__desc"><?php esc_html_e( 'Next sessions across all active Classes, ordered by date.', 'class-bookings-with-stripe' ); ?></p>
+			<section class="clasbowi-reports-panel" aria-labelledby="clasbowi-reports-upcoming-heading">
+				<div class="clasbowi-reports-panel__head">
+					<h2 id="clasbowi-reports-upcoming-heading" class="clasbowi-reports-panel__title"><?php esc_html_e( 'Booked people for upcoming classes', 'class-bookings-with-stripe' ); ?></h2>
+					<p class="clasbowi-reports-panel__desc"><?php esc_html_e( 'Next sessions across all active Classes, ordered by date.', 'class-bookings-with-stripe' ); ?></p>
 				</div>
-				<div class="ioroot-yb-reports-table-scroll">
-					<table class="widefat striped ioroot-yb-reports-table">
+				<div class="clasbowi-reports-table-scroll">
+					<table class="widefat striped clasbowi-reports-table">
 						<thead>
 						<tr>
 							<th scope="col"><?php esc_html_e( 'Class', 'class-bookings-with-stripe' ); ?></th>
@@ -225,9 +225,9 @@ abstract class Reports {
 									<td data-label="<?php esc_attr_e( 'Date', 'class-bookings-with-stripe' ); ?>"><?php echo esc_html( Helpers::format_date( (string) $session['date'] ) ); ?></td>
 									<td data-label="<?php esc_attr_e( 'Time', 'class-bookings-with-stripe' ); ?>"><?php echo esc_html( Helpers::format_time( (string) $session['start_time'] ) ); ?></td>
 									<td data-label="<?php esc_attr_e( 'People booked', 'class-bookings-with-stripe' ); ?>">
-										<span class="ioroot-yb-reports-meter">
-											<span class="ioroot-yb-reports-meter__text"><?php echo esc_html( (string) $people ); ?></span>
-											<span class="ioroot-yb-reports-meter__bar" style="--ioroot-yb-meter: <?php echo esc_attr( (string) $pct ); ?>%;"></span>
+										<span class="clasbowi-reports-meter">
+											<span class="clasbowi-reports-meter__text"><?php echo esc_html( (string) $people ); ?></span>
+											<span class="clasbowi-reports-meter__bar" style="--clasbowi-meter: <?php echo esc_attr( (string) $pct ); ?>%;"></span>
 										</span>
 									</td>
 									<td data-label="<?php esc_attr_e( 'Capacity', 'class-bookings-with-stripe' ); ?>"><?php echo esc_html( (string) $cap ); ?></td>
@@ -239,21 +239,21 @@ abstract class Reports {
 				</div>
 			</section>
 
-			<section class="ioroot-yb-reports-panel" aria-labelledby="ioroot-yb-reports-by-class-heading">
-				<div class="ioroot-yb-reports-panel__head">
-					<h2 id="ioroot-yb-reports-by-class-heading" class="ioroot-yb-reports-panel__title"><?php esc_html_e( 'Next three sessions per Class', 'class-bookings-with-stripe' ); ?></h2>
-					<p class="ioroot-yb-reports-panel__desc"><?php esc_html_e( 'Guest names and emails for each upcoming date.', 'class-bookings-with-stripe' ); ?></p>
+			<section class="clasbowi-reports-panel" aria-labelledby="clasbowi-reports-by-class-heading">
+				<div class="clasbowi-reports-panel__head">
+					<h2 id="clasbowi-reports-by-class-heading" class="clasbowi-reports-panel__title"><?php esc_html_e( 'Next three sessions per Class', 'class-bookings-with-stripe' ); ?></h2>
+					<p class="clasbowi-reports-panel__desc"><?php esc_html_e( 'Guest names and emails for each upcoming date.', 'class-bookings-with-stripe' ); ?></p>
 				</div>
 				<?php if ( empty( $by_class ) ) : ?>
-					<div class="ioroot-yb-reports-empty">
+					<div class="clasbowi-reports-empty">
 						<p><?php esc_html_e( 'No upcoming classes found.', 'class-bookings-with-stripe' ); ?></p>
 					</div>
 				<?php else : ?>
-					<div class="ioroot-yb-reports-table-scroll ioroot-yb-reports-table-scroll--wide">
-						<table class="widefat striped ioroot-yb-reports-table ioroot-yb-reports-table--nested">
+					<div class="clasbowi-reports-table-scroll clasbowi-reports-table-scroll--wide">
+						<table class="widefat striped clasbowi-reports-table clasbowi-reports-table--nested">
 							<thead>
 							<tr>
-								<th scope="col" class="ioroot-yb-reports-table__class-col"><?php esc_html_e( 'Class', 'class-bookings-with-stripe' ); ?></th>
+								<th scope="col" class="clasbowi-reports-table__class-col"><?php esc_html_e( 'Class', 'class-bookings-with-stripe' ); ?></th>
 								<th scope="col"><?php esc_html_e( 'Upcoming #1', 'class-bookings-with-stripe' ); ?></th>
 								<th scope="col"><?php esc_html_e( 'Upcoming #2', 'class-bookings-with-stripe' ); ?></th>
 								<th scope="col"><?php esc_html_e( 'Upcoming #3', 'class-bookings-with-stripe' ); ?></th>
@@ -262,17 +262,17 @@ abstract class Reports {
 							<tbody>
 							<?php foreach ( $by_class as $class_row ) : ?>
 								<tr>
-									<td class="ioroot-yb-reports-table__class-name" data-label="<?php esc_attr_e( 'Class', 'class-bookings-with-stripe' ); ?>">
+									<td class="clasbowi-reports-table__class-name" data-label="<?php esc_attr_e( 'Class', 'class-bookings-with-stripe' ); ?>">
 										<strong><?php echo esc_html( (string) $class_row['class_name'] ); ?></strong>
 									</td>
 									<?php for ( $i = 0; $i < 3; $i++ ) : ?>
 										<?php $session = $class_row['sessions'][ $i ] ?? null; ?>
-										<td class="ioroot-yb-reports-session" data-label="<?php echo esc_attr( sprintf( /* translators: %d: slot number 1–3 */ __( 'Upcoming #%d', 'class-bookings-with-stripe' ), $i + 1 ) ); ?>">
+										<td class="clasbowi-reports-session" data-label="<?php echo esc_attr( sprintf( /* translators: %d: slot number 1–3 */ __( 'Upcoming #%d', 'class-bookings-with-stripe' ), $i + 1 ) ); ?>">
 											<?php if ( ! $session ) : ?>
-												<span class="ioroot-yb-reports-session__empty"><?php esc_html_e( 'No session', 'class-bookings-with-stripe' ); ?></span>
+												<span class="clasbowi-reports-session__empty"><?php esc_html_e( 'No session', 'class-bookings-with-stripe' ); ?></span>
 											<?php else : ?>
 												<?php $rows = self::bookings_for_session( (int) $session['class_id'], (string) $session['date'] ); ?>
-												<div class="ioroot-yb-reports-session__when">
+												<div class="clasbowi-reports-session__when">
 													<?php
 													printf(
 														/* translators: 1: date, 2: time */
@@ -282,17 +282,17 @@ abstract class Reports {
 													);
 													?>
 												</div>
-												<table class="ioroot-yb-reports-mini">
+												<table class="clasbowi-reports-mini">
 													<thead>
 													<tr>
 														<th scope="col"><?php esc_html_e( 'Name', 'class-bookings-with-stripe' ); ?></th>
 														<th scope="col"><?php esc_html_e( 'Email', 'class-bookings-with-stripe' ); ?></th>
-														<th scope="col" class="ioroot-yb-reports-mini__seats"><?php esc_html_e( 'Seats', 'class-bookings-with-stripe' ); ?></th>
+														<th scope="col" class="clasbowi-reports-mini__seats"><?php esc_html_e( 'Seats', 'class-bookings-with-stripe' ); ?></th>
 													</tr>
 													</thead>
 													<tbody>
 													<?php if ( empty( $rows ) ) : ?>
-														<tr><td colspan="3" class="ioroot-yb-reports-mini__empty"><?php esc_html_e( 'No bookings yet.', 'class-bookings-with-stripe' ); ?></td></tr>
+														<tr><td colspan="3" class="clasbowi-reports-mini__empty"><?php esc_html_e( 'No bookings yet.', 'class-bookings-with-stripe' ); ?></td></tr>
 													<?php else : ?>
 														<?php foreach ( $rows as $row ) : ?>
 															<tr>
@@ -302,7 +302,7 @@ abstract class Reports {
 																		<a href="<?php echo esc_url( 'mailto:' . sanitize_email( (string) $row['email'] ) ); ?>"><?php echo esc_html( (string) $row['email'] ); ?></a>
 																	<?php endif; ?>
 																</td>
-																<td class="ioroot-yb-reports-mini__seats"><?php echo esc_html( (string) (int) $row['seats'] ); ?></td>
+																<td class="clasbowi-reports-mini__seats"><?php echo esc_html( (string) (int) $row['seats'] ); ?></td>
 															</tr>
 														<?php endforeach; ?>
 													<?php endif; ?>
@@ -463,15 +463,15 @@ abstract class Reports {
 				'meta_query'     => [
 					'relation' => 'AND',
 					[
-						'key'   => '_yb_class_id',
+						'key'   => '_clasbowi_class_id',
 						'value' => $class_id,
 					],
 					[
-						'key'   => '_yb_status',
+						'key'   => '_clasbowi_status',
 						'value' => Bookings::STATUS_PAID,
 					],
 					[
-						'key'     => '_yb_class_date',
+						'key'     => '_clasbowi_class_date',
 						'value'   => $today,
 						'compare' => '>=',
 						'type'    => 'DATE',
@@ -481,7 +481,7 @@ abstract class Reports {
 		);
 		$dates = [];
 		foreach ( $query->posts as $booking_id ) {
-			$date = (string) get_post_meta( (int) $booking_id, '_yb_class_date', true );
+			$date = (string) get_post_meta( (int) $booking_id, '_clasbowi_class_date', true );
 			if ( '' !== $date ) {
 				$dates[] = $date;
 			}
@@ -506,15 +506,15 @@ abstract class Reports {
 				'meta_query'     => [
 					'relation' => 'AND',
 					[
-						'key'   => '_yb_class_id',
+						'key'   => '_clasbowi_class_id',
 						'value' => $class_id,
 					],
 					[
-						'key'   => '_yb_class_date',
+						'key'   => '_clasbowi_class_date',
 						'value' => $date,
 					],
 					[
-						'key'   => '_yb_status',
+						'key'   => '_clasbowi_status',
 						'value' => Bookings::STATUS_PAID,
 					],
 				],
@@ -524,20 +524,20 @@ abstract class Reports {
 		$rows = [];
 		foreach ( $query->posts as $booking_id ) {
 			$rows[] = [
-				'name'  => (string) get_post_meta( (int) $booking_id, '_yb_customer_name', true ),
-				'email' => (string) get_post_meta( (int) $booking_id, '_yb_customer_email', true ),
-				'seats' => (int) get_post_meta( (int) $booking_id, '_yb_seats', true ),
+				'name'  => (string) get_post_meta( (int) $booking_id, '_clasbowi_customer_name', true ),
+				'email' => (string) get_post_meta( (int) $booking_id, '_clasbowi_customer_email', true ),
+				'seats' => (int) get_post_meta( (int) $booking_id, '_clasbowi_seats', true ),
 			];
 		}
 		return $rows;
 	}
 
 	/**
-	 * Calendar year for the reports chart (GET `yb_year`, clamped).
+	 * Calendar year for the reports chart (GET `clasbowi_year`, clamped).
 	 */
 	private static function reports_year(): int {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only filter UI.
-		$requested = isset( $_GET['yb_year'] ) ? absint( (string) wp_unslash( $_GET['yb_year'] ) ) : 0;
+		$requested = isset( $_GET['clasbowi_year'] ) ? absint( (string) wp_unslash( $_GET['clasbowi_year'] ) ) : 0;
 		$current   = (int) wp_date( 'Y' );
 		if ( $requested < 2000 || $requested > 2100 ) {
 			$requested = $current;
@@ -604,17 +604,17 @@ abstract class Reports {
 				'meta_query'     => [
 					'relation' => 'AND',
 					[
-						'key'   => '_yb_status',
+						'key'   => '_clasbowi_status',
 						'value' => Bookings::STATUS_PAID,
 					],
 					[
-						'key'     => '_yb_class_date',
+						'key'     => '_clasbowi_class_date',
 						'value'   => $start,
 						'compare' => '>=',
 						'type'    => 'DATE',
 					],
 					[
-						'key'     => '_yb_class_date',
+						'key'     => '_clasbowi_class_date',
 						'value'   => $end,
 						'compare' => '<=',
 						'type'    => 'DATE',
@@ -627,9 +627,9 @@ abstract class Reports {
 		$counts = [];
 		foreach ( $query->posts as $booking_id ) {
 			$booking_id = (int) $booking_id;
-			$class_id   = (int) get_post_meta( $booking_id, '_yb_class_id', true );
-			$class_date = (string) get_post_meta( $booking_id, '_yb_class_date', true );
-			$seats      = (int) get_post_meta( $booking_id, '_yb_seats', true );
+			$class_id   = (int) get_post_meta( $booking_id, '_clasbowi_class_id', true );
+			$class_date = (string) get_post_meta( $booking_id, '_clasbowi_class_date', true );
+			$seats      = (int) get_post_meta( $booking_id, '_clasbowi_seats', true );
 			if ( $class_id <= 0 || '' === $class_date ) {
 				continue;
 			}

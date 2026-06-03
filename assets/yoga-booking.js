@@ -2,8 +2,8 @@
 ( function () {
 	'use strict';
 
-	const cfg = window.IOROOT_YB || {
-		rest_url: window.location.origin.replace( /\/$/, '' ) + '/wp-json/stripe-bookings/v1/',
+	const cfg = window.CLASBOWI || {
+		rest_url: window.location.origin.replace( /\/$/, '' ) + '/wp-json/clasbowi/v1/',
 		nonce: '',
 	};
 

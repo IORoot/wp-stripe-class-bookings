@@ -2,17 +2,17 @@
 /**
  * Custom post types: class and booking entities.
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
-namespace IORoot_Yoga_Bookings;
+namespace IOROOT_STRIPE_BOOKINGS;
 
 defined( 'ABSPATH' ) || exit;
 
 abstract class CPT {
 
-	public const CLASS_PT   = 'yoga_class';
-	public const BOOKING_PT = 'yoga_booking';
+	public const CLASS_PT   = 'clasbowi_class';
+	public const BOOKING_PT = 'clasbowi_booking';
 
 	public static function init(): void {
 		add_action( 'init', [ self::class, 'register' ] );
@@ -84,16 +84,16 @@ abstract class CPT {
 		foreach ( $columns as $key => $label ) {
 			$new[ $key ] = $label;
 			if ( 'cb' === $key ) {
-				$new['yb_image'] = __( 'Image', 'class-bookings-with-stripe' );
+				$new['clasbowi_image'] = __( 'Image', 'class-bookings-with-stripe' );
 			}
 			if ( 'title' === $key ) {
-				$new['yb_id']       = __( 'Class ID', 'class-bookings-with-stripe' );
-				$new['yb_location'] = __( 'Location', 'class-bookings-with-stripe' );
-				$new['yb_when']     = __( 'When', 'class-bookings-with-stripe' );
-				$new['yb_type']     = __( 'Type', 'class-bookings-with-stripe' );
-				$new['yb_price']    = __( 'Price', 'class-bookings-with-stripe' );
-				$new['yb_capacity'] = __( 'Capacity', 'class-bookings-with-stripe' );
-				$new['yb_status']   = __( 'Status', 'class-bookings-with-stripe' );
+				$new['clasbowi_id']       = __( 'Class ID', 'class-bookings-with-stripe' );
+				$new['clasbowi_location'] = __( 'Location', 'class-bookings-with-stripe' );
+				$new['clasbowi_when']     = __( 'When', 'class-bookings-with-stripe' );
+				$new['clasbowi_type']     = __( 'Type', 'class-bookings-with-stripe' );
+				$new['clasbowi_price']    = __( 'Price', 'class-bookings-with-stripe' );
+				$new['clasbowi_capacity'] = __( 'Capacity', 'class-bookings-with-stripe' );
+				$new['clasbowi_status']   = __( 'Status', 'class-bookings-with-stripe' );
 			}
 		}
 		return $new;
@@ -117,13 +117,13 @@ abstract class CPT {
 		}
 		wp_add_inline_style(
 			'wp-admin',
-			'.column-yb_image{width:52px;text-align:center;}' .
-			'.column-yb_image img{display:block;margin:0 auto;border-radius:4px;}' .
-			'.yb-class-list__no-image{display:inline-block;width:44px;height:44px;background:#f0f0f1;border-radius:4px;vertical-align:middle;}' .
-			'.yb-class-type-pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;line-height:1.3;font-weight:600;}' .
-			'.yb-class-type-pill--class{background:#e7f3ff;color:#1d4f8f;}' .
-			'.yb-class-type-pill--event{background:#efe8ff;color:#5a37a0;}' .
-			'.yb-class-type-pill--external{background:#e8f7ef;color:#1d6d43;}'
+			'.column-clasbowi_image{width:52px;text-align:center;}' .
+			'.column-clasbowi_image img{display:block;margin:0 auto;border-radius:4px;}' .
+			'.clasbowi-class-list__no-image{display:inline-block;width:44px;height:44px;background:#f0f0f1;border-radius:4px;vertical-align:middle;}' .
+			'.clasbowi-class-type-pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;line-height:1.3;font-weight:600;}' .
+			'.clasbowi-class-type-pill--class{background:#e7f3ff;color:#1d4f8f;}' .
+			'.clasbowi-class-type-pill--event{background:#efe8ff;color:#5a37a0;}' .
+			'.clasbowi-class-type-pill--external{background:#e8f7ef;color:#1d6d43;}'
 		);
 	}
 
@@ -150,7 +150,7 @@ abstract class CPT {
 	}
 
 	public static function class_column_value( string $column, int $post_id ): void {
-		if ( 'yb_image' === $column ) {
+		if ( 'clasbowi_image' === $column ) {
 			self::render_class_image_column( $post_id );
 			return;
 		}
@@ -160,13 +160,13 @@ abstract class CPT {
 			return;
 		}
 		switch ( $column ) {
-			case 'yb_id':
+			case 'clasbowi_id':
 				echo '<code>#' . esc_html( (string) $post_id ) . '</code>';
 				break;
-			case 'yb_location':
+			case 'clasbowi_location':
 				echo esc_html( $class['location'] );
 				break;
-			case 'yb_when':
+			case 'clasbowi_when':
 				$day  = ! empty( $class['is_one_off_event'] )
 					? Helpers::format_date_range( (string) ( $class['start_date'] ?? '' ), (string) ( $class['end_date'] ?? '' ) )
 					: ( $class['day_of_week'] ? ucfirst( $class['day_of_week'] ) : '' );
@@ -174,7 +174,7 @@ abstract class CPT {
 				$dur  = $class['duration'] ? sprintf( ' (%d min)', $class['duration'] ) : '';
 				echo esc_html( trim( "$day $time$dur" ) );
 				break;
-			case 'yb_type':
+			case 'clasbowi_type':
 				if ( ! empty( $class['use_external_link'] ) ) {
 					echo '<span class="yb-class-type-pill yb-class-type-pill--external">' . esc_html__( 'External link', 'class-bookings-with-stripe' ) . '</span>';
 				} elseif ( ! empty( $class['is_one_off_event'] ) ) {
@@ -183,13 +183,13 @@ abstract class CPT {
 					echo '<span class="yb-class-type-pill yb-class-type-pill--class">' . esc_html__( 'Class', 'class-bookings-with-stripe' ) . '</span>';
 				}
 				break;
-			case 'yb_price':
+			case 'clasbowi_price':
 				echo esc_html( Helpers::format_price( $class['price'] ) );
 				break;
-			case 'yb_capacity':
+			case 'clasbowi_capacity':
 				echo esc_html( (string) $class['capacity'] );
 				break;
-			case 'yb_status':
+			case 'clasbowi_status':
 				if ( ! $class['class_active'] ) {
 					echo '<strong style="color:#b00;">' . esc_html__( 'Cancelled', 'class-bookings-with-stripe' ) . '</strong>';
 				} else {
@@ -207,7 +207,7 @@ abstract class CPT {
 		if ( ! $post || self::CLASS_PT !== $post->post_type ) {
 			return;
 		}
-		$shortcode = sprintf( '[stripe_booking class_id="%d"]', (int) $post->ID );
+		$shortcode = sprintf( '[clasbowi_booking class_id="%d"]', (int) $post->ID );
 		echo '<div class="misc-pub-section misc-pub-yb-class-id">';
 		echo '<span>' . esc_html__( 'Class ID:', 'class-bookings-with-stripe' ) . ' <code>#' . esc_html( (string) $post->ID ) . '</code></span>';
 		echo '</div>';
@@ -222,57 +222,57 @@ abstract class CPT {
 		unset( $columns['date'] );
 		$new = [
 			'cb'           => $columns['cb'] ?? '<input type="checkbox" />',
-			'yb_image'     => __( 'Image', 'class-bookings-with-stripe' ),
+			'clasbowi_image'     => __( 'Image', 'class-bookings-with-stripe' ),
 			'title'        => __( 'Booking', 'class-bookings-with-stripe' ),
-			'yb_class'     => __( 'Class', 'class-bookings-with-stripe' ),
-			'yb_date'      => __( 'Class date', 'class-bookings-with-stripe' ),
-			'yb_customer'  => __( 'Customer', 'class-bookings-with-stripe' ),
-			'yb_seats'     => __( 'Seats', 'class-bookings-with-stripe' ),
-			'yb_amount'    => __( 'Amount', 'class-bookings-with-stripe' ),
-			'yb_status'    => __( 'Status', 'class-bookings-with-stripe' ),
-			'yb_stripe'    => __( 'Stripe ID', 'class-bookings-with-stripe' ),
-			'yb_created'   => __( 'Created', 'class-bookings-with-stripe' ),
+			'clasbowi_class'     => __( 'Class', 'class-bookings-with-stripe' ),
+			'clasbowi_date'      => __( 'Class date', 'class-bookings-with-stripe' ),
+			'clasbowi_customer'  => __( 'Customer', 'class-bookings-with-stripe' ),
+			'clasbowi_seats'     => __( 'Seats', 'class-bookings-with-stripe' ),
+			'clasbowi_amount'    => __( 'Amount', 'class-bookings-with-stripe' ),
+			'clasbowi_status'    => __( 'Status', 'class-bookings-with-stripe' ),
+			'clasbowi_stripe'    => __( 'Stripe ID', 'class-bookings-with-stripe' ),
+			'clasbowi_created'   => __( 'Created', 'class-bookings-with-stripe' ),
 		];
 		return $new;
 	}
 
 	public static function booking_column_value( string $column, int $post_id ): void {
 		switch ( $column ) {
-			case 'yb_image':
-				$class_id = (int) get_post_meta( $post_id, '_yb_class_id', true );
+			case 'clasbowi_image':
+				$class_id = (int) get_post_meta( $post_id, '_clasbowi_class_id', true );
 				if ( $class_id ) {
 					self::render_class_image_column( $class_id );
 				} else {
 					echo '<span class="yb-class-list__no-image" aria-hidden="true"></span>';
 				}
 				break;
-			case 'yb_class':
-				$class_id = (int) get_post_meta( $post_id, '_yb_class_id', true );
+			case 'clasbowi_class':
+				$class_id = (int) get_post_meta( $post_id, '_clasbowi_class_id', true );
 				if ( $class_id ) {
 					echo '<a href="' . esc_url( get_edit_post_link( $class_id ) ) . '">' . esc_html( get_the_title( $class_id ) ) . '</a>';
 				}
 				break;
-			case 'yb_date':
-				$date = (string) get_post_meta( $post_id, '_yb_class_date', true );
+			case 'clasbowi_date':
+				$date = (string) get_post_meta( $post_id, '_clasbowi_class_date', true );
 				echo esc_html( Helpers::format_date( $date ) );
 				break;
-			case 'yb_customer':
-				$name  = (string) get_post_meta( $post_id, '_yb_customer_name', true );
-				$email = (string) get_post_meta( $post_id, '_yb_customer_email', true );
+			case 'clasbowi_customer':
+				$name  = (string) get_post_meta( $post_id, '_clasbowi_customer_name', true );
+				$email = (string) get_post_meta( $post_id, '_clasbowi_customer_email', true );
 				echo esc_html( $name );
 				if ( $email ) {
 					echo '<br><a href="mailto:' . esc_attr( $email ) . '">' . esc_html( $email ) . '</a>';
 				}
 				break;
-			case 'yb_seats':
-				echo esc_html( (string) (int) get_post_meta( $post_id, '_yb_seats', true ) );
+			case 'clasbowi_seats':
+				echo esc_html( (string) (int) get_post_meta( $post_id, '_clasbowi_seats', true ) );
 				break;
-			case 'yb_amount':
-				$pence = (int) get_post_meta( $post_id, '_yb_amount_total', true );
+			case 'clasbowi_amount':
+				$pence = (int) get_post_meta( $post_id, '_clasbowi_amount_total', true );
 				echo esc_html( Helpers::format_price( $pence / 100 ) );
 				break;
-			case 'yb_status':
-				$status = (string) get_post_meta( $post_id, '_yb_status', true );
+			case 'clasbowi_status':
+				$status = (string) get_post_meta( $post_id, '_clasbowi_status', true );
 				$colors = [
 					'paid'     => '#0a7e1a',
 					'pending'  => '#a86b00',
@@ -282,13 +282,13 @@ abstract class CPT {
 				$color = $colors[ $status ] ?? '#444';
 				echo '<strong style="color:' . esc_attr( $color ) . ';">' . esc_html( ucfirst( $status ?: 'unknown' ) ) . '</strong>';
 				break;
-			case 'yb_stripe':
-				$id = (string) get_post_meta( $post_id, '_yb_stripe_session_id', true );
+			case 'clasbowi_stripe':
+				$id = (string) get_post_meta( $post_id, '_clasbowi_stripe_session_id', true );
 				if ( $id ) {
 					echo '<code style="font-size:11px;">' . esc_html( substr( $id, 0, 18 ) . '…' ) . '</code>';
 				}
 				break;
-			case 'yb_created':
+			case 'clasbowi_created':
 				$post = get_post( $post_id );
 				if ( $post ) {
 					echo esc_html( get_the_date( 'Y-m-d H:i', $post ) );
@@ -298,9 +298,9 @@ abstract class CPT {
 	}
 
 	public static function booking_sortable( array $columns ): array {
-		$columns['yb_date']    = '_yb_class_date';
-		$columns['yb_status']  = '_yb_status';
-		$columns['yb_created'] = 'date';
+		$columns['clasbowi_date']    = '_clasbowi_class_date';
+		$columns['clasbowi_status']  = '_clasbowi_status';
+		$columns['clasbowi_created'] = 'date';
 		return $columns;
 	}
 }

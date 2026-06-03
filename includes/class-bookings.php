@@ -2,10 +2,10 @@
 /**
  * Booking lifecycle: capacity calculation, soft-hold creation, status transitions, cron cleanup.
  *
- * @package IORoot_Yoga_Bookings
+ * @package IOROOT_STRIPE_BOOKINGS
  */
 
-namespace IORoot_Yoga_Bookings;
+namespace IOROOT_STRIPE_BOOKINGS;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -16,7 +16,7 @@ abstract class Bookings {
 	public const STATUS_EXPIRED  = 'expired';
 	public const STATUS_REFUNDED = 'refunded';
 
-	public const CRON_HOOK = 'yoga_bookings_expire_holds';
+	public const CRON_HOOK = 'clasbowi_expire_holds';
 
 	public static function init(): void {
 		add_filter( 'cron_schedules', [ self::class, 'register_cron_interval' ] );
@@ -25,8 +25,8 @@ abstract class Bookings {
 	}
 
 	public static function register_cron_interval( array $schedules ): array {
-		if ( ! isset( $schedules['yb_five_minutes'] ) ) {
-			$schedules['yb_five_minutes'] = [
+		if ( ! isset( $schedules['clasbowi_five_minutes'] ) ) {
+			$schedules['clasbowi_five_minutes'] = [
 				'interval' => 5 * MINUTE_IN_SECONDS,
 				'display'  => __( 'Every 5 minutes (Class Bookings with Stripe)', 'class-bookings-with-stripe' ),
 			];
@@ -36,13 +36,13 @@ abstract class Bookings {
 
 	public static function maybe_schedule_cron(): void {
 		if ( ! wp_next_scheduled( self::CRON_HOOK ) ) {
-			wp_schedule_event( time() + 60, 'yb_five_minutes', self::CRON_HOOK );
+			wp_schedule_event( time() + 60, 'clasbowi_five_minutes', self::CRON_HOOK );
 		}
 	}
 
 	public static function on_activate(): void {
 		if ( ! wp_next_scheduled( self::CRON_HOOK ) ) {
-			wp_schedule_event( time() + 60, 'yb_five_minutes', self::CRON_HOOK );
+			wp_schedule_event( time() + 60, 'clasbowi_five_minutes', self::CRON_HOOK );
 		}
 	}
 
@@ -70,27 +70,27 @@ abstract class Bookings {
 			'meta_query'     => [
 				'relation' => 'AND',
 				[
-					'key'   => '_yb_class_id',
+					'key'   => '_clasbowi_class_id',
 					'value' => $class_id,
 				],
 				[
-					'key'   => '_yb_class_date',
+					'key'   => '_clasbowi_class_date',
 					'value' => $class_date,
 				],
 				[
 					'relation' => 'OR',
 					[
-						'key'   => '_yb_status',
+						'key'   => '_clasbowi_status',
 						'value' => self::STATUS_PAID,
 					],
 					[
 						'relation' => 'AND',
 						[
-							'key'   => '_yb_status',
+							'key'   => '_clasbowi_status',
 							'value' => self::STATUS_PENDING,
 						],
 						[
-							'key'     => '_yb_expires_at',
+							'key'     => '_clasbowi_expires_at',
 							'value'   => $now_gmt,
 							'compare' => '>',
 							'type'    => 'DATETIME',
@@ -102,7 +102,7 @@ abstract class Bookings {
 
 		$total = 0;
 		foreach ( $query->posts as $post_id ) {
-			$total += (int) get_post_meta( (int) $post_id, '_yb_seats', true );
+			$total += (int) get_post_meta( (int) $post_id, '_clasbowi_seats', true );
 		}
 		return $total;
 	}
@@ -278,26 +278,26 @@ abstract class Bookings {
 			return $post_id;
 		}
 
-		$expires_at = gmdate( 'Y-m-d H:i:s', time() + IOROOT_YB_HOLD_SECONDS );
+		$expires_at = gmdate( 'Y-m-d H:i:s', time() + CLASBOWI_HOLD_SECONDS );
 
-		update_post_meta( $post_id, '_yb_class_id', $class_id );
-		update_post_meta( $post_id, '_yb_class_date', $class_date );
-		update_post_meta( $post_id, '_yb_seats', $seats );
-		update_post_meta( $post_id, '_yb_customer_name', $name );
-		update_post_meta( $post_id, '_yb_customer_email', $email );
-		update_post_meta( $post_id, '_yb_amount_total', $amount_pence );
-		update_post_meta( $post_id, '_yb_waiver_accepted', $waiver_accepted );
-		update_post_meta( $post_id, '_yb_mailchimp_opt_in', $mailchimp_opt_in );
-		update_post_meta( $post_id, '_yb_extra_fields', wp_json_encode( $extra_fields ) );
-		update_post_meta( $post_id, '_yb_status', self::STATUS_PENDING );
-		update_post_meta( $post_id, '_yb_expires_at', $expires_at );
-		update_post_meta( $post_id, '_yb_created_gmt', gmdate( 'Y-m-d H:i:s' ) );
+		update_post_meta( $post_id, '_clasbowi_class_id', $class_id );
+		update_post_meta( $post_id, '_clasbowi_class_date', $class_date );
+		update_post_meta( $post_id, '_clasbowi_seats', $seats );
+		update_post_meta( $post_id, '_clasbowi_customer_name', $name );
+		update_post_meta( $post_id, '_clasbowi_customer_email', $email );
+		update_post_meta( $post_id, '_clasbowi_amount_total', $amount_pence );
+		update_post_meta( $post_id, '_clasbowi_waiver_accepted', $waiver_accepted );
+		update_post_meta( $post_id, '_clasbowi_mailchimp_opt_in', $mailchimp_opt_in );
+		update_post_meta( $post_id, '_clasbowi_extra_fields', wp_json_encode( $extra_fields ) );
+		update_post_meta( $post_id, '_clasbowi_status', self::STATUS_PENDING );
+		update_post_meta( $post_id, '_clasbowi_expires_at', $expires_at );
+		update_post_meta( $post_id, '_clasbowi_created_gmt', gmdate( 'Y-m-d H:i:s' ) );
 
 		return (int) $post_id;
 	}
 
 	public static function attach_stripe_session( int $booking_id, string $session_id ): void {
-		update_post_meta( $booking_id, '_yb_stripe_session_id', $session_id );
+		update_post_meta( $booking_id, '_clasbowi_stripe_session_id', $session_id );
 	}
 
 	public static function find_by_stripe_session( string $session_id ): ?int {
@@ -313,7 +313,7 @@ abstract class Bookings {
 			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 			'meta_query'     => [
 				[
-					'key'   => '_yb_stripe_session_id',
+					'key'   => '_clasbowi_stripe_session_id',
 					'value' => $session_id,
 				],
 			],
@@ -325,28 +325,28 @@ abstract class Bookings {
 	}
 
 	public static function set_status( int $booking_id, string $status ): void {
-		update_post_meta( $booking_id, '_yb_status', $status );
-		update_post_meta( $booking_id, '_yb_status_updated_gmt', gmdate( 'Y-m-d H:i:s' ) );
+		update_post_meta( $booking_id, '_clasbowi_status', $status );
+		update_post_meta( $booking_id, '_clasbowi_status_updated_gmt', gmdate( 'Y-m-d H:i:s' ) );
 	}
 
 	public static function get_status( int $booking_id ): string {
-		return (string) get_post_meta( $booking_id, '_yb_status', true );
+		return (string) get_post_meta( $booking_id, '_clasbowi_status', true );
 	}
 
 	public static function get_meta( int $booking_id ): array {
 		return [
-			'class_id'           => (int) get_post_meta( $booking_id, '_yb_class_id', true ),
-			'class_date'         => (string) get_post_meta( $booking_id, '_yb_class_date', true ),
-			'seats'              => (int) get_post_meta( $booking_id, '_yb_seats', true ),
-			'customer_name'      => (string) get_post_meta( $booking_id, '_yb_customer_name', true ),
-			'customer_email'     => (string) get_post_meta( $booking_id, '_yb_customer_email', true ),
-			'amount_total_pence' => (int) get_post_meta( $booking_id, '_yb_amount_total', true ),
-			'waiver_accepted'    => (int) get_post_meta( $booking_id, '_yb_waiver_accepted', true ),
-			'mailchimp_opt_in'   => (int) get_post_meta( $booking_id, '_yb_mailchimp_opt_in', true ),
-			'extra_fields_json'  => (string) get_post_meta( $booking_id, '_yb_extra_fields', true ),
-			'status'             => (string) get_post_meta( $booking_id, '_yb_status', true ),
-			'stripe_session_id'  => (string) get_post_meta( $booking_id, '_yb_stripe_session_id', true ),
-			'stripe_payment_intent' => (string) get_post_meta( $booking_id, '_yb_stripe_payment_intent', true ),
+			'class_id'           => (int) get_post_meta( $booking_id, '_clasbowi_class_id', true ),
+			'class_date'         => (string) get_post_meta( $booking_id, '_clasbowi_class_date', true ),
+			'seats'              => (int) get_post_meta( $booking_id, '_clasbowi_seats', true ),
+			'customer_name'      => (string) get_post_meta( $booking_id, '_clasbowi_customer_name', true ),
+			'customer_email'     => (string) get_post_meta( $booking_id, '_clasbowi_customer_email', true ),
+			'amount_total_pence' => (int) get_post_meta( $booking_id, '_clasbowi_amount_total', true ),
+			'waiver_accepted'    => (int) get_post_meta( $booking_id, '_clasbowi_waiver_accepted', true ),
+			'mailchimp_opt_in'   => (int) get_post_meta( $booking_id, '_clasbowi_mailchimp_opt_in', true ),
+			'extra_fields_json'  => (string) get_post_meta( $booking_id, '_clasbowi_extra_fields', true ),
+			'status'             => (string) get_post_meta( $booking_id, '_clasbowi_status', true ),
+			'stripe_session_id'  => (string) get_post_meta( $booking_id, '_clasbowi_stripe_session_id', true ),
+			'stripe_payment_intent' => (string) get_post_meta( $booking_id, '_clasbowi_stripe_payment_intent', true ),
 		];
 	}
 
@@ -366,11 +366,11 @@ abstract class Bookings {
 			'meta_query'     => [
 				'relation' => 'AND',
 				[
-					'key'   => '_yb_status',
+					'key'   => '_clasbowi_status',
 					'value' => self::STATUS_PENDING,
 				],
 				[
-					'key'     => '_yb_expires_at',
+					'key'     => '_clasbowi_expires_at',
 					'value'   => $now_gmt,
 					'compare' => '<',
 					'type'    => 'DATETIME',
