@@ -42,9 +42,10 @@ abstract class REST {
 		register_rest_route( CLASBOWI_REST_NS, '/booking-status', [
 			'methods'             => 'GET',
 			'callback'            => [ self::class, 'booking_status' ],
-			'permission_callback' => '__return_true',
+			'permission_callback' => [ self::class, 'can_view_booking_status' ],
 			'args'                => [
 				'session' => [ 'required' => true, 'sanitize_callback' => 'sanitize_text_field' ],
+				'token'   => [ 'required' => false, 'sanitize_callback' => 'sanitize_text_field' ],
 			],
 		] );
 
@@ -148,8 +149,9 @@ abstract class REST {
 			return self::error( 500, 'internal', __( 'Could not start a booking. Please try again.', 'class-bookings-with-stripe' ) );
 		}
 
-		$success_url = Result_Pages::success_url( '{CHECKOUT_SESSION_ID}', $origin );
-		$cancel_url  = Result_Pages::cancel_url( $origin );
+		$status_token = (string) get_post_meta( $booking_id, '_clasbowi_status_token', true );
+		$success_url  = Result_Pages::success_url( '{CHECKOUT_SESSION_ID}', $origin, $status_token );
+		$cancel_url   = Result_Pages::cancel_url( $origin );
 
 		try {
 			$session = Stripe_Service::create_checkout_session(
@@ -328,7 +330,29 @@ abstract class REST {
 	}
 
 	/**
-	 * GET /booking-status?session=cs_...
+	 * Authorize booking-status: site admins, or holder of the per-booking status token.
+	 */
+	public static function can_view_booking_status( \WP_REST_Request $request ): bool {
+		if ( current_user_can( 'manage_options' ) ) {
+			return true;
+		}
+
+		$session_id = (string) $request->get_param( 'session' );
+		$token      = (string) $request->get_param( 'token' );
+		if ( '' === $session_id || '' === $token ) {
+			return false;
+		}
+
+		$booking_id = Bookings::find_by_stripe_session( $session_id );
+		if ( ! $booking_id ) {
+			return false;
+		}
+
+		return Bookings::verify_status_token( $booking_id, $token );
+	}
+
+	/**
+	 * GET /booking-status?session=cs_...&token=...
 	 */
 	public static function booking_status( \WP_REST_Request $request ) {
 		$session_id = (string) $request['session'];

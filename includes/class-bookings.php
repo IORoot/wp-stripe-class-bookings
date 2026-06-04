@@ -292,8 +292,17 @@ abstract class Bookings {
 		update_post_meta( $post_id, '_clasbowi_status', self::STATUS_PENDING );
 		update_post_meta( $post_id, '_clasbowi_expires_at', $expires_at );
 		update_post_meta( $post_id, '_clasbowi_created_gmt', gmdate( 'Y-m-d H:i:s' ) );
+		update_post_meta( $post_id, '_clasbowi_status_token', wp_generate_password( 32, false, false ) );
 
 		return (int) $post_id;
+	}
+
+	public static function verify_status_token( int $booking_id, string $token ): bool {
+		if ( '' === $token ) {
+			return false;
+		}
+		$stored = (string) get_post_meta( $booking_id, '_clasbowi_status_token', true );
+		return '' !== $stored && hash_equals( $stored, $token );
 	}
 
 	public static function attach_stripe_session( int $booking_id, string $session_id ): void {

@@ -272,7 +272,8 @@
 	function attachStatusPolling() {
 		document.querySelectorAll( '.yb-status[data-yb-session]' ).forEach( function ( el ) {
 			const sessionId = el.dataset.ybSession;
-			if ( ! sessionId ) return;
+			const statusToken = el.dataset.ybToken || '';
+			if ( ! sessionId || ! statusToken ) return;
 			if ( ! el.classList.contains( 'yb-status--pending' ) ) return;
 
 			let attempts = 0;
@@ -280,7 +281,7 @@
 			const tick = async function () {
 				attempts++;
 				try {
-					const url = cfg.rest_url + 'booking-status?session=' + encodeURIComponent( sessionId ) + '&_t=' + Date.now();
+					const url = cfg.rest_url + 'booking-status?session=' + encodeURIComponent( sessionId ) + '&token=' + encodeURIComponent( statusToken ) + '&_t=' + Date.now();
 					const res = await fetch( url, {
 						credentials: 'same-origin',
 						cache: 'no-store',

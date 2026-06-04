@@ -118,6 +118,7 @@ abstract class Shortcode {
 
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		$session_id = isset( $_GET['booking'] ) ? sanitize_text_field( wp_unslash( (string) $_GET['booking'] ) ) : '';
+		$status_token = isset( $_GET['token'] ) ? sanitize_text_field( wp_unslash( (string) $_GET['token'] ) ) : '';
 		$reason     = isset( $_GET['reason'] ) ? sanitize_key( wp_unslash( (string) $_GET['reason'] ) ) : '';
 		$msg        = isset( $_GET['msg'] ) ? sanitize_text_field( wp_unslash( (string) $_GET['msg'] ) ) : '';
 		$origin_raw = isset( $_GET['from'] ) ? sanitize_text_field( wp_unslash( (string) $_GET['from'] ) ) : '';
@@ -132,7 +133,11 @@ abstract class Shortcode {
 		$booking = null;
 		if ( 'success' === $type && $session_id ) {
 			$booking_id = Bookings::find_by_stripe_session( $session_id );
-			if ( $booking_id ) {
+			$can_view   = $booking_id && (
+				current_user_can( 'manage_options' )
+				|| Bookings::verify_status_token( $booking_id, $status_token )
+			);
+			if ( $can_view ) {
 				$meta       = Bookings::get_meta( $booking_id );
 				$class_data = Helpers::get_class_data( $meta['class_id'] );
 				$booking    = [
@@ -154,9 +159,10 @@ abstract class Shortcode {
 		$template_args = apply_filters(
 			'clasbowi_status_template_args',
 			[
-				'type'       => $type,
-				'session_id' => $session_id,
-				'reason'     => $reason,
+				'type'         => $type,
+				'session_id'   => $session_id,
+				'status_token' => $status_token,
+				'reason'       => $reason,
 				'msg'        => $msg,
 				'origin'     => $origin,
 				'booking'    => $booking,
@@ -165,9 +171,10 @@ abstract class Shortcode {
 			$atts
 		);
 
-		$type       = (string) ( $template_args['type'] ?? $type );
-		$session_id = (string) ( $template_args['session_id'] ?? $session_id );
-		$reason     = (string) ( $template_args['reason'] ?? $reason );
+		$type         = (string) ( $template_args['type'] ?? $type );
+		$session_id   = (string) ( $template_args['session_id'] ?? $session_id );
+		$status_token = (string) ( $template_args['status_token'] ?? $status_token );
+		$reason       = (string) ( $template_args['reason'] ?? $reason );
 		$msg        = (string) ( $template_args['msg'] ?? $msg );
 		$origin     = (string) ( $template_args['origin'] ?? $origin );
 		$booking    = $template_args['booking'] ?? $booking;

@@ -4,6 +4,7 @@
  *
  * @var string                                                    $type
  * @var string                                                    $session_id
+ * @var string                                                    $status_token
  * @var string                                                    $reason
  * @var string                                                    $msg
  * @var string                                                    $origin
@@ -34,7 +35,7 @@ do_action( 'clasbowi_status_template_start', $type, $booking );
 
 <?php if ( 'success' === $type ) : ?>
 
-	<div class="yb-status yb-status--layout-modern yb-status--<?php echo esc_attr( $booking['status'] ?? 'pending' ); ?>" data-yb-session="<?php echo esc_attr( $session_id ); ?>">
+	<div class="yb-status yb-status--layout-modern yb-status--<?php echo esc_attr( $booking['status'] ?? 'pending' ); ?>" data-yb-session="<?php echo esc_attr( $session_id ); ?>" data-yb-token="<?php echo esc_attr( $status_token ); ?>">
 		<?php if ( $booking && 'paid' === $booking['status'] ) : ?>
 			<?php do_action( 'clasbowi_status_before_success_paid', $booking ); ?>
 			<h2 class="yb-status__title"><?php esc_html_e( 'Booking confirmed', 'class-bookings-with-stripe' ); ?></h2>

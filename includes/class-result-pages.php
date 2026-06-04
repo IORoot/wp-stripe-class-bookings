@@ -110,16 +110,20 @@ abstract class Result_Pages {
 		return $page ? (int) $page->ID : 0;
 	}
 
-	public static function success_url( string $session_token = '{CHECKOUT_SESSION_ID}', string $origin = '' ): string {
+	public static function success_url( string $session_token = '{CHECKOUT_SESSION_ID}', string $origin = '', string $status_token = '' ): string {
 		$id   = self::success_page_id();
 		$base = $id ? get_permalink( $id ) : home_url( '/' );
 
-		// Build with origin first so add_query_arg can url-encode it safely, then append
+		// Build with origin/token first so add_query_arg can url-encode safely, then append
 		// the Stripe placeholder literally so Stripe can substitute {CHECKOUT_SESSION_ID}.
-		$url = $base;
+		$query_args = [];
 		if ( $origin ) {
-			$url = add_query_arg( [ 'from' => $origin ], $url );
+			$query_args['from'] = $origin;
 		}
+		if ( '' !== $status_token ) {
+			$query_args['token'] = $status_token;
+		}
+		$url = $query_args ? add_query_arg( $query_args, $base ) : $base;
 		$url .= ( false === strpos( $url, '?' ) ? '?' : '&' ) . 'booking=' . $session_token;
 		return $url;
 	}

@@ -1313,7 +1313,7 @@ abstract class ACF_Fields {
 		<tbody>
 			<tr><td>POST</td><td><code>/checkout</code></td><td><?php esc_html_e( 'Create session (browser / frontend).', 'class-bookings-with-stripe' ); ?></td></tr>
 			<tr><td>POST</td><td><code>/stripe-webhook</code></td><td><?php esc_html_e( 'Stripe-signed events only.', 'class-bookings-with-stripe' ); ?></td></tr>
-			<tr><td>GET</td><td><code>/booking-status</code></td><td><?php esc_html_e( 'Poll booking state after redirect (optional).', 'class-bookings-with-stripe' ); ?></td></tr>
+			<tr><td>GET</td><td><code>/booking-status</code></td><td><?php esc_html_e( 'Poll booking state after redirect. Requires session ID and the per-booking status token from the success URL (or manage_options).', 'class-bookings-with-stripe' ); ?></td></tr>
 		</tbody>
 	</table>
 	<p class="clasbowi-doc__note"><?php esc_html_e( 'Full base URL (copy-friendly):', 'class-bookings-with-stripe' ); ?></p>
