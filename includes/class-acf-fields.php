@@ -136,13 +136,13 @@ abstract class ACF_Fields {
 		wp_enqueue_style( 'dashicons' );
 		wp_enqueue_style(
 			'clasbowi-admin-settings',
-			CLASBOWI_URL . 'assets/yoga-booking-admin-settings.css',
+			CLASBOWI_URL . 'assets/cbfs-booking-admin-settings.css',
 			[],
 			CLASBOWI_VERSION
 		);
 		wp_enqueue_script(
 			'clasbowi-admin-settings',
-			CLASBOWI_URL . 'assets/yoga-booking-admin-settings.js',
+			CLASBOWI_URL . 'assets/cbfs-booking-admin-settings.js',
 			[],
 			CLASBOWI_VERSION,
 			true
@@ -173,20 +173,20 @@ abstract class ACF_Fields {
 		wp_enqueue_style( 'dashicons' );
 		wp_enqueue_style(
 			'clasbowi-admin-settings',
-			CLASBOWI_URL . 'assets/yoga-booking-admin-settings.css',
+			CLASBOWI_URL . 'assets/cbfs-booking-admin-settings.css',
 			[],
 			CLASBOWI_VERSION
 		);
 		wp_enqueue_script(
 			'clasbowi-cancelled-dates',
-			CLASBOWI_URL . 'assets/yoga-booking-cancelled-dates.js',
+			CLASBOWI_URL . 'assets/cbfs-booking-cancelled-dates.js',
 			[],
 			CLASBOWI_VERSION,
 			true
 		);
 		wp_enqueue_script(
 			'clasbowi-class-metabox',
-			CLASBOWI_URL . 'assets/yoga-booking-class-metabox.js',
+			CLASBOWI_URL . 'assets/cbfs-booking-class-metabox.js',
 			[ 'jquery' ],
 			CLASBOWI_VERSION,
 			true
@@ -217,7 +217,7 @@ abstract class ACF_Fields {
 		wp_enqueue_style( 'dashicons' );
 		wp_enqueue_style(
 			'clasbowi-admin-settings',
-			CLASBOWI_URL . 'assets/yoga-booking-admin-settings.css',
+			CLASBOWI_URL . 'assets/cbfs-booking-admin-settings.css',
 			[],
 			CLASBOWI_VERSION
 		);
@@ -1173,18 +1173,18 @@ abstract class ACF_Fields {
 
 		ob_start();
 		?>
-		<div class="yb-admin-summary yb-admin-summary--modern">
-			<header class="yb-admin-summary__hero">
-				<div class="yb-admin-summary__hero-main">
-					<p class="yb-admin-summary__kicker"><?php esc_html_e( 'Booking reference', 'class-bookings-with-stripe' ); ?></p>
-					<p class="yb-admin-summary__id">#<?php echo esc_html( (string) (int) $post_id ); ?></p>
-				</div><span class="yb-admin-summary__status yb-admin-summary__status--<?php echo esc_attr( $status_slug ); ?>"><?php echo esc_html( $status_label ); ?></span>
+		<div class="cbfs-admin-summary cbfs-admin-summary--modern">
+			<header class="cbfs-admin-summary__hero">
+				<div class="cbfs-admin-summary__hero-main">
+					<p class="cbfs-admin-summary__kicker"><?php esc_html_e( 'Booking reference', 'class-bookings-with-stripe' ); ?></p>
+					<p class="cbfs-admin-summary__id">#<?php echo esc_html( (string) (int) $post_id ); ?></p>
+				</div><span class="cbfs-admin-summary__status cbfs-admin-summary__status--<?php echo esc_attr( $status_slug ); ?>"><?php echo esc_html( $status_label ); ?></span>
 			</header>
 
-			<div class="yb-admin-summary__kv">
-				<div class="yb-admin-summary__kv-row">
-					<span class="yb-admin-summary__kv-label"><?php esc_html_e( 'Class', 'class-bookings-with-stripe' ); ?></span>
-					<div class="yb-admin-summary__kv-value">
+			<div class="cbfs-admin-summary__kv">
+				<div class="cbfs-admin-summary__kv-row">
+					<span class="cbfs-admin-summary__kv-label"><?php esc_html_e( 'Class', 'class-bookings-with-stripe' ); ?></span>
+					<div class="cbfs-admin-summary__kv-value">
 						<?php if ( $class_edit ) : ?>
 							<a href="<?php echo esc_url( $class_edit ); ?>"><?php echo esc_html( (string) $class_title ); ?></a>
 						<?php else : ?>
@@ -1192,9 +1192,9 @@ abstract class ACF_Fields {
 						<?php endif; ?>
 					</div>
 				</div>
-				<div class="yb-admin-summary__kv-row">
-					<span class="yb-admin-summary__kv-label"><?php esc_html_e( 'When', 'class-bookings-with-stripe' ); ?></span>
-					<div class="yb-admin-summary__kv-value">
+				<div class="cbfs-admin-summary__kv-row">
+					<span class="cbfs-admin-summary__kv-label"><?php esc_html_e( 'When', 'class-bookings-with-stripe' ); ?></span>
+					<div class="cbfs-admin-summary__kv-value">
 						<?php
 						$date_fmt = Helpers::format_date( (string) $meta['class_date'] );
 						$time_fmt = ( $class_data && ! empty( $class_data['start_time'] ) )
@@ -1216,26 +1216,26 @@ abstract class ACF_Fields {
 					</div>
 				</div>
 				<?php if ( $class_data && ! empty( $class_data['location'] ) ) : ?>
-					<div class="yb-admin-summary__kv-row">
-						<span class="yb-admin-summary__kv-label"><?php esc_html_e( 'Where', 'class-bookings-with-stripe' ); ?></span>
-						<div class="yb-admin-summary__kv-value"><?php echo esc_html( (string) $class_data['location'] ); ?></div>
+					<div class="cbfs-admin-summary__kv-row">
+						<span class="cbfs-admin-summary__kv-label"><?php esc_html_e( 'Where', 'class-bookings-with-stripe' ); ?></span>
+						<div class="cbfs-admin-summary__kv-value"><?php echo esc_html( (string) $class_data['location'] ); ?></div>
 					</div>
 				<?php endif; ?>
-				<div class="yb-admin-summary__kv-row">
-					<span class="yb-admin-summary__kv-label"><?php esc_html_e( 'Seats', 'class-bookings-with-stripe' ); ?></span>
-					<div class="yb-admin-summary__kv-value"><?php echo esc_html( (string) (int) $meta['seats'] ); ?></div>
+				<div class="cbfs-admin-summary__kv-row">
+					<span class="cbfs-admin-summary__kv-label"><?php esc_html_e( 'Seats', 'class-bookings-with-stripe' ); ?></span>
+					<div class="cbfs-admin-summary__kv-value"><?php echo esc_html( (string) (int) $meta['seats'] ); ?></div>
 				</div>
-				<div class="yb-admin-summary__kv-row">
-					<span class="yb-admin-summary__kv-label"><?php esc_html_e( 'Total', 'class-bookings-with-stripe' ); ?></span>
-					<div class="yb-admin-summary__kv-value yb-admin-summary__amount"><?php echo esc_html( Helpers::format_price( ( (int) $meta['amount_total_pence'] ) / 100 ) ); ?></div>
+				<div class="cbfs-admin-summary__kv-row">
+					<span class="cbfs-admin-summary__kv-label"><?php esc_html_e( 'Total', 'class-bookings-with-stripe' ); ?></span>
+					<div class="cbfs-admin-summary__kv-value cbfs-admin-summary__amount"><?php echo esc_html( Helpers::format_price( ( (int) $meta['amount_total_pence'] ) / 100 ) ); ?></div>
 				</div>
-				<div class="yb-admin-summary__kv-row">
-					<span class="yb-admin-summary__kv-label"><?php esc_html_e( 'Customer', 'class-bookings-with-stripe' ); ?></span>
-					<div class="yb-admin-summary__kv-value"><?php echo esc_html( (string) $meta['customer_name'] ); ?></div>
+				<div class="cbfs-admin-summary__kv-row">
+					<span class="cbfs-admin-summary__kv-label"><?php esc_html_e( 'Customer', 'class-bookings-with-stripe' ); ?></span>
+					<div class="cbfs-admin-summary__kv-value"><?php echo esc_html( (string) $meta['customer_name'] ); ?></div>
 				</div>
-				<div class="yb-admin-summary__kv-row">
-					<span class="yb-admin-summary__kv-label"><?php esc_html_e( 'Email', 'class-bookings-with-stripe' ); ?></span>
-					<div class="yb-admin-summary__kv-value">
+				<div class="cbfs-admin-summary__kv-row">
+					<span class="cbfs-admin-summary__kv-label"><?php esc_html_e( 'Email', 'class-bookings-with-stripe' ); ?></span>
+					<div class="cbfs-admin-summary__kv-value">
 						<?php if ( $mailto ) : ?>
 							<a href="<?php echo esc_url( $mailto ); ?>"><?php echo esc_html( (string) $meta['customer_email'] ); ?></a>
 						<?php else : ?>
@@ -1243,25 +1243,25 @@ abstract class ACF_Fields {
 						<?php endif; ?>
 					</div>
 				</div>
-				<div class="yb-admin-summary__kv-row">
-					<span class="yb-admin-summary__kv-label"><?php esc_html_e( 'Waiver', 'class-bookings-with-stripe' ); ?></span>
-					<div class="yb-admin-summary__kv-value"><?php echo esc_html( ! empty( $meta['waiver_accepted'] ) ? __( 'Accepted', 'class-bookings-with-stripe' ) : __( 'Not recorded', 'class-bookings-with-stripe' ) ); ?></div>
+				<div class="cbfs-admin-summary__kv-row">
+					<span class="cbfs-admin-summary__kv-label"><?php esc_html_e( 'Waiver', 'class-bookings-with-stripe' ); ?></span>
+					<div class="cbfs-admin-summary__kv-value"><?php echo esc_html( ! empty( $meta['waiver_accepted'] ) ? __( 'Accepted', 'class-bookings-with-stripe' ) : __( 'Not recorded', 'class-bookings-with-stripe' ) ); ?></div>
 				</div>
-				<div class="yb-admin-summary__kv-row">
-					<span class="yb-admin-summary__kv-label"><?php esc_html_e( 'Mailing list', 'class-bookings-with-stripe' ); ?></span>
-					<div class="yb-admin-summary__kv-value"><?php echo esc_html( ! empty( $meta['mailchimp_opt_in'] ) ? __( 'Opted in', 'class-bookings-with-stripe' ) : __( 'No', 'class-bookings-with-stripe' ) ); ?></div>
+				<div class="cbfs-admin-summary__kv-row">
+					<span class="cbfs-admin-summary__kv-label"><?php esc_html_e( 'Mailing list', 'class-bookings-with-stripe' ); ?></span>
+					<div class="cbfs-admin-summary__kv-value"><?php echo esc_html( ! empty( $meta['mailchimp_opt_in'] ) ? __( 'Opted in', 'class-bookings-with-stripe' ) : __( 'No', 'class-bookings-with-stripe' ) ); ?></div>
 				</div>
 			</div>
 
-			<div class="yb-admin-summary__stripe">
-				<h4 class="yb-admin-summary__stripe-title"><?php esc_html_e( 'Stripe', 'class-bookings-with-stripe' ); ?></h4>
-				<div class="yb-admin-summary__mono-block">
-					<span class="yb-admin-summary__mono-label"><?php esc_html_e( 'Session', 'class-bookings-with-stripe' ); ?></span>
-					<code class="yb-admin-summary__code"><?php echo esc_html( (string) $meta['stripe_session_id'] ) ?: '—'; ?></code>
+			<div class="cbfs-admin-summary__stripe">
+				<h4 class="cbfs-admin-summary__stripe-title"><?php esc_html_e( 'Stripe', 'class-bookings-with-stripe' ); ?></h4>
+				<div class="cbfs-admin-summary__mono-block">
+					<span class="cbfs-admin-summary__mono-label"><?php esc_html_e( 'Session', 'class-bookings-with-stripe' ); ?></span>
+					<code class="cbfs-admin-summary__code"><?php echo esc_html( (string) $meta['stripe_session_id'] ) ?: '—'; ?></code>
 				</div>
-				<div class="yb-admin-summary__mono-block">
-					<span class="yb-admin-summary__mono-label"><?php esc_html_e( 'Payment intent', 'class-bookings-with-stripe' ); ?></span>
-					<code class="yb-admin-summary__code"><?php echo esc_html( (string) $meta['stripe_payment_intent'] ) ?: '—'; ?></code>
+				<div class="cbfs-admin-summary__mono-block">
+					<span class="cbfs-admin-summary__mono-label"><?php esc_html_e( 'Payment intent', 'class-bookings-with-stripe' ); ?></span>
+					<code class="cbfs-admin-summary__code"><?php echo esc_html( (string) $meta['stripe_payment_intent'] ) ?: '—'; ?></code>
 				</div>
 			</div>
 
@@ -1269,9 +1269,9 @@ abstract class ACF_Fields {
 			$extra_rows = Extra_Fields::display_rows( $class_id, (string) ( $meta['extra_fields_json'] ?? '' ) );
 			if ( ! empty( $extra_rows ) ) :
 				?>
-				<div class="yb-admin-summary__extras">
-					<h4 class="yb-admin-summary__extras-title"><?php esc_html_e( 'Additional fields', 'class-bookings-with-stripe' ); ?></h4>
-					<table class="yb-admin-summary__table">
+				<div class="cbfs-admin-summary__extras">
+					<h4 class="cbfs-admin-summary__extras-title"><?php esc_html_e( 'Additional fields', 'class-bookings-with-stripe' ); ?></h4>
+					<table class="cbfs-admin-summary__table">
 						<tbody>
 						<?php foreach ( $extra_rows as $row ) : ?>
 							<tr>
@@ -1345,31 +1345,56 @@ abstract class ACF_Fields {
 	}
 
 	private static function developer_templates_message(): string {
-		$filter_example = <<<'PHP'
+		$filter_layout = <<<'PHP'
 add_filter( 'clasbowi_template_path', function ( $path, $relative, $context ) {
 	if ( 'booking' === $context && 'booking-form.php' === $relative ) {
-		return get_stylesheet_directory() . '/stripe-bookings/booking-form.php';
+		return get_stylesheet_directory() . '/class-bookings-with-stripe/booking-form.php';
 	}
 	return $path;
 }, 10, 3 );
+PHP;
+		$filter_component = <<<'PHP'
+add_filter( 'clasbowi_component_path', function ( $path, $layout, $slug ) {
+	if ( 'booking-form' === $layout && 'email-field' === $slug ) {
+		return get_stylesheet_directory() . '/class-bookings-with-stripe/booking-form/email-field.php';
+	}
+	return $path;
+}, 10, 3 );
+PHP;
+		$layout_example = <<<'PHP'
+// booking-form.php — layout HTML with components embedded:
+<form class="cbfs-form__form">
+	<div class="cbfs-form__grid cbfs-form__grid--2">
+		<?php $view->render( 'name-field' ); ?>
+		<?php $view->render( 'email-field' ); ?>
+	</div>
+	<?php $view->render( 'date-field' ); ?>
+</form>
 PHP;
 
 		ob_start();
 		?>
 <div class="clasbowi-doc">
-	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Theme template overrides', 'class-bookings-with-stripe' ); ?></h3>
-	<p class="clasbowi-doc__p"><?php esc_html_e( 'Place copies under your active theme (or child theme). WordPress resolves these paths automatically before the plugin default.', 'class-bookings-with-stripe' ); ?></p>
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Component-based templates', 'class-bookings-with-stripe' ); ?></h3>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'Layout files contain the HTML structure. Components render a single field or content block only — place $view->render() calls where you want each piece in the layout.', 'class-bookings-with-stripe' ); ?></p>
 	<ul class="clasbowi-doc__ul">
-		<li><code>class-bookings-with-stripe/booking-form.php</code> — <?php esc_html_e( 'Booking form & Stripe button markup.', 'class-bookings-with-stripe' ); ?></li>
-		<li><code>class-bookings-with-stripe/booking-status.php</code> — <?php esc_html_e( 'Success / cancel / error screens.', 'class-bookings-with-stripe' ); ?></li>
-		<li><code>class-bookings-with-stripe/email-customer.php</code> — <?php esc_html_e( 'Customer email HTML wrapper.', 'class-bookings-with-stripe' ); ?></li>
-		<li><code>class-bookings-with-stripe/email-admin.php</code> — <?php esc_html_e( 'Admin email HTML wrapper.', 'class-bookings-with-stripe' ); ?></li>
+		<li><code>class-bookings-with-stripe/booking-form.php</code> — <?php esc_html_e( 'Form layout HTML (grid, card, form tags).', 'class-bookings-with-stripe' ); ?></li>
+		<li><code>class-bookings-with-stripe/booking-form/{slug}.php</code> — <?php esc_html_e( 'Components: name-field, email-field, submit-button, waiver, etc.', 'class-bookings-with-stripe' ); ?></li>
+		<li><code>class-bookings-with-stripe/booking-status.php</code> — <?php esc_html_e( 'Status layout HTML.', 'class-bookings-with-stripe' ); ?></li>
+		<li><code>class-bookings-with-stripe/booking-status/{slug}.php</code> — <?php esc_html_e( 'Status components: title, lede, details-list, hint, etc.', 'class-bookings-with-stripe' ); ?></li>
+		<li><code>class-bookings-with-stripe/assets/components/booking-form/{slug}.css</code> — <?php esc_html_e( 'Optional per-component CSS (auto-enqueued).', 'class-bookings-with-stripe' ); ?></li>
 	</ul>
-	<p class="clasbowi-doc__p"><?php esc_html_e( 'Alias folder name (same files):', 'class-bookings-with-stripe' ); ?> <code>class-bookings-with-stripe/</code></p>
+
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Layout example', 'class-bookings-with-stripe' ); ?></h3>
+	<pre class="clasbowi-doc__pre"><code><?php echo esc_html( $layout_example ); ?></code></pre>
 
 	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Filter: clasbowi_template_path', 'class-bookings-with-stripe' ); ?></h3>
-	<p class="clasbowi-doc__p"><?php esc_html_e( 'Arguments: $path (absolute), $relative (filename), $context (e.g. booking, status). Return a different absolute path to load your file.', 'class-bookings-with-stripe' ); ?></p>
-	<pre class="clasbowi-doc__pre"><code><?php echo esc_html( $filter_example ); ?></code></pre>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'Override the layout file path. Arguments: $path, $relative, $context (booking | status).', 'class-bookings-with-stripe' ); ?></p>
+	<pre class="clasbowi-doc__pre"><code><?php echo esc_html( $filter_layout ); ?></code></pre>
+
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Filter: clasbowi_component_path', 'class-bookings-with-stripe' ); ?></h3>
+	<p class="clasbowi-doc__p"><?php esc_html_e( 'Override a single component partial. Arguments: $path, $layout (booking-form | booking-status), $slug.', 'class-bookings-with-stripe' ); ?></p>
+	<pre class="clasbowi-doc__pre"><code><?php echo esc_html( $filter_component ); ?></code></pre>
 </div>
 		<?php
 		return (string) ob_get_clean();
@@ -1389,8 +1414,8 @@ add_filter( 'clasbowi_booking_labels', function ( $labels, $class_data, $dates )
 }, 10, 3 );
 PHP;
 		$ex_action = <<<'PHP'
-add_action( 'clasbowi_booking_form_bottom', function ( $class_data, $dates ) {
-	echo '<input type="hidden" name="campaign" value="spring" />';
+add_action( 'clasbowi_booking_template_start', function ( $class_data, $dates ) {
+	// Runs once before the form layout renders.
 }, 10, 2 );
 PHP;
 
@@ -1407,6 +1432,8 @@ PHP;
 			<tr><td><code>clasbowi_status_html</code></td><td><?php esc_html_e( 'Replace or wrap status page HTML.', 'class-bookings-with-stripe' ); ?></td></tr>
 			<tr><td><code>clasbowi_booking_labels</code></td><td><?php esc_html_e( 'Change button copy, hints, field labels (3rd param: $dates).', 'class-bookings-with-stripe' ); ?></td></tr>
 			<tr><td><code>clasbowi_booking_title</code></td><td><?php esc_html_e( 'Filter heading text; receives title string + $class_data.', 'class-bookings-with-stripe' ); ?></td></tr>
+			<tr><td><code>clasbowi_component_path</code></td><td><?php esc_html_e( 'Point a component slug at a custom PHP partial.', 'class-bookings-with-stripe' ); ?></td></tr>
+			<tr><td><code>clasbowi_template_path</code></td><td><?php esc_html_e( 'Override layout template path (booking-form.php, booking-status.php).', 'class-bookings-with-stripe' ); ?></td></tr>
 		</tbody>
 	</table>
 
@@ -1416,9 +1443,9 @@ PHP;
 	<h4 class="clasbowi-doc__h4"><?php esc_html_e( 'Example: rename the pay button', 'class-bookings-with-stripe' ); ?></h4>
 	<pre class="clasbowi-doc__pre"><code><?php echo esc_html( $ex_filter_labels ); ?></code></pre>
 
-	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Actions (inject markup or side effects)', 'class-bookings-with-stripe' ); ?></h3>
-	<p class="clasbowi-doc__p"><code>clasbowi_booking_before_form</code>, <code>clasbowi_booking_form_top</code>, <code>clasbowi_booking_form_bottom</code>, <code>clasbowi_booking_after_form</code> — <?php esc_html_e( 'each receives ($class_data, $dates).', 'class-bookings-with-stripe' ); ?></p>
-	<h4 class="clasbowi-doc__h4"><?php esc_html_e( 'Example: extra hidden field before submit', 'class-bookings-with-stripe' ); ?></h4>
+	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'Actions (layout boundaries)', 'class-bookings-with-stripe' ); ?></h3>
+	<p class="clasbowi-doc__p"><code>clasbowi_booking_template_start</code>, <code>clasbowi_booking_template_end</code>, <code>clasbowi_status_template_start</code>, <code>clasbowi_status_template_end</code> — <?php esc_html_e( 'fire once around each screen layout. For field order or structure, override booking-form.php; for a single field, override its component file.', 'class-bookings-with-stripe' ); ?></p>
+	<h4 class="clasbowi-doc__h4"><?php esc_html_e( 'Example: run code before the form layout', 'class-bookings-with-stripe' ); ?></h4>
 	<pre class="clasbowi-doc__pre"><code><?php echo esc_html( $ex_action ); ?></code></pre>
 
 	<h3 class="clasbowi-doc__h"><?php esc_html_e( 'ACF fields on the booking form', 'class-bookings-with-stripe' ); ?></h3>

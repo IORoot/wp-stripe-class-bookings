@@ -16,7 +16,7 @@ abstract class Elementor_Integration {
 	}
 
 	public static function register_widget( $widgets_manager ): void {
-		require_once CLASBOWI_DIR . 'widgets/yoga-booking-widget.php';
+		require_once CLASBOWI_DIR . 'widgets/cbfs-booking-widget.php';
 		if ( class_exists( '\IOROOT_STRIPE_BOOKINGS\Widgets\Widget_Stripe_Booking' ) ) {
 			$widgets_manager->register( new \IOROOT_STRIPE_BOOKINGS\Widgets\Widget_Stripe_Booking() );
 		}

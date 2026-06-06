@@ -138,7 +138,7 @@ abstract class Emails {
 		if ( ! $looks_like_html ) {
 			$body = wpautop( $body );
 		}
-		$css_path = CLASBOWI_DIR . 'assets/yoga-booking-email.css';
+		$css_path = CLASBOWI_DIR . 'assets/cbfs-booking-email.css';
 		$css      = is_readable( $css_path )
 			? wp_strip_all_tags( (string) file_get_contents( $css_path ) ) // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			: '';
@@ -146,7 +146,7 @@ abstract class Emails {
 		if ( '' !== $css ) {
 			$head .= '<style>' . $css . '</style>';
 		}
-		return $head . '</head><body><div class="yb-mail">' . $body . '</div></body></html>';
+		return $head . '</head><body><div class="cbfs-mail">' . $body . '</div></body></html>';
 	}
 
 	private static function load_template_file( string $relative ): string {

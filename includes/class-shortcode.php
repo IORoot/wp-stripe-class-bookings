@@ -63,7 +63,7 @@ abstract class Shortcode {
 
 		$class_data = $class_id ? Helpers::get_class_data( $class_id ) : null;
 		if ( ! $class_data ) {
-			return '<div class="yb-form yb-form--error">' . esc_html__( 'No class selected.', 'class-bookings-with-stripe' ) . '</div>';
+			return '<div class="cbfs-form cbfs-form--error">' . esc_html__( 'No class selected.', 'class-bookings-with-stripe' ) . '</div>';
 		}
 		$class_data = apply_filters( 'clasbowi_booking_class_data', $class_data, $atts );
 
@@ -88,21 +88,7 @@ abstract class Shortcode {
 			$atts
 		);
 
-		$class_data      = $template_args['class_data'] ?? $class_data;
-		$dates           = $template_args['dates'] ?? $dates;
-		$show_heading    = (bool) ( $template_args['show_heading'] ?? $show_heading );
-		$max_seats_today = (int) ( $template_args['max_seats_today'] ?? $max_seats_today );
-		$atts            = $template_args['atts'] ?? $atts;
-		$template_path   = self::get_template_path( 'booking-form.php', 'booking' );
-
-		ob_start();
-		if ( is_readable( $template_path ) ) {
-			do_action( 'clasbowi_before_render_booking_template', $template_args, $template_path );
-			include $template_path;
-			do_action( 'clasbowi_after_render_booking_template', $template_args, $template_path );
-		}
-		$html = (string) ob_get_clean();
-		return (string) apply_filters( 'clasbowi_booking_html', $html, $template_args, $template_path );
+		return Booking_Form_View::render_html( $template_args );
 	}
 
 	/**
@@ -171,39 +157,6 @@ abstract class Shortcode {
 			$atts
 		);
 
-		$type         = (string) ( $template_args['type'] ?? $type );
-		$session_id   = (string) ( $template_args['session_id'] ?? $session_id );
-		$status_token = (string) ( $template_args['status_token'] ?? $status_token );
-		$reason       = (string) ( $template_args['reason'] ?? $reason );
-		$msg        = (string) ( $template_args['msg'] ?? $msg );
-		$origin     = (string) ( $template_args['origin'] ?? $origin );
-		$booking    = $template_args['booking'] ?? $booking;
-		$atts       = $template_args['atts'] ?? $atts;
-		$template_path = self::get_template_path( 'booking-status.php', 'status' );
-
-		ob_start();
-		if ( is_readable( $template_path ) ) {
-			do_action( 'clasbowi_before_render_status_template', $template_args, $template_path );
-			include $template_path;
-			do_action( 'clasbowi_after_render_status_template', $template_args, $template_path );
-		}
-		$html = (string) ob_get_clean();
-		return (string) apply_filters( 'clasbowi_status_html', $html, $template_args, $template_path );
-	}
-
-	/**
-	 * Resolve template path: theme override first, then plugin default.
-	 */
-	private static function get_template_path( string $relative, string $context = '' ): string {
-		$relative = ltrim( $relative, '/' );
-		$theme    = locate_template(
-			[
-				'class-bookings-with-stripe/' . $relative
-			],
-			false,
-			false
-		);
-		$path     = $theme ?: CLASBOWI_DIR . 'templates/' . $relative;
-		return (string) apply_filters( 'clasbowi_template_path', $path, $relative, $context );
+		return Booking_Status_View::render_html( $template_args );
 	}
 }

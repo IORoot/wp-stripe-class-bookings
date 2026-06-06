@@ -57,7 +57,7 @@ abstract class Reports {
 		}
 		wp_enqueue_style(
 			'clasbowi-reports',
-			CLASBOWI_URL . 'assets/yoga-booking-reports-admin.css',
+			CLASBOWI_URL . 'assets/cbfs-booking-reports-admin.css',
 			[],
 			CLASBOWI_VERSION
 		);
@@ -94,7 +94,7 @@ abstract class Reports {
 		);
 		wp_enqueue_script(
 			'clasbowi-reports-chart',
-			CLASBOWI_URL . 'assets/yoga-booking-reports-chart.js',
+			CLASBOWI_URL . 'assets/cbfs-booking-reports-chart.js',
 			[ 'clasbowi-chart', 'clasbowi-chart-adapter-date-fns', 'clasbowi-chartjs-zoom' ],
 			CLASBOWI_VERSION,
 			true

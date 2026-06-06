@@ -105,14 +105,14 @@ abstract class Extra_Fields {
 		foreach ( $fields as $field ) {
 			$key      = (string) ( $field['key'] ?? '' );
 			$name     = 'extra_fields[' . $key . ']';
-			$id       = 'yb-extra-' . sanitize_html_class( $key );
+			$id       = 'cbfs-extra-' . sanitize_html_class( $key );
 			$type     = (string) ( $field['type'] ?? 'text' );
 			$label    = (string) ( $field['label'] ?? '' );
 			$required = ! empty( $field['required'] );
 			$star     = $required ? ' *' : '';
 
-			echo '<div class="yb-form__row">';
-			echo '<label class="yb-form__label" for="' . esc_attr( $id ) . '">' . esc_html( $label . $star ) . '</label>';
+			echo '<div class="cbfs-form__row">';
+			echo '<label class="cbfs-form__label" for="' . esc_attr( $id ) . '">' . esc_html( $label . $star ) . '</label>';
 			self::render_input_for_field( $field, $id, $name, $required );
 			echo '</div>';
 		}
@@ -126,7 +126,7 @@ abstract class Extra_Fields {
 		$placeholder = isset( $field['placeholder'] ) ? (string) $field['placeholder'] : '';
 
 		if ( 'textarea' === $type ) {
-			echo '<textarea class="yb-form__input" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '"';
+			echo '<textarea class="cbfs-form__input" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '"';
 			self::render_required_attrs( $required );
 			echo ' placeholder="' . esc_attr( $placeholder ) . '"></textarea>';
 			return;
@@ -134,7 +134,7 @@ abstract class Extra_Fields {
 
 		if ( in_array( $type, [ 'select', 'radio' ], true ) ) {
 			$choices = (array) ( $field['choices'] ?? [] );
-			echo '<select class="yb-form__input yb-form__select" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '"';
+			echo '<select class="cbfs-form__input cbfs-form__select" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '"';
 			self::render_required_attrs( $required );
 			echo '>';
 			if ( empty( $field['required'] ) ) {
@@ -148,11 +148,11 @@ abstract class Extra_Fields {
 		}
 
 		if ( 'true_false' === $type ) {
-			echo '<label class="yb-form__check">';
-			echo '<input class="yb-form__check-input" id="' . esc_attr( $id ) . '" type="checkbox" name="' . esc_attr( $name ) . '" value="1"';
+			echo '<label class="cbfs-form__check">';
+			echo '<input class="cbfs-form__check-input" id="' . esc_attr( $id ) . '" type="checkbox" name="' . esc_attr( $name ) . '" value="1"';
 			self::render_required_attrs( $required );
 			echo '>';
-			echo '<span class="yb-form__check-label">' . esc_html( (string) ( $field['message'] ?? '' ) ) . '</span>';
+			echo '<span class="cbfs-form__check-label">' . esc_html( (string) ( $field['message'] ?? '' ) ) . '</span>';
 			echo '</label>';
 			return;
 		}
@@ -165,7 +165,7 @@ abstract class Extra_Fields {
 		} elseif ( 'url' === $type ) {
 			$html_type = 'url';
 		}
-		echo '<input class="yb-form__input" id="' . esc_attr( $id ) . '" type="' . esc_attr( $html_type ) . '" name="' . esc_attr( $name ) . '"';
+		echo '<input class="cbfs-form__input" id="' . esc_attr( $id ) . '" type="' . esc_attr( $html_type ) . '" name="' . esc_attr( $name ) . '"';
 		self::render_required_attrs( $required );
 		echo ' placeholder="' . esc_attr( $placeholder ) . '">';
 	}
@@ -174,7 +174,7 @@ abstract class Extra_Fields {
 		if ( ! $required ) {
 			return;
 		}
-		echo ' required="required" data-yb-required="1"';
+		echo ' required="required" data-cbfs-required="1"';
 	}
 
 	/**

@@ -137,8 +137,8 @@ class Widget_Stripe_Booking extends Widget_Base {
 					],
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .yb-form' => 'max-width: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .yb-status' => 'max-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .cbfs-form' => 'max-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .cbfs-status' => 'max-width: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -150,9 +150,9 @@ class Widget_Stripe_Booking extends Widget_Base {
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em', 'rem' ],
 				'selectors'  => [
-					/* Outer wrapper only — card chrome lives on .yb-form__surface */
-					'{{WRAPPER}} .yb-form.yb-form--layout-modern' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-					'{{WRAPPER}} .yb-form:not(.yb-form--layout-modern), {{WRAPPER}} .yb-status' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					/* Outer wrapper only — card chrome lives on .cbfs-form__surface */
+					'{{WRAPPER}} .cbfs-form.cbfs-form--layout-modern' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .cbfs-form:not(.cbfs-form--layout-modern), {{WRAPPER}} .cbfs-status' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -170,7 +170,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 					],
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .yb-form__form' => 'gap: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .cbfs-form__form' => 'gap: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -188,7 +188,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 					],
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .yb-form__row' => 'gap: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .cbfs-form__row' => 'gap: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -200,8 +200,8 @@ class Widget_Stripe_Booking extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					/* Paint the card, not the outer shell (modern layout stays visible) */
-					'{{WRAPPER}} .yb-form__surface' => 'background: {{VALUE}};',
-					'{{WRAPPER}} .yb-form:not(.yb-form--layout-modern), {{WRAPPER}} .yb-status' => 'background: {{VALUE}};',
+					'{{WRAPPER}} .cbfs-form__surface' => 'background: {{VALUE}};',
+					'{{WRAPPER}} .cbfs-form:not(.cbfs-form--layout-modern), {{WRAPPER}} .cbfs-status' => 'background: {{VALUE}};',
 				],
 			]
 		);
@@ -212,7 +212,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 				'label'     => esc_html__( 'Title color', 'class-bookings-with-stripe' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .yb-form__title, {{WRAPPER}} .yb-status__title' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .cbfs-form__title, {{WRAPPER}} .cbfs-status__title' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -231,7 +231,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 			[
 				'name'     => 'stripe_button_typography',
 				'label'    => esc_html__( 'Typography', 'class-bookings-with-stripe' ),
-				'selector' => '{{WRAPPER}} .yb-form .yb-form__button',
+				'selector' => '{{WRAPPER}} .cbfs-form .cbfs-form__button',
 			]
 		);
 
@@ -241,7 +241,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 				'label'     => esc_html__( 'Text color', 'class-bookings-with-stripe' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .yb-form .yb-form__button' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .cbfs-form .cbfs-form__button' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -252,7 +252,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 				'label'     => esc_html__( 'Background color', 'class-bookings-with-stripe' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .yb-form .yb-form__button' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .cbfs-form .cbfs-form__button' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -262,7 +262,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 			[
 				'name'     => 'stripe_button_border',
 				'label'    => esc_html__( 'Border', 'class-bookings-with-stripe' ),
-				'selector' => '{{WRAPPER}} .yb-form .yb-form__button',
+				'selector' => '{{WRAPPER}} .cbfs-form .cbfs-form__button',
 			]
 		);
 
@@ -273,7 +273,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em', 'rem' ],
 				'selectors'  => [
-					'{{WRAPPER}} .yb-form .yb-form__button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .cbfs-form .cbfs-form__button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -285,7 +285,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em', 'rem' ],
 				'selectors'  => [
-					'{{WRAPPER}} .yb-form .yb-form__button' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .cbfs-form .cbfs-form__button' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -304,7 +304,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 			[
 				'name'     => 'external_button_typography',
 				'label'    => esc_html__( 'Typography', 'class-bookings-with-stripe' ),
-				'selector' => '{{WRAPPER}} .yb-form .yb-form__button--link',
+				'selector' => '{{WRAPPER}} .cbfs-form .cbfs-form__button--link',
 			]
 		);
 
@@ -314,7 +314,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 				'label'     => esc_html__( 'Text color', 'class-bookings-with-stripe' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .yb-form .yb-form__button--link' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .cbfs-form .cbfs-form__button--link' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -325,7 +325,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 				'label'     => esc_html__( 'Background color', 'class-bookings-with-stripe' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .yb-form .yb-form__button--link' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .cbfs-form .cbfs-form__button--link' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -335,7 +335,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 			[
 				'name'     => 'external_button_border',
 				'label'    => esc_html__( 'Border', 'class-bookings-with-stripe' ),
-				'selector' => '{{WRAPPER}} .yb-form .yb-form__button--link',
+				'selector' => '{{WRAPPER}} .cbfs-form .cbfs-form__button--link',
 			]
 		);
 
@@ -346,7 +346,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em', 'rem' ],
 				'selectors'  => [
-					'{{WRAPPER}} .yb-form .yb-form__button--link' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .cbfs-form .cbfs-form__button--link' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -358,7 +358,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em', 'rem' ],
 				'selectors'  => [
-					'{{WRAPPER}} .yb-form .yb-form__button--link' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .cbfs-form .cbfs-form__button--link' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -410,7 +410,7 @@ class Widget_Stripe_Booking extends Widget_Base {
 
 		if ( ! $class_id ) {
 			if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
-				echo '<div class="yb-form yb-form--error">' . esc_html__( 'No Class ID found. Pick a class manually or ensure the current post has clasbowi_class_stripe_id (or legacy yoga_class_stripe_id) set.', 'class-bookings-with-stripe' ) . '</div>';
+				echo '<div class="cbfs-form cbfs-form--error">' . esc_html__( 'No Class ID found. Pick a class manually or ensure the current post has clasbowi_class_stripe_id (or legacy yoga_class_stripe_id) set.', 'class-bookings-with-stripe' ) . '</div>';
 			}
 			return;
 		}

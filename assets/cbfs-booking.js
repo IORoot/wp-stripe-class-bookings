@@ -16,31 +16,31 @@
 	}
 
 	function showError( form, message, fieldName ) {
-		const errEl = form.querySelector( '.yb-form__error' );
+		const errEl = form.querySelector( '.cbfs-form__error' );
 		if ( errEl ) {
 			errEl.hidden = false;
 			errEl.textContent = message;
 		}
-		$$( form, '.yb-form__input--error' ).forEach( function ( el ) {
-			el.classList.remove( 'yb-form__input--error' );
+		$$( form, '.cbfs-form__input--error' ).forEach( function ( el ) {
+			el.classList.remove( 'cbfs-form__input--error' );
 		} );
 		if ( fieldName ) {
 			const f = form.querySelector( '[name="' + fieldName + '"]' );
 			if ( f ) {
-				f.classList.add( 'yb-form__input--error' );
+				f.classList.add( 'cbfs-form__input--error' );
 				f.focus();
 			}
 		}
 	}
 
 	function clearError( form ) {
-		const errEl = form.querySelector( '.yb-form__error' );
+		const errEl = form.querySelector( '.cbfs-form__error' );
 		if ( errEl ) {
 			errEl.hidden = true;
 			errEl.textContent = '';
 		}
-		$$( form, '.yb-form__input--error' ).forEach( function ( el ) {
-			el.classList.remove( 'yb-form__input--error' );
+		$$( form, '.cbfs-form__input--error' ).forEach( function ( el ) {
+			el.classList.remove( 'cbfs-form__input--error' );
 		} );
 	}
 
@@ -73,7 +73,7 @@
 	function updateSeatsOptions( form ) {
 		const dateField = form.querySelector( '[name="class_date"]' );
 		const seatsSel = form.querySelector( '[name="seats"]' );
-		const totalEl = form.querySelector( '.yb-form__total' );
+		const totalEl = form.querySelector( '.cbfs-form__total' );
 		if ( ! dateField || ! seatsSel ) return;
 
 		const remaining = getDateRemaining( dateField );
@@ -99,10 +99,10 @@
 
 	function updateTotal( form ) {
 		const seatsSel = form.querySelector( '[name="seats"]' );
-		const totalEl = form.querySelector( '.yb-form__total' );
+		const totalEl = form.querySelector( '.cbfs-form__total' );
 		if ( ! seatsSel || ! totalEl ) return;
 		const seats = parseInt( seatsSel.value, 10 ) || 1;
-		const unit = parseFloat( totalEl.dataset.ybUnitPrice || '0' );
+		const unit = parseFloat( totalEl.dataset.cbfsUnitPrice || '0' );
 		totalEl.textContent = formatPrice( unit * seats );
 	}
 
@@ -119,28 +119,28 @@
 	}
 
 	async function refreshAvailability( wrapper ) {
-		const classId = wrapper.dataset.ybClassId;
+		const classId = wrapper.dataset.cbfsClassId;
 		if ( ! classId ) return;
 		try {
 			const res = await fetch( cfg.rest_url + 'availability?class_id=' + encodeURIComponent( classId ) );
 			if ( ! res.ok ) return;
 			const data = await res.json();
-			const form = wrapper.querySelector( '.yb-form__form' ) || wrapper;
+			const form = wrapper.querySelector( '.cbfs-form__form' ) || wrapper;
 			const dateField = wrapper.querySelector( '[name="class_date"]' );
 			if ( ! dateField || ! ( data.dates || [] ).length ) return;
 
-			const showSeatsRemaining = form.dataset.ybShowSeatsRemaining === '1';
-			const isOneOff = form.dataset.ybOneOffDate === '1';
+			const showSeatsRemaining = form.dataset.cbfsShowSeatsRemaining === '1';
+			const isOneOff = form.dataset.cbfsOneOffDate === '1';
 
 			if ( isOneOff && dateField.tagName !== 'SELECT' ) {
 				const d = data.dates[ 0 ];
-				const display = wrapper.querySelector( '[data-yb-date-display]' );
+				const display = wrapper.querySelector( '[data-cbfs-date-display]' );
 				dateField.value = d.date;
 				dateField.dataset.remaining = String( d.remaining );
 				dateField.dataset.cancelled = d.cancelled ? '1' : '0';
 				if ( display ) {
 					display.textContent = formatDateOptionLabel( d, showSeatsRemaining );
-					display.classList.toggle( 'yb-form__date-fixed--cancelled', !! d.cancelled );
+					display.classList.toggle( 'cbfs-form__date-fixed--cancelled', !! d.cancelled );
 				}
 				updateSeatsOptions( form );
 				return;
@@ -158,7 +158,7 @@
 				o.dataset.cancelled = d.cancelled ? '1' : '0';
 				if ( d.cancelled ) {
 					o.disabled = true;
-					o.className = 'yb-form__option--cancelled';
+					o.className = 'cbfs-form__option--cancelled';
 				}
 				o.textContent = formatDateOptionLabel( d, showSeatsRemaining );
 				dateField.appendChild( o );
@@ -169,7 +169,7 @@
 
 	function getWrapperForForm( form ) {
 		if ( ! form ) return null;
-		return form.closest( '.yb-form[data-yb-class-id]' );
+		return form.closest( '.cbfs-form[data-cbfs-class-id]' );
 	}
 
 	async function handleFormSubmit( form, ev ) {
@@ -181,7 +181,7 @@
 			return;
 		}
 
-		const button = form.querySelector( '.yb-form__button' );
+		const button = form.querySelector( '.cbfs-form__button' );
 		const fd = new FormData( form );
 		const extraFields = {};
 		form.querySelectorAll( '[name^="extra_fields["]' ).forEach( function ( el ) {
@@ -195,7 +195,7 @@
 			}
 		} );
 		const payload = {
-			class_id: parseInt( wrapper.dataset.ybClassId, 10 ) || 0,
+			class_id: parseInt( wrapper.dataset.cbfsClassId, 10 ) || 0,
 			class_date: fd.get( 'class_date' ),
 			seats: parseInt( fd.get( 'seats' ), 10 ) || 1,
 			customer_name: ( fd.get( 'customer_name' ) || '' ).toString().trim(),
@@ -215,7 +215,7 @@
 			return;
 		}
 		const missingRequiredExtra = Array.prototype.find.call(
-			form.querySelectorAll( '[name^="extra_fields["][data-yb-required="1"]' ),
+			form.querySelectorAll( '[name^="extra_fields["][data-cbfs-required="1"]' ),
 			function ( el ) {
 				return ( el.type === 'checkbox' ) ? !el.checked : !( ( el.value || '' ).toString().trim() );
 			}
@@ -270,11 +270,11 @@
 	}
 
 	function attachStatusPolling() {
-		document.querySelectorAll( '.yb-status[data-yb-session]' ).forEach( function ( el ) {
-			const sessionId = el.dataset.ybSession;
-			const statusToken = el.dataset.ybToken || '';
+		document.querySelectorAll( '.cbfs-status[data-cbfs-session]' ).forEach( function ( el ) {
+			const sessionId = el.dataset.cbfsSession;
+			const statusToken = el.dataset.cbfsToken || '';
 			if ( ! sessionId || ! statusToken ) return;
-			if ( ! el.classList.contains( 'yb-status--pending' ) ) return;
+			if ( ! el.classList.contains( 'cbfs-status--pending' ) ) return;
 
 			let attempts = 0;
 			const max = 90; // ~3+ minutes with adaptive interval
@@ -302,7 +302,7 @@
 					const wait = attempts < 10 ? 2000 : ( attempts < 30 ? 3000 : 5000 );
 					setTimeout( tick, wait );
 				} else {
-					const text = el.querySelector( '.yb-status__pending-text' );
+					const text = el.querySelector( '.cbfs-status__pending-text' );
 					if ( text ) {
 						text.textContent = 'Still confirming with Stripe — please refresh this page in a moment.';
 					}
@@ -313,9 +313,9 @@
 	}
 
 	function attachWaiverRichLabels() {
-		document.querySelectorAll( '[data-yb-waiver-group]' ).forEach( function ( group ) {
+		document.querySelectorAll( '[data-cbfs-waiver-group]' ).forEach( function ( group ) {
 			const input = group.querySelector( '[name="waiver_accepted"]' );
-			const labelArea = group.querySelector( '[data-yb-waiver-label]' );
+			const labelArea = group.querySelector( '[data-cbfs-waiver-label]' );
 			if ( ! input || ! labelArea ) {
 				return;
 			}
@@ -331,12 +331,12 @@
 	}
 
 	function init() {
-		document.querySelectorAll( '.yb-form__form' ).forEach( updateSeatsOptions );
+		document.querySelectorAll( '.cbfs-form__form' ).forEach( updateSeatsOptions );
 		attachWaiverRichLabels();
 		document.addEventListener( 'change', function ( ev ) {
 			const target = ev.target;
 			if ( ! target || ! target.closest ) return;
-			const form = target.closest( '.yb-form__form' );
+			const form = target.closest( '.cbfs-form__form' );
 			if ( ! form ) return;
 			if ( target.matches( '[name="class_date"]' ) ) {
 				updateSeatsOptions( form );
@@ -346,7 +346,7 @@
 			}
 		} );
 		document.addEventListener( 'submit', function ( ev ) {
-			const form = ev.target && ev.target.closest ? ev.target.closest( '.yb-form__form' ) : null;
+			const form = ev.target && ev.target.closest ? ev.target.closest( '.cbfs-form__form' ) : null;
 			if ( ! form ) return;
 			handleFormSubmit( form, ev );
 		} );

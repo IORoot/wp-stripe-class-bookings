@@ -145,7 +145,7 @@ abstract class CPT {
 				]
 			);
 		} else {
-			echo '<span class="yb-class-list__no-image" aria-hidden="true"></span>';
+			echo '<span class="cbfs-class-list__no-image" aria-hidden="true"></span>';
 		}
 	}
 
@@ -176,11 +176,11 @@ abstract class CPT {
 				break;
 			case 'clasbowi_type':
 				if ( ! empty( $class['use_external_link'] ) ) {
-					echo '<span class="yb-class-type-pill yb-class-type-pill--external">' . esc_html__( 'External link', 'class-bookings-with-stripe' ) . '</span>';
+					echo '<span class="cbfs-class-type-pill cbfs-class-type-pill--external">' . esc_html__( 'External link', 'class-bookings-with-stripe' ) . '</span>';
 				} elseif ( ! empty( $class['is_one_off_event'] ) ) {
-					echo '<span class="yb-class-type-pill yb-class-type-pill--event">' . esc_html__( 'One-off event', 'class-bookings-with-stripe' ) . '</span>';
+					echo '<span class="cbfs-class-type-pill cbfs-class-type-pill--event">' . esc_html__( 'One-off event', 'class-bookings-with-stripe' ) . '</span>';
 				} else {
-					echo '<span class="yb-class-type-pill yb-class-type-pill--class">' . esc_html__( 'Class', 'class-bookings-with-stripe' ) . '</span>';
+					echo '<span class="cbfs-class-type-pill cbfs-class-type-pill--class">' . esc_html__( 'Class', 'class-bookings-with-stripe' ) . '</span>';
 				}
 				break;
 			case 'clasbowi_price':
@@ -208,10 +208,10 @@ abstract class CPT {
 			return;
 		}
 		$shortcode = sprintf( '[clasbowi_booking class_id="%d"]', (int) $post->ID );
-		echo '<div class="misc-pub-section misc-pub-yb-class-id">';
+		echo '<div class="misc-pub-section misc-pub-cbfs-class-id">';
 		echo '<span>' . esc_html__( 'Class ID:', 'class-bookings-with-stripe' ) . ' <code>#' . esc_html( (string) $post->ID ) . '</code></span>';
 		echo '</div>';
-		echo '<div class="misc-pub-section misc-pub-yb-shortcode">';
+		echo '<div class="misc-pub-section misc-pub-cbfs-shortcode">';
 		echo '<span>' . esc_html__( 'Shortcode:', 'class-bookings-with-stripe' ) . '</span><br>';
 		echo '<code style="display:inline-block; margin-top:6px; user-select:all;">' . esc_html( $shortcode ) . '</code>';
 		echo '<p style="margin:6px 0 0; color:#646970; font-size:12px;">' . esc_html__( 'Copy and paste this into any page, post, or Elementor shortcode widget.', 'class-bookings-with-stripe' ) . '</p>';
@@ -243,7 +243,7 @@ abstract class CPT {
 				if ( $class_id ) {
 					self::render_class_image_column( $class_id );
 				} else {
-					echo '<span class="yb-class-list__no-image" aria-hidden="true"></span>';
+					echo '<span class="cbfs-class-list__no-image" aria-hidden="true"></span>';
 				}
 				break;
 			case 'clasbowi_class':

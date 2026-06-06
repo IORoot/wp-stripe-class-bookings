@@ -40,13 +40,13 @@ final class Plugin {
 	public function register_assets(): void {
 		wp_register_style(
 			'clasbowi',
-			CLASBOWI_URL . 'assets/yoga-booking.css',
+			CLASBOWI_URL . 'assets/cbfs-booking.css',
 			[],
 			CLASBOWI_VERSION
 		);
 		wp_register_script(
 			'clasbowi',
-			CLASBOWI_URL . 'assets/yoga-booking.js',
+			CLASBOWI_URL . 'assets/cbfs-booking.js',
 			[],
 			CLASBOWI_VERSION,
 			true
