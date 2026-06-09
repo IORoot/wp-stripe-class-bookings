@@ -12,9 +12,11 @@ Stripe Checkout booking for classes: capacity-aware dates, soft holds, webhooks,
 
 == Description ==
 
+https://www.youtube.com/watch?v=8B6TxXcDt2E
+
 **Class Bookings with Stripe** helps studios, instructors, and venues sell places on scheduled classes using **Stripe Checkout** (Stripe’s hosted payment page). Customers pick a date, choose seats, and pay securely without WooCommerce or a custom cart.
 
-The plugin uses **Advanced Custom Fields (ACF)**. Each bookable class has schedule, price, capacity, and optional extras. Embed the form with a shortcode or Elementor widget. When a customer clicks **Book & pay with Stripe**, the plugin creates a soft-hold, opens a Stripe Checkout Session, and redirects to Stripe. A signed webhook marks the booking paid and can send customer and admin emails.
+The plugin uses **Advanced Custom Fields (ACF) Free** (built in). Each bookable class has schedule, price, capacity, and optional extras. Embed the form with a shortcode or Elementor widget. When a customer clicks **Book & pay with Stripe**, the plugin creates a soft-hold, opens a Stripe Checkout Session, and redirects to Stripe. A signed webhook marks the booking paid and can send customer and admin emails.
 
 = Video tutorials — get started =
 
@@ -42,7 +44,6 @@ The plugin uses the bundled **stripe-php** SDK. It does not embed card fields on
 
 * `[clasbowi_booking class_id="123"]`
 * `[clasbowi_booking_status type="success"]` (or `cancelled`, `error`)
-* Legacy aliases: `[stripe_booking]`, `[yoga_booking]`, `[stripe_booking_status]`, `[yoga_booking_status]`
 
 = Requirements =
 
