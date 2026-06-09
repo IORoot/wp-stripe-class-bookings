@@ -1234,10 +1234,25 @@
 
 /* ACF true/false & button group */
 .clasbowi-class-edit .acf-true-false label,
-.clasbowi-class-edit .acf-button-group label,
-.clasbowi-booking-edit .acf-true-false label,
-.clasbowi-booking-edit .acf-button-group label {
+.clasbowi-booking-edit .acf-true-false label {
 	border-radius: 6px;
+}
+
+.clasbowi-class-edit .acf-button-group label,
+.clasbowi-booking-edit .acf-button-group label {
+	border-radius: 0;
+}
+
+.clasbowi-class-edit .acf-button-group label:first-child,
+.clasbowi-booking-edit .acf-button-group label:first-child {
+	border-top-left-radius: 6px;
+	border-bottom-left-radius: 6px;
+}
+
+.clasbowi-class-edit .acf-button-group label:last-child,
+.clasbowi-booking-edit .acf-button-group label:last-child {
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
 }
 
 .clasbowi-class-edit .acf-button-group label.selected,

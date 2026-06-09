@@ -19,6 +19,8 @@ abstract class ACF_Fields {
 		add_action( 'acf/include_fields', [ self::class, 'register_field_groups' ] );
 		add_filter( 'acf/load_field/key=field_clasbowi_b_summary', [ self::class, 'filter_booking_summary_field_format' ], 5 );
 		add_filter( 'acf/load_field/key=field_clasbowi_b_summary', [ self::class, 'populate_booking_summary_field' ], 10 );
+		add_filter( 'acf/load_value/name=schedule_type', [ self::class, 'load_schedule_type_value' ], 10, 3 );
+		add_filter( 'acf/update_value/name=schedule_type', [ self::class, 'sync_use_external_link_from_schedule_type' ], 10, 3 );
 		add_action( 'acf/render_field/key=field_clasbowi_cancelled_dates_fallback', [ self::class, 'render_cancelled_dates_quick_add' ] );
 
 		$settings_screen_hook = CPT::CLASS_PT . '_page_' . self::SETTINGS_MENU_SLUG;
@@ -326,6 +328,45 @@ abstract class ACF_Fields {
 		echo '</div>';
 	}
 
+	/**
+	 * Legacy classes stored external booking as a separate toggle; map that to schedule type.
+	 *
+	 * @param mixed $value
+	 * @param int|string $post_id
+	 * @param array<string,mixed> $field
+	 * @return mixed
+	 */
+	public static function load_schedule_type_value( $value, $post_id, array $field ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+		$post_id = is_numeric( $post_id ) ? (int) $post_id : 0;
+		if ( $post_id <= 0 || CPT::CLASS_PT !== get_post_type( $post_id ) ) {
+			return $value;
+		}
+		if ( 'external' === $value ) {
+			return $value;
+		}
+		if ( (bool) get_post_meta( $post_id, 'use_external_link', true ) ) {
+			return 'external';
+		}
+		return $value;
+	}
+
+	/**
+	 * Keep legacy use_external_link meta in sync when schedule type changes.
+	 *
+	 * @param mixed $value
+	 * @param int|string $post_id
+	 * @param array<string,mixed> $field
+	 * @return mixed
+	 */
+	public static function sync_use_external_link_from_schedule_type( $value, $post_id, array $field ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+		$post_id = is_numeric( $post_id ) ? (int) $post_id : 0;
+		if ( $post_id <= 0 || CPT::CLASS_PT !== get_post_type( $post_id ) ) {
+			return $value;
+		}
+		update_post_meta( $post_id, 'use_external_link', 'external' === (string) $value ? 1 : 0 );
+		return $value;
+	}
+
 	public static function register_field_groups(): void {
 		if ( ! function_exists( 'acf_add_local_field_group' ) ) {
 			return;
@@ -342,9 +383,9 @@ abstract class ACF_Fields {
 			'conditional_logic' => [
 				[
 					[
-						'field'    => 'field_clasbowi_use_external_link',
+						'field'    => 'field_clasbowi_schedule_type',
 						'operator' => '!=',
-						'value'    => '1',
+						'value'    => 'external',
 					],
 				],
 			],
@@ -353,20 +394,25 @@ abstract class ACF_Fields {
 		$internal_booking_condition = [
 			[
 				[
-					'field'    => 'field_clasbowi_use_external_link',
+					'field'    => 'field_clasbowi_schedule_type',
 					'operator' => '!=',
-					'value'    => '1',
+					'value'    => 'external',
+				],
+			],
+		];
+
+		$external_booking_condition = [
+			[
+				[
+					'field'    => 'field_clasbowi_schedule_type',
+					'operator' => '==',
+					'value'    => 'external',
 				],
 			],
 		];
 
 		$recurring_booking_condition = [
 			[
-				[
-					'field'    => 'field_clasbowi_use_external_link',
-					'operator' => '!=',
-					'value'    => '1',
-				],
 				[
 					'field'    => 'field_clasbowi_schedule_type',
 					'operator' => '==',
@@ -377,11 +423,6 @@ abstract class ACF_Fields {
 
 		$one_off_booking_condition = [
 			[
-				[
-					'field'    => 'field_clasbowi_use_external_link',
-					'operator' => '!=',
-					'value'    => '1',
-				],
 				[
 					'field'    => 'field_clasbowi_schedule_type',
 					'operator' => '==',
@@ -397,6 +438,24 @@ abstract class ACF_Fields {
 				'title'    => __( 'Class details', 'class-bookings-with-stripe' ),
 				'fields'   => [
 					[
+						'key'           => 'field_clasbowi_schedule_type',
+						'label'         => __( 'Schedule type', 'class-bookings-with-stripe' ),
+						'name'          => 'schedule_type',
+						'type'          => 'button_group',
+						'choices'       => [
+							'recurring' => __( 'Weekly class', 'class-bookings-with-stripe' ),
+							'one_off'   => __( 'One-off event', 'class-bookings-with-stripe' ),
+							'external'  => __( 'External link', 'class-bookings-with-stripe' ),
+						],
+						'default_value' => 'recurring',
+						'allow_null'    => 0,
+						'required'      => 1,
+						'instructions'  => __( 'Choose a weekly class, a one-off event, or an external booking link instead of the built-in form.', 'class-bookings-with-stripe' ),
+						'wrapper'       => [
+							'width' => '75',
+						],
+					],
+					[
 						'key'           => 'field_clasbowi_class_active',
 						'label'         => __( 'Class is active (bookable)', 'class-bookings-with-stripe' ),
 						'name'          => 'class_active',
@@ -405,19 +464,7 @@ abstract class ACF_Fields {
 						'ui'            => 1,
 						'instructions'  => __( 'Toggle off to suspend all bookings for this class.', 'class-bookings-with-stripe' ),
 						'wrapper'       => [
-							'width' => '50',
-						],
-					],
-					[
-						'key'           => 'field_clasbowi_use_external_link',
-						'label'         => __( 'Booking mode: use external link instead of form', 'class-bookings-with-stripe' ),
-						'name'          => 'use_external_link',
-						'type'          => 'true_false',
-						'default_value' => 0,
-						'ui'            => 1,
-						'instructions'  => __( 'Enable this to hide the booking form and show a single button linking to another URL.', 'class-bookings-with-stripe' ),
-						'wrapper'       => [
-							'width' => '50',
+							'width' => '25',
 						],
 					],
 					[
@@ -427,30 +474,7 @@ abstract class ACF_Fields {
 						'type'              => 'url',
 						'instructions'      => __( 'For example: ClassFor, Eventbrite, or any custom external destination.', 'class-bookings-with-stripe' ),
 						'placeholder'       => 'https://',
-						'conditional_logic' => [
-							[
-								[
-									'field'    => 'field_clasbowi_use_external_link',
-									'operator' => '==',
-									'value'    => '1',
-								],
-							],
-						],
-					],
-					[
-						'key'           => 'field_clasbowi_schedule_type',
-						'label'         => __( 'Schedule type', 'class-bookings-with-stripe' ),
-						'name'          => 'schedule_type',
-						'type'          => 'button_group',
-						'choices'       => [
-							'recurring' => __( 'Weekly class', 'class-bookings-with-stripe' ),
-							'one_off'   => __( 'One-off event', 'class-bookings-with-stripe' ),
-						],
-						'default_value' => 'recurring',
-						'allow_null'    => 0,
-						'required'      => 1,
-						'instructions'  => __( 'Choose whether this repeats weekly or is bookable only between specific event dates.', 'class-bookings-with-stripe' ),
-						'conditional_logic' => $internal_booking_condition,
+						'conditional_logic' => $external_booking_condition,
 					],
 					[
 						'key'           => 'field_clasbowi_day',
@@ -471,7 +495,7 @@ abstract class ACF_Fields {
 						'allow_null'    => 0,
 						'required'      => 1,
 						'wrapper'       => [
-							'width' => '50',
+							'width' => '25',
 						],
 						'conditional_logic' => $recurring_booking_condition,
 					],
@@ -543,7 +567,7 @@ abstract class ACF_Fields {
 						'step'          => 0.01,
 						'required'      => 1,
 						'wrapper'       => [
-							'width' => '50',
+							'width' => '25',
 						],
 						'conditional_logic' => $internal_booking_condition,
 					],
@@ -594,6 +618,9 @@ abstract class ACF_Fields {
 						'type'          => 'text',
 						'instructions'  => __( 'Optional, e.g. "Orpington Studio".', 'class-bookings-with-stripe' ),
 						'required'      => 0,
+						'wrapper'       => [
+							'width' => '25',
+						],
 						'conditional_logic' => $internal_booking_condition,
 					],
 					[

@@ -260,8 +260,11 @@ abstract class Helpers {
 			$start_time = substr( $start_time, 0, 5 );
 		}
 
-		$schedule_type = function_exists( 'get_field' ) ? (string) get_field( 'schedule_type', $class_id ) : 'recurring';
-		if ( 'one_off' !== $schedule_type ) {
+		$schedule_type   = function_exists( 'get_field' ) ? (string) get_field( 'schedule_type', $class_id ) : 'recurring';
+		$legacy_external = (bool) get_post_meta( $class_id, 'use_external_link', true );
+		if ( 'external' === $schedule_type || $legacy_external ) {
+			$schedule_type = 'external';
+		} elseif ( 'one_off' !== $schedule_type ) {
 			$schedule_type = 'recurring';
 		}
 
@@ -288,7 +291,7 @@ abstract class Helpers {
 			'name'            => get_the_title( $class_id ),
 			'description'     => function_exists( 'get_field' ) ? (string) get_field( 'description', $class_id ) : '',
 			'image_id'        => $image_id,
-			'use_external_link' => function_exists( 'get_field' ) ? (bool) get_field( 'use_external_link', $class_id ) : false,
+			'use_external_link' => 'external' === $schedule_type,
 			'external_link_url' => function_exists( 'get_field' ) ? esc_url_raw( (string) get_field( 'external_link_url', $class_id ) ) : '',
 			'location'        => function_exists( 'get_field' ) ? (string) get_field( 'location', $class_id ) : '',
 			'schedule_type'   => $schedule_type,
