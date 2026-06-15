@@ -3,7 +3,7 @@
  * Plugin Name: Class Bookings with Stripe
  * Description: Class Bookings with Stripe — Stripe Checkout for classes. ACF-driven class types, capacity-aware date dropdowns, customer + admin emails, Elementor widget and shortcode.
  * Plugin URI: https://ioroot.com
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: IORoot.com
  * Text Domain: class-bookings-with-stripe
  * License: GPL v2 or later
@@ -13,7 +13,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'CLASBOWI_VERSION', '1.0.1' );
+define( 'CLASBOWI_VERSION', '1.0.2' );
 define( 'CLASBOWI_TEXT_DOMAIN', 'class-bookings-with-stripe' );
 define( 'CLASBOWI_FILE', __FILE__ );
 define( 'CLASBOWI_DIR', plugin_dir_path( __FILE__ ) );

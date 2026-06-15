@@ -4,7 +4,7 @@ Tags: stripe, booking, classes, checkout, elementor
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -176,6 +176,10 @@ Yes. Use the **Class Booking with Stripe** widget or the shortcode.
 
 == Changelog ==
 
+= 1.0.2 =
+
+* Added screenshots for the WordPress.org plugin directory.
+
 = 1.0.1 =
 
 * Class edit screen: external booking is now a schedule type option (Weekly class / One-off event / External link) instead of a separate toggle.
@@ -196,6 +200,10 @@ Yes. Use the **Class Booking with Stripe** widget or the shortcode.
 * Bundled ACF Free when ACF is not active.
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+
+Added screenshots for the WordPress.org plugin directory.
 
 = 1.0.1 =
 
